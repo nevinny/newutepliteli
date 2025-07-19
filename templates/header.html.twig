@@ -1,0 +1,372 @@
+<header class="sticky-top bg-white border-bottom shadow-sm">
+    <div class="container-fluid py-2">
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+
+            <!-- Лого -->
+            <a href="/" class="d-flex align-items-center text-dark text-decoration-none me-3">
+                <img src="/upload/CNext/470/470d92f94db300693ac13345dff8e771.PNG" alt="Теплый Дом" height="50">
+            </a>
+
+            <!-- Региональность -->
+            <div class="me-3">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-geo-alt"></i> Москва
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="?region=msk">Москва</a></li>
+                        <li><a class="dropdown-item" href="?region=spb">Санкт-Петербург</a></li>
+                        <li><a class="dropdown-item" href="?region=ekb">Екатеринбург</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Форма поиска -->
+            <form class="d-none d-md-block flex-grow-0 mx-2" action="/catalog/" role="search">
+                <div class="input-group">
+                    <input type="search" name="q" class="form-control" placeholder="Поиск по каталогу…" />
+                    <button type="submit" class="btn btn-outline-secondary">Найти</button>
+                </div>
+            </form>
+
+            <!-- Контакты -->
+            <div class="d-none d-lg-block text-end me-3">
+                <div class="fw-bold">
+                    <i class="bi bi-phone"></i>
+                    +7 (495) 545‑39‑00</div>
+                <button class="btn btn-sm btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                    Заказать звонок
+                </button>
+            </div>
+
+            <!-- Авторизация и корзина -->
+            <div class="d-flex align-items-center gap-4">
+                <!-- Авторизация -->
+                <a href="/login" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-person"></i>
+                    <span class="d-none d-lg-inline">Войти</span>
+                </a>
+                <!-- Кабинет: если авторизован, отобразится вместо "войти" -->
+                <!-- <a href="/account" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-person-circle"></i> Кабинет
+                </a> -->
+
+                <!-- Корзина -->
+                <a href="/cart" class="btn btn-outline-secondary position-relative btn-sm">
+                    <i class="bi bi-cart"></i>
+{#                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2<span class="visually-hidden">товаров в корзине</span></span>#}
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Главная</a>
+            <a class="navbar-brand" href="/catalog/">Каталог</a>
+            <!-- Кнопка для открытия меню (видна только на малых экранах) -->
+            <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/about/news">Новости</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">О нас</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contacts/">Контакты</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Сайдбар Offcanvas -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="mobileMenuLabel">Меню</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column gap-3">
+
+            <!-- Региональность -->
+            <div>
+                <label for="regionSelect" class="form-label">Ваш регион:</label>
+                <select id="regionSelect" class="form-select">
+                    <option value="moscow">Москва</option>
+                    <option value="spb">Санкт-Петербург</option>
+                    <option value="ekb">Екатеринбург</option>
+                    <!-- можно загружать динамически через JS -->
+                </select>
+            </div>
+
+            <!-- Авторизация -->
+            <div>
+                <a href="/login" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-person"></i> Войти / Регистрация
+                </a>
+                <!-- если пользователь авторизован:
+                <div class="d-flex flex-column gap-2">
+                  <span>Здравствуйте, Антон</span>
+                  <a href="/profile" class="btn btn-outline-secondary w-100">Личный кабинет</a>
+                  <a href="/logout" class="btn btn-outline-danger w-100">Выйти</a>
+                </div>
+                -->
+            </div>
+
+
+            <!-- Категории -->
+            <div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house"></i> Главная</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/catalog"><i class="bi bi-grid"></i> Каталог</a>
+                        <ul class="list-group">
+                            {% for item in menu %}
+                                {% set item_id = 'item_' ~ loop.index %}
+                                {% set collapse_id = 'collapse_' ~ loop.index %}
+                                {% if item.children is not empty %}
+                                    <li class="list-group-item">
+                                        <a class="text-decoration-none d-block" data-bs-toggle="collapse" href="#{{ item_id }}" role="button" aria-expanded="false" aria-controls="{{ item_id }}">
+                                            <i class="bi bi-chevron-down me-1"></i> {{ item.label }}
+                                        </a>
+                                        <div class="collapse ps-3" id="{{ item_id }}">
+                                            {% for child in item.children %}
+                                                <a href="{{ child.fullPath }}" class="d-block py-1">{{ child.label }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% else %}
+                                    <li class="list-group-item">
+                                        <a href="{{ item.fullPath }}" class="text-decoration-none d-block">
+                                            {{ item.label }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+
+
+
+            <!-- Корзина -->
+            <div>
+                <a href="/cart" class="btn btn-outline-success w-100">
+                    <i class="bi bi-cart"></i> Корзина
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+{#<!-- Основной хедер для десктопов -->#}
+{#<header class="d-none d-md-block py-3">#}
+{#    <div class="row align-items-center">#}
+{#        <div class="col-md-2">#}
+{#            <a href="/">#}
+{#                <img src="/upload/CNext/470/470d92f94db300693ac13345dff8e771.PNG" alt="Теплый Дом" class="img-fluid">#}
+{#            </a>#}
+{#        </div>#}
+
+{#        <div class="col-md-2">#}
+{#            <div>Ваш город</div>#}
+{#            <div>Москва</div>#}
+{#        </div>#}
+
+{#        <div class="col-md-4">#}
+{#            <form class="d-flex">#}
+{#                <input class="form-control me-2" type="search" placeholder="Поиск">#}
+{#                <button class="btn btn-outline-secondary" type="submit">Найти</button>#}
+{#            </form>#}
+{#        </div>#}
+
+{#        <div class="col-md-4 text-end">#}
+{#            <a href="tel:+74955453900" class="text-decoration-none me-3">+7 (495) 545-39-00</a>#}
+{#            <button class="btn btn-primary">Заказать звонок</button>#}
+{#        </div>#}
+{#    </div>#}
+
+{#    <nav class="navbar navbar-expand-md mt-3">#}
+{#        <ul class="navbar-nav">#}
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="/news/">Каталог</a>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="/news/">Новости</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </nav>#}
+{#</header>#}
+
+{#<!-- Фиксированный хедер при скролле -->#}
+{#<div class="d-none d-md-block bg-light fixed-top py-2 shadow-sm">#}
+{#    <div class="container">#}
+{#        <div class="row align-items-center">#}
+{#            <div class="col-md-2">#}
+{#                <a href="/">#}
+{#                    <img src="/upload/CNext/470/470d92f94db300693ac13345dff8e771.PNG" alt="Теплый Дом" height="40">#}
+{#                </a>#}
+{#            </div>#}
+{#            <div class="col-md-6">#}
+{#                <form class="d-flex">#}
+{#                    <input class="form-control me-2" type="search" placeholder="Поиск">#}
+{#                    <button class="btn btn-outline-secondary" type="submit">Найти</button>#}
+{#                </form>#}
+{#            </div>#}
+{#            <div class="col-md-4 text-end">#}
+{#                <a href="tel:+74955453900" class="text-decoration-none me-3">+7 (495) 545-39-00</a>#}
+{#                <button class="btn btn-primary">Заказать звонок</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+{#<!-- Мобильный хедер -->#}
+{#<header class="d-md-none bg-light py-2">#}
+{#    <div class="container">#}
+{#        <div class="row align-items-center">#}
+{#            <div class="col-2">#}
+{#                <button class="btn">☰</button>#}
+{#            </div>#}
+{#            <div class="col-6 text-center">#}
+{#                <a href="/">#}
+{#                    <img src="/upload/CNext/470/470d92f94db300693ac13345dff8e771.PNG" alt="Теплый Дом" height="40">#}
+{#                </a>#}
+{#            </div>#}
+{#            <div class="col-4 text-end">#}
+{#                <button class="btn">🔍</button>#}
+{#                <button class="btn">🛒</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</header>#}
+
+
+
+{#<header class="py-3 mb-4">#}
+{#    <div class="container d-flex flex-wrap justify-content-center ">#}
+{#        <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">#}
+{#            <img src="/images/tepliydom.png" alt="Logo" style="height: 44px; width: auto;" class="me-2">#}
+{#        </a>#}
+{#        <div class="pull-right">#}
+{#            <div class="wrap_icon inner-table-block">#}
+{#                <div class="phone-block">#}
+{#                    <div id="bxdynamic_header-allphones-block1_start" style="d2isplay:none"></div>											<div class="phone">#}
+{#                        <i class="bi bi-phone"></i>#}
+{#                        <a rel="nofollow" href="tel:+74955453900">+7 (495) 545-39-00</a>#}
+{#                    </div>#}
+{#                    <div id="bxdynamic_header-allphones-block1_end" style="display:none"></div>																					<div class="callback-block">#}
+{#                        <span class="animate-load twosmallfont colored" data-event="jqm" data-param-form_id="CALLBACK" data-name="callback">Заказать звонок</span>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">#}
+{#            <input type="search" class="form-control" placeholder="Search..." aria-label="Search"></form>#}
+{#    </div>#}
+{#</header>#}
+{#<div class="menu-row middle-block bgcolored">#}
+{#    <div class="maxwidth-theme ">#}
+{#        <div class="row">#}
+{#            <div class="col-md-12">#}
+{#                <div class="menu-only">#}
+{#                    <nav class="mega-menu sliced">#}
+{#                        <table >#}
+{#                            <tr>#}
+{#                                <td class="catalog"><a href="/news/">Каталог</a></td>#}
+{#                                <td>#}
+{#                                    <ul class="nav">#}
+{#                                        <li><a href="/news/">Новости</a></li>#}
+{#                                    </ul></td>#}
+{#                            </tr>#}
+{#                        </table>#}
+{#                    </nav>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+
+{#<nav class="py-2 bg-body-tertiary border-bottom mega_fixed_menu">#}
+{#    <div class="container d-flex flex-wrap">#}
+
+{#        <ul class="nav me-auto">#}
+{#            <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2 active" aria-current="page">Главная</a>#}
+{#            </li>#}
+{#            <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">Каталог</a></li>#}
+{#            <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">О компании</a></li>#}
+{#            <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">FAQs</a></li>#}
+{#            <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">About</a></li>#}
+{#        </ul>#}
+{#        <ul class="nav">#}
+{#            <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">Login</a></li>#}
+{#            <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">Sign up</a></li>#}
+{#        </ul>#}
+{#    </div>#}
+{#</nav>#}
+
+
+
+
+
+
+{#<!-- Header -->#}
+{#<header class="bg-white shadow-md sticky top-0 z-50">#}
+{#    <div class="container mx-auto px-4 py-3 flex justify-between items-center">#}
+{#        <div class="flex items-center">#}
+{#            <a href="/" class="flex items-center">#}
+{#                <div class="bg-blue-600 text-white p-2 rounded-lg mr-3">#}
+
+{#                </div>#}
+
+{#            </a>#}
+{#        </div>#}
+
+{#        <div class="hidden md:flex space-x-6">#}
+{#            <a href="#materials" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth">Материалы</a>#}
+{#            <a href="#advantages" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth">Преимущества</a>#}
+{#            <a href="#calculator" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth">Калькулятор</a>#}
+{#            <a href="#reviews" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth">Отзывы</a>#}
+{#            <a href="#contacts" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth">Контакты</a>#}
+{#        </div>#}
+
+{#        <div class="flex items-center space-x-4">#}
+{#            <a href="tel:+78001234567" class="hidden md:flex items-center text-gray-700 hover:text-blue-600 transition-smooth">#}
+{#                <i class="fas fa-phone-alt mr-2"></i>#}
+{#                <span>8 (800) 123-45-67</span>#}
+{#            </a>#}
+{#            <button class="bg-[#ff6b00] hover:bg-[#e05e00] text-white px-4 py-2 rounded-lg transition-smooth">#}
+{#                Заказать звонок#}
+{#            </button>#}
+{#            <button id="mobile-menu-button" class="md:hidden text-gray-700">#}
+{#                <i class="fas fa-bars text-2xl"></i>#}
+{#            </button>#}
+{#        </div>#}
+{#    </div>#}
+
+{#    <!-- Mobile menu -->#}
+{#    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">#}
+{#        <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">#}
+{#            <a href="#materials" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth py-2">Материалы</a>#}
+{#            <a href="#advantages" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth py-2">Преимущества</a>#}
+{#            <a href="#calculator" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth py-2">Калькулятор</a>#}
+{#            <a href="#reviews" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth py-2">Отзывы</a>#}
+{#            <a href="#contacts" class="nav-link text-gray-700 hover:text-blue-600 transition-smooth py-2">Контакты</a>#}
+{#            <a href="tel:+78001234567" class="flex items-center text-gray-700 hover:text-blue-600 transition-smooth py-2">#}
+{#                <i class="fas fa-phone-alt mr-2"></i>#}
+{#                <span>8 (800) 123-45-67</span>#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
+{#</header>#}

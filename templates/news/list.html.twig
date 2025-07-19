@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid my-4">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        Каталог продукции
+                    </div>
+                    {{ include('menu-catalog.html.twig') }}
+                </div>
+                {{ include('_block/subscription.html.twig') }}
+            </div>
+
+            <!-- Контент справа -->
+            <div class="col-lg-9">
+                <h1>{{ page.title }}</h1>
+                <div class="news-list">
+                    {% for news in newsList %}
+                        <div class="news-item mb-4 pb-4 border-bottom">
+                            <div class="row">
+                                <!-- Изображение новости -->
+                                <div class="col-md-3 mb-3 mb-md-0">
+                                    <a href="/about/news/{{ news.slug }}">
+                                        <img src="{{ news.image }}" alt="{{ news.title }}" class="img-fluid rounded" style="max-height: 180px; width: 100%; object-fit: cover;">
+                                    </a>
+                                </div>
+
+                                <!-- Контент новости -->
+                                <div class="col-md-9">
+                                    <!-- Заголовок и дата -->
+                                    <h3 class="h5 mb-2">
+                                        <a href="/about/news/{{ news.slug }}" class="text-decoration-none text-dark">{{ news.title }}</a>
+                                    </h3>
+
+                                    <div class="text-muted small mb-2">
+                                        <i class="far fa-calendar-alt me-1"></i> {{ news.datetime|date("d.m.Y") }}
+                                    </div>
+
+                                    <!-- Анонс новости -->
+                                    <p class="mb-2">{{ news.description|u.wordwrap(5)|raw }}</p>
+
+                                    <!-- Ссылка "Подробнее" -->
+                                    <a href="/about/news/{{ news.slug }}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <!-- Кнопка "Все новости" (опционально) -->
+                    <div class="text-center mt-4">
+                        <a href="/news/" class="btn btn-primary">Все новости</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

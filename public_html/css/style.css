@@ -1,0 +1,148 @@
+.carousel-control-prev-icon:hover {
+    background: #d9002a;
+    /*background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwYWFlMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDhmYzciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);*/
+    background: -moz-linear-gradient(top,#d9002a 0%,#bf001f 100%);
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#d9002a),color-stop(100%,#bf001f));
+    background: -webkit-linear-gradient(top,#d9002a 0%,#bf001f 100%);
+    background: -o-linear-gradient(top,#d9002a 0%,#bf001f 100%);
+    background: -ms-linear-gradient(top,#d9002a 0%,#bf001f 100%);
+    background: linear-gradient(to bottom,#d9002a 0%,#bf001f 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@bcolor_00aae2',endColorstr='@bcolor_008fc7',GradientType=0);
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    /*background-color: #d9002a !important;*/
+}
+
+.brand-img {
+    max-height: 80px;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease-in-out;
+    display: block;
+    /*border: #0a58ca 1px solid;*/
+}
+.brand-item:hover .brand-img {
+    filter: grayscale(0%);
+}
+.position-relative {
+    position: relative;
+}
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.8);
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 2;
+}
+.carousel-arrow.left {
+    left: 0;
+}
+.carousel-arrow.right {
+    right: 0;
+}
+#brandTrack {
+    transition: transform 0.5s ease;
+    will-change: transform;
+}
+
+.slide-2 {
+    background: url("/upload/iblock/8cc/8ccb6403e2ad258fca0ac6bb6ad5bec0.jpg") bottom left no-repeat;
+}
+.slide-2 .carousel-caption {
+    left: 10%;
+    right: auto;
+    text-align: left;
+    width: 40%;
+    top: 100px;
+    bottom: auto;
+    height: 483px;
+}
+.carousel-control-next {
+    color: danger;
+}
+
+#mainCarousel {
+    /*height: 250px !important;*/
+}
+
+/*pay icons*/
+.pay_system_icons {
+    /*background: #d9002a;*/
+    /*border: #0a58ca 1px solid !important;*/
+}
+.pay_system_icons i{
+    display:inline-block;
+    height:20px;
+    width:34px;
+    background:url("/images/pay_icons.png");
+    margin:0px 11px 9px 0px;
+}
+.pay_system_icons span i:last-child{margin-right:0px;}
+.pay_system_icons i.cacsh{background-position:0px -1px;}
+.pay_system_icons i.sbrf{background-position:-259px -1px;}
+.pay_system_icons i.alfa{background-position:-305px -1px;}
+.pay_system_icons i.mastercard{background-position:-42px -1px;}
+.pay_system_icons i.visa{background-position:-89px -1px;}
+.pay_system_icons i.yandex_money{background-position:-142px -1px;width:21px;}
+.pay_system_icons i.webmoney{background-position:-182px -1px;margin-right:7px;}
+.pay_system_icons i.qiwi{background-position:-222px -1px;margin-right:0px;}
+.accordion-button.no-arrow::after {
+    display: none;
+}
+/* Красный фон для активного элемента аккордеона */
+.accordion-item .accordion-button:not(.collapsed) {
+    background-color: #dc3545; /* Красный цвет */
+    color: white; /* Белый текст */
+    border-left: 5px solid #dc3545;
+}
+/* remove glow */
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: inherit;
+}
+
+/* Белый цвет для ссылок в аккордеоне */
+.accordion-body a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Изменение цвета при наведении на ссылку */
+.accordion-body a:hover {
+    color: #f8f9fa; /* Слегка светлее белого */
+    text-decoration: underline;
+}
+.accordion-body li a {
+    color: #c82333;
+}
+.accordion-body li a:hover {
+    color: #c82333;
+}
+
+/* Убираем стандартную иконку стрелки Bootstrap */
+.accordion-button.no-arrow::after {
+    display: none;
+}
+.accordion-button {
+    border-left: 5px solid #FFFFFF;
+}
+/* Цвет фона при наведении */
+.accordion-button:hover:not(.no-arrow) {
+    /*background-color: #c82333; !* Темнее красный *!*/
+    border-left: 5px solid #c82333;
+    /*color: white;*/
+}
+.bottom-menu a {
+    color: #555555;
+    text-decoration: none;
+}
+
+.bottom-menu a:hover {
+    color: #c82333;
+    text-decoration: underline;
+}

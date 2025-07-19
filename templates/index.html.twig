@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid my-4">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        Каталог продукции
+                    </div>
+                    {{ include('menu-catalog.html.twig') }}
+                </div>
+                {{ include('_block/subscription.html.twig') }}
+            </div>
+
+            <!-- Контент справа -->
+            <div class="col-lg-9">
+                <!-- Слайдер -->
+                   {{ include('index/carousel.html.twig') }}
+                   {{ include('index/teasers.html.twig') }}
+                   {{ include('index/popular-catalog.html.twig') }}
+                   {{ include('index/hit-and-recomend.html.twig') }}
+                   {{ include('index/about.html.twig') }}
+                   {{ include('index/brands.html.twig') }}
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
