@@ -6,7 +6,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController
 {
-    #[Route(path: '/catalog/{slug}', name: 'category_index', requirements: ['slug' => '.+'], defaults: ['slug' => ''])]
+    #[Route(
+        path: '/catalog/{path}/p-{product}',
+        name: 'category_index',
+        requirements: [
+            'path' => '.+',
+            'product' => '.+',
+            ],
+        defaults: ['slug' => ''],
+        priority: 30)]
     public function index(string $slug = '')
     {
         dd($slug);

@@ -249,10 +249,7 @@ class Section
         return $this;
     }
 
-    public function isPublished(): bool
-    {
-        return $this->getStatus() === Statuses::Active;
-    }
+
 
     public function getTemplate(): ?string
     {

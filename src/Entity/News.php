@@ -51,6 +51,9 @@ class News
     #[ORM\Column]
     private ?\DateTime $datetime = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $parent = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -188,6 +191,18 @@ class News
     public function setDatetime(\DateTime $datetime): static
     {
         $this->datetime = $datetime;
+
+        return $this;
+    }
+
+    public function getParent(): ?int
+    {
+        return $this->parent;
+    }
+
+    public function setParent(int $parent): static
+    {
+        $this->parent = $parent;
 
         return $this;
     }
