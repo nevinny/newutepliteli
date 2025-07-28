@@ -16,7 +16,7 @@ enum Statuses: string
     public static function choices(): array
     {
         return array_combine(
-            array_map(fn(self $case) => $case->value, self::cases()),
+            array_map(fn(self $case) => $case->name, self::cases()),
             self::cases()
         );
     }

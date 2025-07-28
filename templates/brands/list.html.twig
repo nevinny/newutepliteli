@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-lg-3 d-none d-lg-block">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    Каталог продукции
+                </div>
+                {{ include('menu-catalog.html.twig') }}
+            </div>
+            {{ include('_block/subscription.html.twig') }}
+        </div>
+
+        <!-- Контент справа -->
+        <div class="col-lg-9">
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.description|raw }}</p>
+    {#<div class="row">#}
+    {#    <div class="col-6"><h3>{{ page.addr }}</h3></div>#}
+    {#    <div class="col-3">{{ page.workHours|raw }}</div>#}
+    {#    <div class="col-3">{{ page.phone|raw }}<br><a href="mailto:{{ page.email }}">{{ page.email }}</a></div>#}
+    {#</div>#}
+
+{#    <p>{{ page.description }}</p>#}
+    <div class="row">
+    {% for item in list %}
+        {% if item.logo is not empty %}
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <h3 class="text-center m-5 p-2"><a
+                href="{{ main.fullPath }}/{{ item.slug }}"><img
+                src="{{ asset('/images/brands/' ~ item.logo) }}"
+                alt="{{ item.title }}"
+                title="{{ item.title }}"
+                class="img-fluid"
+                ></a></h3>
+            </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -7,10 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait Status
 {
-    #[ORM\Column(enumType: Statuses::class, options: ['default' => Statuses::Active])]
+
+    #[ORM\Column(type: 'string', enumType: Statuses::class, options: ['default' => Statuses::Active])]
     private ?Statuses $status = Statuses::Active;
 
-    public function getStatus(): ?Statuses
+    public function getStatus(): Statuses|string|null
     {
         return $this->status;
     }
@@ -20,5 +21,10 @@ trait Status
         $this->status = $status;
 
         return $this;
+    }
+    public function isPublished(): bool
+    {
+//        dd($this->getStatus(),Statuses::Active->value,($this->getStatus() === Statuses::Active));
+        return $this->getStatus() === Statuses::Active;
     }
 }

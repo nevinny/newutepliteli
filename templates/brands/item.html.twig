@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid my-4">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        Каталог продукции
+                    </div>
+                    {{ include('menu-catalog.html.twig') }}
+                </div>
+                {{ include('_block/subscription.html.twig') }}
+            </div>
+
+            <!-- Контент справа -->
+            <div class="col-lg-9">
+                <div class="d-flex align-items-center">
+                    <h1 class="mb-0">{{ main.title }}</h1>
+                    {% if page.logo %}
+                        <img src="{{ asset('/images/brands/' ~ page.logo) }}" alt="{{ main.title }}" class="ms-3" style="max-height: 40px;">
+                    {% endif %}
+                </div>
+                <div>{{ page.description|raw }}</div>
+                {% if page.url %}
+                    <div class="mt-2">
+                        <a href="{{ page.url }}" target="_blank" class="text-decoration-none">{{ page.url }}</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

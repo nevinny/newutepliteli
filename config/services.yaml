@@ -28,3 +28,4 @@ services:
         tags:
             - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\Section }
             - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\Section }
+#            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Section }

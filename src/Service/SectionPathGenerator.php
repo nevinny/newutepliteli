@@ -2,20 +2,23 @@
 
 namespace App\Service;
 
+use App\Entity\Main;
 use App\Entity\Section;
 
 final class SectionPathGenerator
 {
-    public function generateFullPath(Section $section): string
+    public function generateFullPath($entity): string
     {
-        $parts = [];
-        $current = $section;
-
-        while ($current !== null) {
-            array_unshift($parts, $current->getSlug());
-            $current = $current->getParent();
+//        dd($entity);
+        if($entity instanceof Main) {
+            $parts = [];
+            $current = $entity;
+            while ($current !== null) {
+                array_unshift($parts, $current->getSlug());
+                $current = $current->getParent();
+            }
+            return '/' . implode('/', $parts);
         }
-
-        return '/' . implode('/', $parts);
+        return '/';
     }
 }

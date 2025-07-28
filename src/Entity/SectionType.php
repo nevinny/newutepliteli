@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Interface\SystemEntityInterface;
 use App\Repository\SectionTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,7 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SectionTypeRepository::class)]
-class SectionType
+class SectionType implements SystemEntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,6 +50,11 @@ class SectionType
     public function __construct()
     {
         $this->sections = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->code;
     }
 
     public function getId(): ?int

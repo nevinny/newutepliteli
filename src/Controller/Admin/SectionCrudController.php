@@ -31,11 +31,12 @@ class SectionCrudController extends DefaultCrudController
     public function __construct(
         RequestStack $requestStack,
         EntityManagerInterface $entityManager,
-        private AdminUrlGenerator $adminUrlGenerator,)
+        private AdminUrlGenerator $adminUrlGenerator,
+    )
     {
         $this->requestStack = $requestStack;
         // Вызываем конструктор родителя с теми же аргументами
-        parent::__construct($requestStack, $entityManager);
+        parent::__construct($requestStack, $entityManager, $adminUrlGenerator);
     }
 
     public static function getEntityFqcn(): string
@@ -61,9 +62,8 @@ class SectionCrudController extends DefaultCrudController
         yield FormField::addTab('System');
 
 
-
         $request = $this->requestStack->getCurrentRequest();
-        $parentId = $request?->query->get('parent_id');
+        $parentId = $request?->query->get('parent_id', 0);
 
         if ($pageName === Crud::PAGE_NEW && $parentId) {
             // можно скрыть поле, если не хотите позволять менять родителя
@@ -133,28 +133,7 @@ class SectionCrudController extends DefaultCrudController
         ->setMaxLength(255);
     }
 
-    public function configureActions(Actions $actions): Actions
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        $parentId = $request ? $request->query->getInt('parent_id', 0) : 0;
 
-        $url = $this->adminUrlGenerator
-            ->setController(self::class)
-            ->setAction('new')
-            ->set('parent_id', $parentId)
-            ->generateUrl();
-
-        $customNewAction = Action::new('customNew', 'Add Section')
-            ->linkToUrl($url)
-            ->setCssClass('btn btn-primary')
-            ->createAsGlobalAction()
-        ;
-
-        return $actions
-            ->remove(Crud::PAGE_INDEX,Action::NEW)
-            ->add(Crud::PAGE_INDEX,$customNewAction)
-        ;
-    }
 
     public function createEntity(string $entityFqcn)
     {

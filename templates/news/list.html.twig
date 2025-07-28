@@ -15,9 +15,9 @@
 
             <!-- Контент справа -->
             <div class="col-lg-9">
-                <h1>{{ page.title }}</h1>
+                <h1>{{ main.title }}</h1>
                 <div class="news-list">
-                    {% for news in newsList %}
+                    {% for news in list %}
                         <div class="news-item mb-4 pb-4 border-bottom">
                             <div class="row">
                                 <!-- Изображение новости -->
@@ -50,7 +50,7 @@
 
                     <!-- Кнопка "Все новости" (опционально) -->
                     <div class="text-center mt-4">
-                        <a href="/news/" class="btn btn-primary">Все новости</a>
+                        <a href="/news/" class="btn btn-danger">Все новости</a>
                     </div>
                 </div>
             </div>

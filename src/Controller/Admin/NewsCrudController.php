@@ -4,9 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\News;
 //use App\Entity\Page;
+use App\Entity\Section;
 use App\Enum\Statuses;
 use App\Service\ImageUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -18,12 +20,22 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RequestStack;
 
-class NewsCrudController extends AbstractCrudController
+class NewsCrudController extends DefaultCrudController
 {
-    public function __construct(private ImageUploaderService $imageUploader) {}
+    public function __construct(
+        private ImageUploaderService $imageUploader,
+        private RequestStack $requestStack,
+        EntityManagerInterface $entityManager,
+        private AdminUrlGenerator $adminUrlGenerator,
+
+    ) {
+        parent::__construct($requestStack, $entityManager, $adminUrlGenerator);
+    }
 
     public static function getEntityFqcn(): string
     {
@@ -34,11 +46,16 @@ class NewsCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield FormField::addTab('System');
-//        yield AssociationField::new('parent', 'Родитель')
-//            ->setFormTypeOption('choice_label', function (Page $page) {
-//                return str_repeat('— ', $page->getLevel()) . $page->getTitle();
-//            })
-//            ->setFormTypeOption('required', false);
+        $request = $this->requestStack->getCurrentRequest();
+        $parentId = $request?->query->get('parent_id', 0);
+
+//        if ($pageName === Crud::PAGE_NEW && $parentId) {
+            // можно скрыть поле, если не хотите позволять менять родителя
+            $parentField = IdField::new('parent', 'Родитель');
+            $parentField->setFormTypeOption('data', $parentId);
+//        }
+
+        yield $parentField;
         yield ChoiceField::new('status')->setChoices([
             Statuses::Active,
             Statuses::Disabled,
