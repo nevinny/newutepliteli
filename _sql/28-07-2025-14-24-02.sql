@@ -1,0 +1,579 @@
+# ************************************************************
+# Sequel Ace SQL dump
+# Версия 20080
+#
+# https://sequel-ace.com/
+# https://github.com/Sequel-Ace/Sequel-Ace
+#
+# Хост: localhost (MySQL 9.1.0)
+# База данных: admintdst_newutp
+# Время формирования: 2025-07-28 11:24:02 +0000
+# ************************************************************
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+SET NAMES utf8mb4;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE='NO_AUTO_VALUE_ON_ZERO', SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Дамп таблицы brand
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `brand`;
+
+CREATE TABLE `brand` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent` int DEFAULT NULL,
+  `ord` int NOT NULL DEFAULT '0',
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `brand` WRITE;
+/*!40000 ALTER TABLE `brand` DISABLE KEYS */;
+
+INSERT INTO `brand` (`id`, `slug`, `title`, `parent`, `ord`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `created_at`, `updated_at`, `description`, `url`, `logo`)
+VALUES
+	(2,'rookwool','ROOKWOOL',98,0,NULL,NULL,NULL,'active','2025-07-24 17:53:44','2025-07-25 12:51:53','<div>Компания представлена тремя брендами:</div><div><br>РОКВУЛ – современные надежные тепло- и звукоизоляционные материалы из каменной ваты. Продукция применяется для утепления, звукоизоляции, огнезащиты и предназначена для всех видов зданий и сооружений, промышленного оборудования, трубопроводов и воздуховодов.<br><br></div><div><br>Рокфон – крупнейший бренд акустических решений – потолочных и стеновых панелей из каменной ваты. Продукция применяется для звукоизоляции и создания акустического комфорта внутри общественных объектов, офисов, промышленных предприятий, зданий здравоохранения и образования.<br><br></div><div><br>Гродан – инновационные и экологичные решения с использованием субстратов из каменной ваты для профессионального растениеводства, основанные на принципах Точного выращивания. Эти решения используются для выращивания овощей и цветов.</div>','https://rwl.ru/','rockwool-68837de9a9115529086909.png'),
+	(3,'tehnonikol','Технониколь',98,0,NULL,NULL,NULL,'active','2025-07-24 17:54:13','2025-07-25 13:02:42',NULL,NULL,'tn-688380720aea9828848700.png'),
+	(4,'bitex','Bitex',98,0,NULL,NULL,NULL,'active','2025-07-24 17:54:34','2025-07-25 13:02:59',NULL,NULL,'bitex-68838083f33d2299924076.png'),
+	(5,'brane','Brane',98,0,NULL,NULL,NULL,'active','2025-07-24 17:54:53','2025-07-25 13:03:09',NULL,NULL,'brane-6883808d2a8b5268382487.png'),
+	(6,'taleon','Taleon',98,0,NULL,NULL,NULL,'active','2025-07-24 17:55:06','2025-07-25 13:03:52',NULL,NULL,'ultralam-688380b827a3a903346896.png'),
+	(7,'paroc','Paroc',98,0,NULL,NULL,NULL,'active','2025-07-24 17:55:18','2025-07-25 13:04:00',NULL,NULL,'paroc-688380c0a340a082201698.jpg'),
+	(8,'baumit','Baumit',98,0,NULL,NULL,NULL,'active','2025-07-24 17:55:33','2025-07-25 13:04:08',NULL,NULL,'baumit-688380c89c3bd788547686.png'),
+	(9,'penopleks','Пеноплекс',98,0,NULL,NULL,NULL,'active','2025-07-24 17:55:50','2025-07-25 13:04:17',NULL,NULL,'penoplex-688380d1438fe071273458.png'),
+	(10,'knauf','Knauf',98,0,NULL,NULL,NULL,'active','2025-07-24 17:56:07','2025-07-25 13:05:02',NULL,NULL,'knauf-688380fe434e8613761250.png');
+
+/*!40000 ALTER TABLE `brand` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы brand_list
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `brand_list`;
+
+CREATE TABLE `brand_list` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent` int DEFAULT NULL,
+  `ord` int NOT NULL DEFAULT '0',
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `brand_list` WRITE;
+/*!40000 ALTER TABLE `brand_list` DISABLE KEYS */;
+
+INSERT INTO `brand_list` (`id`, `slug`, `title`, `parent`, `ord`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `created_at`, `updated_at`, `description`)
+VALUES
+	(2,'brands','Бренды',0,0,NULL,NULL,NULL,'active','2025-07-24 17:42:55','2025-07-24 17:42:55','<div>Наш интернет-магазин является официальным дилером представленных торговых марок. Это означает, что вся продукция действительно фирменная, никакого «серого импорта», на все товары распространяется гарантия производителя, цены в нашем магазине соответствуют, рекомендованным производителем.</div>');
+
+/*!40000 ALTER TABLE `brand_list` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы category
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `category`;
+
+CREATE TABLE `category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent` int DEFAULT NULL,
+  `ord` int NOT NULL DEFAULT '0',
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+
+INSERT INTO `category` (`id`, `slug`, `title`, `parent`, `ord`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `created_at`, `updated_at`)
+VALUES
+	(9,'teploizolyaciya','Теплоизоляция',8,0,NULL,NULL,NULL,'active','2025-07-09 15:41:45','2025-07-09 15:41:45'),
+	(10,'gidroizolyaciya','Гидроизоляция',8,0,NULL,NULL,NULL,'active','2025-07-10 14:28:38','2025-07-10 14:28:38'),
+	(11,'zvukoizolyaciya','Звукоизоляция',8,0,NULL,NULL,NULL,'active','2025-07-10 14:29:33','2025-07-10 14:29:33'),
+	(12,'paroizolyaciya','Пароизоляция',8,0,NULL,NULL,NULL,'active','2025-07-10 14:29:58','2025-07-10 14:29:58'),
+	(13,'vetro-vlagozashita','Ветро-влагозащита',8,0,NULL,NULL,NULL,'active','2025-07-10 14:30:22','2025-07-10 14:30:22'),
+	(14,'tehnicheskaya-izolyaciya','Техническая изоляция',8,0,NULL,NULL,NULL,'active','2025-07-10 14:30:42','2025-07-10 14:30:42'),
+	(15,'uteplenie-fasadov','Утепление фасадов',8,0,NULL,NULL,NULL,'active','2025-07-10 14:31:04','2025-07-10 14:31:04'),
+	(16,'drevesno-struzhechnye-plity','Древесно-стружечные плиты',8,0,NULL,NULL,NULL,'active','2025-07-10 14:31:27','2025-07-10 14:31:27'),
+	(17,'krepyozh','Крепёж',8,0,NULL,NULL,NULL,'active','2025-07-10 14:31:44','2025-07-10 14:31:44'),
+	(18,'smesi-kraski-i-gruntovki','Смеси, краски и грунтовки',8,0,NULL,NULL,NULL,'active','2025-07-10 14:32:07','2025-07-10 14:32:07'),
+	(19,'peny-i-germetiki','Пены и герметики',8,0,NULL,NULL,NULL,'active','2025-07-10 14:32:30','2025-07-10 14:32:30'),
+	(20,'bazaltovyj-uteplitel','Базальтовый утеплитель',9,0,NULL,NULL,NULL,'active','2025-07-10 14:33:03','2025-07-10 14:33:03'),
+	(21,'ekstruzionnyj-penopolistirol','Экструзионный пенополистирол',9,0,NULL,NULL,NULL,'active','2025-07-10 16:07:16','2025-07-10 16:07:16'),
+	(22,'mineralnaya-vata','Минеральная вата',9,0,NULL,NULL,NULL,'active','2025-07-10 16:07:38','2025-07-10 16:07:38'),
+	(23,'bitumnye-rulonnye-materialy','Битумные рулонные материалы',10,0,NULL,NULL,NULL,'active','2025-07-10 16:20:11','2025-07-10 16:20:11'),
+	(24,'cilindry','Цилиндры',14,0,NULL,NULL,NULL,'active','2025-07-10 16:20:56','2025-07-10 16:20:56'),
+	(25,'kraski','Краски',18,0,NULL,NULL,NULL,'active','2025-07-10 16:21:45','2025-07-10 16:21:45'),
+	(26,'gruntovki','Грунтовки',18,0,NULL,NULL,NULL,'active','2025-07-10 16:22:17','2025-07-10 16:22:17'),
+	(27,'shtukaturki','Штукатурки',18,0,NULL,NULL,NULL,'active','2025-07-10 16:22:39','2025-07-10 16:22:39'),
+	(28,'klei','Клеи',18,0,NULL,NULL,NULL,'active','2025-07-10 16:23:03','2025-07-10 16:23:03');
+
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы contacts
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `contacts`;
+
+CREATE TABLE `contacts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `addr` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `work_hours` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `coordinates` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent` int DEFAULT NULL,
+  `ord` int NOT NULL DEFAULT '0',
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `contacts` WRITE;
+/*!40000 ALTER TABLE `contacts` DISABLE KEYS */;
+
+INSERT INTO `contacts` (`id`, `addr`, `phone`, `email`, `work_hours`, `coordinates`, `slug`, `title`, `parent`, `ord`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `created_at`, `updated_at`)
+VALUES
+	(21,'Москва, Новочерёмушкинская улица, 69','+7(495) 545-39-00<br>+7(495) 332-54-57','shop@utepliteli.org','Пн - Пт: 9.00 - 18.00<br>Сб - Вс: выходные','7ce02a5c97f6461158d06421a049419a65f1d309fae40176652ccb12f72f4a93','contacts','Контакты',0,0,NULL,NULL,NULL,'active','2025-07-23 17:15:59','2025-07-23 17:15:59');
+
+/*!40000 ALTER TABLE `contacts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы doctrine_migration_versions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `doctrine_migration_versions`;
+
+CREATE TABLE `doctrine_migration_versions` (
+  `version` varchar(191) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `executed_at` datetime DEFAULT NULL,
+  `execution_time` int DEFAULT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+LOCK TABLES `doctrine_migration_versions` WRITE;
+/*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
+
+INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`)
+VALUES
+	('DoctrineMigrations\\Version20250702110816','2025-07-02 11:08:25',311),
+	('DoctrineMigrations\\Version20250702111251','2025-07-02 11:13:11',21),
+	('DoctrineMigrations\\Version20250707120713','2025-07-07 12:07:50',104),
+	('DoctrineMigrations\\Version20250707122624','2025-07-07 12:26:30',28),
+	('DoctrineMigrations\\Version20250707133937','2025-07-07 13:39:57',47),
+	('DoctrineMigrations\\Version20250709090217','2025-07-09 09:02:22',29),
+	('DoctrineMigrations\\Version20250710094907','2025-07-10 09:49:24',66),
+	('DoctrineMigrations\\Version20250710103002','2025-07-10 10:30:11',45),
+	('DoctrineMigrations\\Version20250719121004','2025-07-19 12:10:10',33),
+	('DoctrineMigrations\\Version20250719164154','2025-07-19 16:42:13',59),
+	('DoctrineMigrations\\Version20250719164318','2025-07-19 16:43:21',20),
+	('DoctrineMigrations\\Version20250719170255','2025-07-19 17:02:58',19),
+	('DoctrineMigrations\\Version20250719172031','2025-07-19 17:20:52',35),
+	('DoctrineMigrations\\Version20250719173547','2025-07-19 17:36:33',20),
+	('DoctrineMigrations\\Version20250719174154','2025-07-19 17:42:10',17),
+	('DoctrineMigrations\\Version20250719175421','2025-07-19 17:54:41',45),
+	('DoctrineMigrations\\Version20250719180042','2025-07-19 18:00:45',26),
+	('DoctrineMigrations\\Version20250719202203','2025-07-19 20:24:07',28),
+	('DoctrineMigrations\\Version20250720155812','2025-07-20 17:47:51',43),
+	('DoctrineMigrations\\Version20250720174549','2025-07-20 17:49:42',5),
+	('DoctrineMigrations\\Version20250720182504','2025-07-20 18:25:15',25),
+	('DoctrineMigrations\\Version20250722162559','2025-07-22 16:26:06',28),
+	('DoctrineMigrations\\Version20250723112750','2025-07-23 11:27:57',29),
+	('DoctrineMigrations\\Version20250723113733','2025-07-23 11:37:37',40),
+	('DoctrineMigrations\\Version20250723175524','2025-07-23 17:55:30',74),
+	('DoctrineMigrations\\Version20250723180931','2025-07-23 18:11:29',52),
+	('DoctrineMigrations\\Version20250723183758','2025-07-23 18:38:04',30),
+	('DoctrineMigrations\\Version20250724165713','2025-07-24 16:57:18',21),
+	('DoctrineMigrations\\Version20250724173045','2025-07-24 17:30:50',24),
+	('DoctrineMigrations\\Version20250724183021','2025-07-24 18:30:27',31),
+	('DoctrineMigrations\\Version20250724213202','2025-07-24 21:32:06',30),
+	('DoctrineMigrations\\Version20250725141515','2025-07-25 14:15:21',26);
+
+/*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы main
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `main`;
+
+CREATE TABLE `main` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent_id` int DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ord` int DEFAULT NULL,
+  `is_node` tinyint(1) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `entity_id` int NOT NULL,
+  `entity_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `path_unique_idx` (`full_path`),
+  KEY `IDX_BF28CD64727ACA70` (`parent_id`),
+  KEY `IDX_BF28CD645681BEB0` (`entity_type_id`),
+  CONSTRAINT `FK_BF28CD645681BEB0` FOREIGN KEY (`entity_type_id`) REFERENCES `section_type` (`id`),
+  CONSTRAINT `FK_BF28CD64727ACA70` FOREIGN KEY (`parent_id`) REFERENCES `main` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `main` WRITE;
+/*!40000 ALTER TABLE `main` DISABLE KEYS */;
+
+INSERT INTO `main` (`id`, `title`, `parent_id`, `slug`, `full_path`, `template`, `ord`, `is_node`, `created_at`, `updated_at`, `status`, `entity_id`, `entity_type_id`)
+VALUES
+	(1,'О компании',NULL,'about','/about','section/text',0,1,'2025-07-08 11:13:20','2025-07-08 11:13:20','active',1,1),
+	(2,'Информация',NULL,'info','/info','section/text',0,1,'2025-07-08 11:14:09','2025-07-08 11:14:09','active',2,1),
+	(3,'Помощь',NULL,'help','/help','section/text',0,1,'2025-07-08 11:14:31','2025-07-08 11:14:31','active',3,1),
+	(4,'Новости',1,'news','/about/news','news/list',0,1,'2025-07-08 11:18:16','2025-07-08 11:18:16','active',4,2),
+	(5,'Условия оплаты',2,'payment','/info/payment','section/text',0,0,'2025-07-08 11:21:05','2025-07-08 11:21:05','active',5,1),
+	(6,'Условия доставки',2,'delivery','/info/delivery','section/text',0,0,'2025-07-08 11:32:14','2025-07-08 11:32:14','active',6,1),
+	(7,'Гарантия на товар',2,'warranty','/info/warranty','section/text',0,0,'2025-07-08 11:37:23','2025-07-08 11:37:23','active',7,1),
+	(8,'Каталог',NULL,'catalog','/catalog',NULL,0,1,'2025-07-09 15:38:52','2025-07-09 15:38:52','active',8,7),
+	(9,'Теплоизоляция',8,'teploizolyaciya','/catalog/teploizolyaciya','catalog/category',0,1,'2025-07-09 15:41:45','2025-07-09 15:41:45','active',9,8),
+	(10,'Гидроизоляция',8,'gidroizolyaciya','/catalog/gidroizolyaciya','catalog/category',0,1,'2025-07-10 14:28:38','2025-07-10 14:28:38','active',10,8),
+	(11,'Звукоизоляция',8,'zvukoizolyaciya','/catalog/zvukoizolyaciya','catalog/category',0,1,'2025-07-10 14:29:33','2025-07-10 14:29:33','active',11,8),
+	(12,'Пароизоляция',8,'paroizolyaciya','/catalog/paroizolyaciya','catalog/category',0,1,'2025-07-10 14:29:58','2025-07-10 14:29:58','active',12,8),
+	(13,'Ветро-влагозащита',8,'vetro-vlagozashita','/catalog/vetro-vlagozashita','catalog/category',0,1,'2025-07-10 14:30:22','2025-07-10 14:30:22','active',13,8),
+	(14,'Техническая изоляция',8,'tehnicheskaya-izolyaciya','/catalog/tehnicheskaya-izolyaciya','catalog/category',0,1,'2025-07-10 14:30:42','2025-07-10 14:30:42','active',14,8),
+	(15,'Утепление фасадов',8,'uteplenie-fasadov','/catalog/uteplenie-fasadov','catalog/category',0,1,'2025-07-10 14:31:04','2025-07-10 14:31:04','active',15,8),
+	(16,'Древесно-стружечные плиты',8,'drevesno-struzhechnye-plity','/catalog/drevesno-struzhechnye-plity','catalog/category',0,1,'2025-07-10 14:31:27','2025-07-10 14:31:27','active',16,8),
+	(17,'Крепёж',8,'krepyozh','/catalog/krepyozh','catalog/category',0,1,'2025-07-10 14:31:44','2025-07-10 14:31:44','active',17,8),
+	(18,'Смеси, краски и грунтовки',8,'smesi-kraski-i-gruntovki','/catalog/smesi-kraski-i-gruntovki','catalog/category',0,1,'2025-07-10 14:32:07','2025-07-10 14:32:07','active',18,8),
+	(19,'Пены и герметики',8,'peny-i-germetiki','/catalog/peny-i-germetiki','catalog/category',0,1,'2025-07-10 14:32:30','2025-07-10 14:32:30','active',19,8),
+	(20,'Базальтовый утеплитель',9,'bazaltovyj-uteplitel','/catalog/teploizolyaciya/bazaltovyj-uteplitel','catalog/category',0,1,'2025-07-10 14:33:03','2025-07-10 14:33:03','active',20,8),
+	(21,'Экструзионный пенополистирол',9,'ekstruzionnyj-penopolistirol','/catalog/teploizolyaciya/ekstruzionnyj-penopolistirol','catalog/category',0,1,'2025-07-10 16:07:16','2025-07-10 16:07:16','active',21,8),
+	(22,'Минеральная вата',9,'mineralnaya-vata','/catalog/teploizolyaciya/mineralnaya-vata','catalog/category',0,1,'2025-07-10 16:07:38','2025-07-10 16:07:38','active',22,8),
+	(23,'Битумные рулонные материалы',10,'bitumnye-rulonnye-materialy','/catalog/gidroizolyaciya/bitumnye-rulonnye-materialy','catalog/category',0,1,'2025-07-10 16:20:11','2025-07-10 16:20:11','active',23,8),
+	(24,'Цилиндры',14,'cilindry','/catalog/tehnicheskaya-izolyaciya/cilindry','catalog/category',0,1,'2025-07-10 16:20:56','2025-07-10 16:20:56','active',24,8),
+	(25,'Краски',18,'kraski','/catalog/smesi-kraski-i-gruntovki/kraski','catalog/category',0,1,'2025-07-10 16:21:45','2025-07-10 16:21:45','active',25,8),
+	(26,'Грунтовки',18,'gruntovki','/catalog/smesi-kraski-i-gruntovki/gruntovki','catalog/category',0,1,'2025-07-10 16:22:17','2025-07-10 16:22:17','active',26,8),
+	(27,'Штукатурки',18,'shtukaturki','/catalog/smesi-kraski-i-gruntovki/shtukaturki','catalog/category',0,1,'2025-07-10 16:22:39','2025-07-10 16:22:39','active',27,8),
+	(28,'Клеи',18,'klei','/catalog/smesi-kraski-i-gruntovki/klei','catalog/category',0,1,'2025-07-10 16:23:03','2025-07-10 16:23:03','active',28,8),
+	(95,'тесту',4,'testu','/about/news/testu','news/item',NULL,0,'2025-07-23 17:09:44','2025-07-23 17:09:44','active',3,10),
+	(96,'Контакты',NULL,'contacts','/contacts','contacts/list.html.twig',0,1,'2025-07-23 17:15:59','2025-07-23 17:15:59','active',21,5),
+	(97,'Москва',110,'moscow','/contacts/stores/moscow','store/item.html.twig',0,1,'2025-07-23 18:22:39','2025-07-23 18:22:39','active',1,13),
+	(98,'Бренды',2,'brands','/info/brands','brands/list',0,1,'2025-07-24 17:42:55','2025-07-24 17:42:55','active',2,14),
+	(99,'ROOKWOOL',98,'rookwool','/info/brands/rookwool','brands/item',0,0,'2025-07-24 17:53:44','2025-07-24 17:53:44','active',2,15),
+	(100,'Технониколь',98,'tehnonikol','/info/brands/tehnonikol','brands/item',0,0,'2025-07-24 17:54:13','2025-07-24 17:54:13','active',3,15),
+	(101,'Bitex',98,'bitex','/info/brands/bitex','brands/item',0,0,'2025-07-24 17:54:34','2025-07-24 17:54:34','active',4,15),
+	(102,'Brane',98,'brane','/info/brands/brane','brands/item',0,0,'2025-07-24 17:54:53','2025-07-24 17:54:53','active',5,15),
+	(103,'Taleon',98,'taleon','/info/brands/taleon','brands/item',0,0,'2025-07-24 17:55:06','2025-07-24 17:55:06','active',6,15),
+	(104,'Paroc',98,'paroc','/info/brands/paroc','brands/item',0,0,'2025-07-24 17:55:18','2025-07-24 17:55:18','active',7,15),
+	(105,'Baumit',98,'baumit','/info/brands/baumit','brands/item',0,0,'2025-07-24 17:55:33','2025-07-24 17:55:33','active',8,15),
+	(106,'Пеноплекс',98,'penopleks','/info/brands/penopleks','brands/item',0,0,'2025-07-24 17:55:50','2025-07-24 17:55:50','active',9,15),
+	(107,'Knauf',98,'knauf','/info/brands/knauf','brands/item',0,0,'2025-07-24 17:56:07','2025-07-24 17:56:07','active',10,15),
+	(108,'Санкт-Петербург',110,'sankt-peterburg','/contacts/stores/sankt-peterburg','store/item.html.twig',0,1,'2025-07-25 14:02:20','2025-07-25 14:02:20','active',2,13),
+	(109,'Политика конфидинциальности',2,'privacy','/info/privacy',NULL,0,0,'2025-07-25 14:07:12','2025-07-25 14:07:12','active',51,1),
+	(110,'Магазины',96,'stores','/contacts/stores','store/list',0,1,'2025-07-25 14:17:16','2025-07-25 14:17:16','active',1,16);
+
+/*!40000 ALTER TABLE `main` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы messenger_messages
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `messenger_messages`;
+
+CREATE TABLE `messenger_messages` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `body` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `headers` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue_name` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+  `available_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+  `delivered_at` datetime DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)',
+  PRIMARY KEY (`id`),
+  KEY `IDX_75EA56E0FB7336F0` (`queue_name`),
+  KEY `IDX_75EA56E0E3BD61CE` (`available_at`),
+  KEY `IDX_75EA56E016BA31DB` (`delivered_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+# Дамп таблицы news
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `news`;
+
+CREATE TABLE `news` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `parent` int DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_preview` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `datetime` datetime NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_1DD39950989D9B62` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `news` WRITE;
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+
+INSERT INTO `news` (`id`, `parent`, `title`, `slug`, `description`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `image`, `image_preview`, `datetime`, `created_at`, `updated_at`)
+VALUES
+	(3,4,'тесту','testu',NULL,NULL,NULL,NULL,'active',NULL,NULL,'2025-07-23 19:59:00','2025-07-23 17:09:44','2025-07-23 17:09:44');
+
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы section
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `section`;
+
+CREATE TABLE `section` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `parent_id` int DEFAULT NULL,
+  `type_id` int NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ord` int NOT NULL DEFAULT '0',
+  `is_node` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_2D737AEF989D9B62` (`slug`),
+  KEY `IDX_2D737AEF727ACA70` (`parent_id`),
+  KEY `IDX_2D737AEFC54C8C93` (`type_id`),
+  CONSTRAINT `FK_2D737AEF727ACA70` FOREIGN KEY (`parent_id`) REFERENCES `section` (`id`),
+  CONSTRAINT `FK_2D737AEFC54C8C93` FOREIGN KEY (`type_id`) REFERENCES `section_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `section` WRITE;
+/*!40000 ALTER TABLE `section` DISABLE KEYS */;
+
+INSERT INTO `section` (`id`, `parent_id`, `type_id`, `title`, `description`, `slug`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `full_path`, `created_at`, `updated_at`, `template`, `ord`, `is_node`)
+VALUES
+	(1,NULL,1,'О компании','<p>C 1999 года наша компания работает в области поставок теплоизоляционных материалов и является членом Национального объединения производителей строительных материалов, изделий и конструкций (НОПСМ). Так же мы являемся официальным дистрибьютором ведущих производителей строительной и технической изоляции и сопутствующей продукции (крепежи, пароизоляционные и гидроизоляционные мембраны, материалы для фасадных работ и пр.). Представляемая нами продукция имеет все необходимые сертификаты и отвечает самым высоким современным стандартам.&nbsp;<br><br></p><p><br>&nbsp;Наши стандарты:<br>&nbsp;<br>&nbsp;Быть нацеленным на постоянное удовлетворение потребностей наших заказчиков;<br>&nbsp;Совершенствовать и рационализировать нашу работу;<br>&nbsp;Заботиться о людях, работающих в нашей компании;<br>&nbsp;Работать как одна команда;<br>&nbsp;Наши цели и задачи:<br>&nbsp;<br>&nbsp;Предоставлять нашим заказчикам изоляционные услуги и изоляционные материалы высокого качества<br>&nbsp;Укреплять доверие к нашей компании у всех кто работает с нами<br>&nbsp;Развивать изоляционный бизнес проявляя постоянную заботу о наших сотрудниках, акционерах, о нашей пользе обществу<br>&nbsp;Мы стараемся поддерживать доброе имя нашей компании, постоянно заботясь о клиентах и сотрудниках, делая всё, чтобы предлагать вам продукцию и сервис высокого уровня.&nbsp;</p>','about',NULL,NULL,NULL,'active','/about','2025-07-08 11:13:20','2025-07-08 11:13:20','section/text',0,1),
+	(2,NULL,1,'Информация','<p>Интернет магазин <a href=\"https://utepliteli.org/\"><strong>\"Теплый Дом\"</strong></a> предлагает тепло-гидро-паро-ветро-звукоизоляцию, а так же сопутствующие товары в четырёх регионах РФ: г. Москва, г. Санкт-Петербург, г. Краснодар и Тверская область. Пожалуйста, выберете в шапке сайта Ваш регион, чтобы видеть актуальные цены и наличие товара, а так же контакты и условия доставки. Стоимость доставки указана приблизительная, т.к. для расчёта конечной стоимости необходимо провести индивидуальный расчёт в зависимости от объёма материала в заказе и пункта доставки.</p><p><br>Для точного расчёта стоимости заказа и по другим вопросам вы можете обратиться к менеджеру, для этого:<br>1. Выберете в \"шапке\" сайта Ваш регион<br>2. Перейдите на страницу <a href=\"https://utepliteli.org/contacts/\"><strong>\"Контакты\"</strong></a> <br>3. Используйте указанные на странице <a href=\"https://utepliteli.org/contacts/\"><strong>\"Контакты\"</strong></a> номер телефона или адрес электронной почты<br>4. По общим вопросам Вы так же можете написать в один из двух онлайн-чатов, расположенных внизу каждой страницы или воспользоваться активной ссылкой <a href=\"https://api.whatsapp.com/send?phone=+79778989651&amp;text=&amp;source=&amp;data=&amp;app_absent=\"><strong>WatsApp</strong></a> или <strong>Viber</strong> внизу каждой страницы</p>','info',NULL,NULL,NULL,'active','/info','2025-07-08 11:14:09','2025-07-08 11:14:09','section/text',0,1),
+	(3,NULL,1,'Помощь','<h2>Как с нами связаться</h2><p>&nbsp;1. Выберете ваш регион в \"шапке\" сайта, если он не определился автоматически. В шапке сайта вы можете видеть номер телефона, актуальный для вашего региона.&nbsp; &nbsp; &nbsp; <br>&nbsp;2. Рядом с указанным номером телефона вы можете заказать обратный звонок. <br>&nbsp;3. Перейдите на страницу <a href=\"https://utepliteli.org/contacts/\"><strong>\"Контакты\"</strong></a><strong> </strong>и воспользуйтесь указанными номерами телефонов или адресом электронной почты.<br>&nbsp;4. Вы можете воспользоваться одним из двух онлайн-чатов, расположенных внизу каждой страницы<br>&nbsp;5. Так же вы можете воспользоваться активными ссылками <a href=\"https://api.whatsapp.com/send?phone=+79778989651&amp;text=&amp;source=&amp;data=&amp;app_absent=\"><strong>WatsApp</strong></a> или <strong>Viber</strong> внизу каждой страницы<br>&nbsp;<br>&nbsp;<br><br></p><h2>Как оформить заказ</h2><p>&nbsp;Оформить заказ на нашем сайте легко. Выберете ваш регион в \"шапке\" сайта, если он не определился автоматически. Добавьте товары в корзину, а затем перейдите на страницу Корзина, проверьте правильность заказанных позиций и нажмите кнопку «Оформить заказ» или «Быстрый заказ». Ожидайте подтверждения заказа, менеджер обязательно свяжется с Вами.&nbsp;</p><h3>Быстрый заказ</h3><p>&nbsp;Функция «Быстрый заказ» позволяет покупателю не проходить всю процедуру оформления заказа самостоятельно. Вы заполняете форму, и через короткое время вам перезвонит менеджер магазина. Он уточнит все условия заказа, ответит на вопросы, касающиеся качества товара, его особенностей. А также подскажет о вариантах оплаты и доставки.&nbsp;</p><p>&nbsp;По результатам звонка, пользователь либо, получив уточнения, самостоятельно оформляет заказ, укомплектовав его необходимыми позициями, либо соглашается на оформление в том виде, в котором есть сейчас. Получает подтверждение на почту или на мобильный телефон и ждёт доставки.&nbsp;</p><h3>Оформление заказа в стандартном режиме</h3><p>&nbsp;Если вы уверены в выборе, то можете самостоятельно оформить заказ, заполнив по этапам всю форму.&nbsp;</p><p>&nbsp;Заполнение адреса</p><p>&nbsp;Выберите из списка название вашего региона и населённого пункта. Если вы не нашли свой населённый пункт в списке, выберите значение «Другое местоположение» и впишите название своего населённого пункта в графу «Город». Введите правильный индекс.&nbsp;</p><p>&nbsp;Доставка</p><p>&nbsp;В зависимости от места жительства вам предложат варианты доставки. Выберите любой удобный способ. Подробнее об условиях доставки читайте в разделе «<a href=\"/help/delivery/\">Доставка</a>».&nbsp; <strong>ОБРАТИТЕ ВНИМАНИЕ</strong>, стоимость доставки указана приблизительная, т.к. для расчёта конечной стоимости необходимо провести индивидуальный расчёт в зависимости от объёма материала в заказе и пункта доставки.&nbsp;</p><p>&nbsp;Оплата</p><p>&nbsp;Выберите оптимальный способ оплаты. Подробнее о всех вариантах читайте в разделе «<a href=\"/help/payment/\">Оплата</a>»&nbsp;</p><p>&nbsp;Покупатель</p><p>&nbsp;Введите данные о себе: ФИО, адрес доставки, номер телефона. В поле «Комментарии к заказу» введите сведения, которые могут пригодиться курьеру, например: подъезды в доме считаются справа налево.&nbsp;</p><p>&nbsp;Оформление заказа</p><p>&nbsp;Проверьте правильность ввода информации: позиции заказа, выбор местоположения, данные о покупателе. Нажмите кнопку «Оформить заказ».&nbsp;</p><p>&nbsp;Наш сервис запоминает данные о пользователе, информацию о заказе и в следующий раз предложит вам повторить к вводу данные предыдущего заказа. Если условия вам не подходят, выбирайте другие варианты.&nbsp;</p>','help',NULL,NULL,NULL,'active','/help','2025-07-08 11:14:31','2025-07-08 11:14:31','section/text',0,1),
+	(4,1,2,'Новости',NULL,'news',NULL,NULL,NULL,'active','/about/news','2025-07-08 11:18:16','2025-07-08 11:18:16','news/list',0,1),
+	(5,2,1,'Условия оплаты','<p>Вы можете выбрать один из трёх вариантов оплаты:</p>\n<h3>Оплата наличными</h3>\n<p>\n	При выборе варианта оплаты наличными, вы дожидаетесь приезда курьера и передаёте ему сумму за товар в рублях. Курьер предоставляет товар, который можно осмотреть на предмет повреждений, соответствие указанным условиям. Покупатель подписывает товаросопроводительные документы, вносит денежные средства и получает чек.\n</p>\n<p>\n	Также оплата наличными доступна при самовывозе из магазина, оплаты по почте или использовании постамата.\n</p>\n<h3>Безналичный расчёт</h3>\n<p>\n	При оформлении заказа в корзине вы можете выбрать вариант безналичной оплаты. Мы принимаем карты Visa и Master Card. Чтобы оплатить покупку, вас перенаправит на сервер системы ASSIST, где вы должны ввести номер карты, срок действия, имя держателя.\n</p>\n<p>\n	Вам могут отказать от авторизации в случае:\n</p>\n<ul>\n	<li>\n	если ваш банк не поддерживает технологию 3D-Secure; </li>\n	<li>\n	на карте недостаточно средств для покупки; </li>\n	<li>\n	банк не поддерживает услугу платежей в интернете; </li>\n	<li>\n	истекло время ожидания ввода данных; </li>\n	<li>\n	в данных была допущена ошибка. </li>\n</ul>\n<p>\n	В этом случае вы можете повторить авторизацию через 20 минут, воспользоваться другой картой или обратиться в свой банк для решения вопроса.\n</p>\n<p>\n	Безналичным расчётом можно воспользоваться при курьерской доставке, использовании постамата или самовывоза из магазина.\n</p>\n<h3>Электронные системы</h3>\n<p>\n	Для оплаты вы можете воспользоваться одной из электронных платёжных систем:\n</p>\n<ul>\n	<li>Сбербанк Онлайн; </li>\n	<li>\n	Оплата через банкомат; </li>\n</ul>','payment',NULL,NULL,NULL,'active','/info/payment','2025-07-08 11:21:05','2025-07-08 11:21:05','section/text',0,0),
+	(6,2,1,'Условия доставки','<h2>Возможные варианты доставки и оплаты строительных материалов.</h2>\n	 &nbsp;&nbsp; &nbsp;1. Вы можете забрать подготовленный для Вас заказ <em><strong>самовывозом</strong></em> со склада.<br>\n	 &nbsp;&nbsp; &nbsp;2. Мы можем осуществить доставку Вашего заказа по указанному Вами адресу. Постарайтесь продумать полный список необходимых Вам <a href=\"/\">строительных материалов</a>. Вы можете также задать вопросы по возможной комплектации для выполнения определенных строительных работ нашему менеджеру, он всегда будет рад Вам помочь. Это может <em><strong>сэкономить Ваше время</strong></em> и деньги, т.к. не нужно будет делать дополнительных заказов и тратить дополнительное время.&nbsp;<br>\n <br>\n	 Оплату Вашего заказа можно произвести заранее или при получении товара.<br>\n <br>\n <strong>Стоимость доставки по г. Мо</strong><strong>скве в пределах МКАД до МОЖД указана в таблице</strong>:<br>\n <br>\n\n		<table border=\"1\">\n		<tbody>\n			<tr>\n				<td>Вид транспорта</td>\n				<td>Мин. Время заказа (ч)</td>\n				<td>Стоимость</td>\n			</tr>\n			<tr>\n				<td>Грузовик 8м<sup>3</sup> (\"Газель\")</td>\n				<td>5(1+4)</td>\n				<td>5400</td>\n			</tr>\n			<tr>\n				<td>Грузовик 20м<sup>3</sup> (\"Бычок\")</td>\n				<td>7(1+6)</td>\n				<td>6200</td>\n			</tr>\n			<tr>\n				<td>Грузовик 40м<sup>3</sup></td>\n				<td>7(1+6)</td>\n				<td>7900</td>\n			</tr>\n			<tr>\n				<td>Грузовик 60м<sup>3</sup></td>\n				<td>8(1+7)</td>\n				<td>9800</td>\n			</tr>\n		</tbody>\n	</table>\n\n <br>\n <br>\n	 Доставка за МКАД и регионы рассчитывается индивидуально.<br>\n <br>\n	 Вашему вниманию предлагаются высококачественные строительные материалы мелким и крупным оптом, по наиболее выгодным ценам. Данная информация предназначается для строительных фирм, организаций, ведущих промышленное, жилищное и коттеджное строительство, а также для частных застройщиков. <br>\n <br>\n	 Осуществляется поставка строительных материалов от ведущих производителей, вся продукция подробно представлена с описаниями и техническими характеристиками на страницах каталога. Необходимая информация, касающаяся габаритов того или иного товара, возможностей использования, цены за метр (тонну, килограмм, пакет и т.д.), полностью удовлетворит самого требовательного покупателя, привыкшего внимательно относиться к покупке строительных материалов для рабочего объекта. <br>\n <br>\n	 Заказывая <a href=\"/Information/Help\"><strong>строительные материалы оптом</strong></a> в данной компании, каждый клиент может воспользоваться возможностью подробно узнать о каждом из наименований, выставленных на продажу, позвонив менеджерам компании и проконсультировавшись по любому из вопросов. Квалифицированные специалисты детально расскажут о преимуществах любого из представленных в ассортименте компании товара, ответят на вопросы о стоимости, доставке, возможности скидок, погрузке-разгрузке, наличии на складе и количественном выражении запасов. <br>\n <br>\n	 Компания является участником строительного рынка в Москве, будучи нацеленной на постоянное развитие бизнеса и занимая высокие позиции. Миссия заключается в предоставлении клиентам максимально возможного ассортимента товаров для осуществления строительных работ, от возведения фундамента до отделки. Наличие широкого ассортимента строительных товаров, сосредоточенных на одной территории, удобно для заказчиков – ища <strong>магазины стройматериалов в Москве</strong>, можно убедиться в том, что не каждая компания является универсальным поставщиком и предлагает максимально полный список необходимой продукции. <br>\n <br>\n	 Вниманию клиентов предлагается <strong>поставка стройматериало</strong>в по Москве&nbsp;области&nbsp;и регионы. Преимуществами являются значительный опыт в поставке строительных материалов, команда опытных сотрудников, наличие гибкого подхода к нуждам клиента, оптимальное соотношение качества продукции и цены на нее. Основными критериями работы в данном коллективе считаются: творческий подход, результативность и профессионализм, что в полной мере применимо к услугам. Приоритетами являются профессиональные консультации, предоставляемые сотрудниками с самого начала обращения к услугам фирмы, а также грамотное формирование ценовой политики и внимательность к нуждам потребителей. <br>\n <br>\n	 Постоянные клиенты могут рассчитывать на систему скидок, приобретая <strong>стройматериалы оптом</strong>. Подробнее об этом можно узнать у специалистов, позвонив по указанным телефонам. Компания предоставляет все возможности для установления долгосрочного партнерства и ценит как новых заказчиков, так и постоянных клиентов. Заказывая полную или частичную комплектацию объектов отделочными и строительными материалами, в этом можно легко убедиться.<br>\n <br>\n	<div style=\"text-align: center;\">\n		 Существует также возможность забрать материалы самовывозом, если необходимые материалы имеются в достаточном количестве на складе.\n	</div>','delivery',NULL,NULL,NULL,'active','/info/delivery','2025-07-08 11:32:14','2025-07-08 11:32:14','section/text',0,0),
+	(7,2,1,'Гарантия на товар','<p>Гарантийный период – это срок, во время которого клиент, обнаружив недостаток товара имеет право потребовать от продавца или изготовителя принять меры по устранению дефекта. Продавец должен устранить недостатки, если не будет доказано, что они возникли вследствие нарушений покупателем правил эксплуатации.\n</p>\n<h3>С какого момента начинается гарантия?</h3>\n<ul>\n	<li>\n\n		с момента передачи товара потребителю, если в договоре нет уточнения;\n\n </li>\n	<li>\n\n		если нет возможности установить день покупки, то гарантия идёт с момента изготовления;\n	\n </li>\n	<li>\n\n		на сезонные товары гарантия идёт с момента начала сезона;\n\n </li>\n	<li>\n\n		при заказе товара из интернет-магазина гарантия начинается со дня доставки.\n\n </li>\n</ul>\n<p>\n	Обслуживание по гарантии включает в себя:\n</p>\n<ul>\n	<li>\n\n		устранение недостатков товара в сертифицированных сервисных центрах;\n	\n </li>\n	<li>\n\n		обмен на аналогичный товар без доплаты;\n	\n </li>\n	<li>\n\n		обмен на похожий товар с доплатой;\n\n </li>\n	<li>\n\n		возврат товара и перечисление денежных средств на счёт покупателя.\n\n </li>\n</ul>\n<h3>Правила обмена и возврата товара:</h3>\n<h4>Обмен и возврат продукции надлежащего качества</h4>\n<p>\n	Продавец гарантирует, что покупатель в течение 7 дней с момента приобретения товара может отказаться от товара надлежащего качества, если:\n</p>\n<ul>\n	<li>\n\n		товар не поступал в эксплуатацию и имеет товарный вид, находится в упаковке со всеми ярлыками, а также есть документы на приобретение товара;\n\n </li>\n	<li>\n\n		товар не входит в перечень продуктов надлежащего качества, не подлежащих возврату и обмену.\n\n </li>\n</ul>\n<p>\n	Покупатель имеет право обменять товар надлежащего качество на другое торговое предложение этого товара или другой товар, идентичный по стоимости или на иной товар с доплатой или возвратом разницы в цене.\n</p>\n<h4>Обмен и возврат продукции ненадлежащего качества</h4>\n<p>\n	Если покупатель обнаружил недостатки товара после его приобретения, то он может потребовать замену у продавца. Замена должна быть произведена в течение 7 дней со дня предъявления требования. В случае, если будет назначена экспертиза на соответствие товара указанным нормам, то обмен должен быть произведён в течение 20 дней.\n</p>\n<p>\n	Технически сложные товары ненадлежащего качества заменяются товарами той же марки или на аналогичный товар другой марки с перерасчётом стоимости. Возврат производится путем аннулирования договора купли-продажи и возврата суммы в размере стоимости товара.\n</p>\n<h3>Возврат денежных средств</h3>\n<p>\n	Срок возврата денежных средств зависит от вида оплаты, который изначально выбрал покупатель.\n</p>\n<p>\n	При наличном расчете возврат денежных средств осуществляется на кассе не позднее через через 10 дней после предъявления покупателем требования о возврате.\n</p>\n<p>\n	Зачисление стоимости товара на карту клиента, если был использован безналичный расчёт, происходит сразу после получения требования от покупателя.\n</p>\n<p>\n	При использовании электронных платёжных систем, возврат осуществляется на электронный счёт в течение 10 календарных дней.','warranty',NULL,NULL,NULL,'active','/info/warranty','2025-07-08 11:37:23','2025-07-08 11:37:23','section/text',0,0),
+	(8,NULL,7,'Каталог','<p>qwe</p>','catalog',NULL,NULL,NULL,'active','/','2025-07-09 15:38:52','2025-07-09 15:38:52',NULL,0,1),
+	(9,8,8,'Теплоизоляция',NULL,'teploizolyaciya',NULL,NULL,NULL,'active','/catalog/teploizolyaciya','2025-07-09 15:41:45','2025-07-09 15:41:45','catalog/category',0,1),
+	(10,8,8,'Гидроизоляция',NULL,'gidroizolyaciya',NULL,NULL,NULL,'active','/catalog/gidroizolyaciya','2025-07-10 14:28:38','2025-07-10 14:28:38','catalog/category',0,1),
+	(11,8,8,'Звукоизоляция',NULL,'zvukoizolyaciya',NULL,NULL,NULL,'active','/catalog/zvukoizolyaciya','2025-07-10 14:29:33','2025-07-10 14:29:33','catalog/category',0,1),
+	(12,8,8,'Пароизоляция',NULL,'paroizolyaciya',NULL,NULL,NULL,'active','/catalog/paroizolyaciya','2025-07-10 14:29:58','2025-07-10 14:29:58','catalog/category',0,1),
+	(13,8,8,'Ветро-влагозащита',NULL,'vetro-vlagozashita',NULL,NULL,NULL,'active','/catalog/vetro-vlagozashita','2025-07-10 14:30:22','2025-07-10 14:30:22','catalog/category',0,1),
+	(14,8,8,'Техническая изоляция',NULL,'tehnicheskaya-izolyaciya',NULL,NULL,NULL,'active','/catalog/tehnicheskaya-izolyaciya','2025-07-10 14:30:42','2025-07-10 14:30:42','catalog/category',0,1),
+	(15,8,8,'Утепление фасадов',NULL,'uteplenie-fasadov',NULL,NULL,NULL,'active','/catalog/uteplenie-fasadov','2025-07-10 14:31:04','2025-07-10 14:31:04','catalog/category',0,1),
+	(16,8,8,'Древесно-стружечные плиты',NULL,'drevesno-struzhechnye-plity',NULL,NULL,NULL,'active','/catalog/drevesno-struzhechnye-plity','2025-07-10 14:31:27','2025-07-10 14:31:27','catalog/category',0,1),
+	(17,8,8,'Крепёж',NULL,'krepyozh',NULL,NULL,NULL,'active','/catalog/krepyozh','2025-07-10 14:31:44','2025-07-10 14:31:44','catalog/category',0,1),
+	(18,8,8,'Смеси, краски и грунтовки',NULL,'smesi-kraski-i-gruntovki',NULL,NULL,NULL,'active','/catalog/smesi-kraski-i-gruntovki','2025-07-10 14:32:07','2025-07-10 14:32:07','catalog/category',0,1),
+	(19,8,8,'Пены и герметики',NULL,'peny-i-germetiki',NULL,NULL,NULL,'active','/catalog/peny-i-germetiki','2025-07-10 14:32:30','2025-07-10 14:32:30','catalog/category',0,1),
+	(20,9,8,'Базальтовый утеплитель',NULL,'bazaltovyj-uteplitel',NULL,NULL,NULL,'active','/catalog/teploizolyaciya/bazaltovyj-uteplitel','2025-07-10 14:33:03','2025-07-10 14:33:03','catalog/category',0,1),
+	(21,9,8,'Экструзионный пенополистирол',NULL,'ekstruzionnyj-penopolistirol',NULL,NULL,NULL,'active','/catalog/teploizolyaciya/ekstruzionnyj-penopolistirol','2025-07-10 16:07:16','2025-07-10 16:07:16','catalog/category',0,1),
+	(22,9,8,'Минеральная вата',NULL,'mineralnaya-vata',NULL,NULL,NULL,'active','/catalog/teploizolyaciya/mineralnaya-vata','2025-07-10 16:07:38','2025-07-10 16:07:38','catalog/category',0,1),
+	(23,10,8,'Битумные рулонные материалы',NULL,'bitumnye-rulonnye-materialy',NULL,NULL,NULL,'active','/catalog/gidroizolyaciya/bitumnye-rulonnye-materialy','2025-07-10 16:20:11','2025-07-10 16:20:11','catalog/category',0,1),
+	(24,14,8,'Цилиндры',NULL,'cilindry',NULL,NULL,NULL,'active','/catalog/tehnicheskaya-izolyaciya/cilindry','2025-07-10 16:20:56','2025-07-10 16:20:56','catalog/category',0,1),
+	(25,18,8,'Краски',NULL,'kraski',NULL,NULL,NULL,'active','/catalog/smesi-kraski-i-gruntovki/kraski','2025-07-10 16:21:45','2025-07-10 16:21:45','catalog/category',0,1),
+	(26,18,8,'Грунтовки',NULL,'gruntovki',NULL,NULL,NULL,'active','/catalog/smesi-kraski-i-gruntovki/gruntovki','2025-07-10 16:22:17','2025-07-10 16:22:17','catalog/category',0,1),
+	(27,18,8,'Штукатурки',NULL,'shtukaturki',NULL,NULL,NULL,'active','/catalog/smesi-kraski-i-gruntovki/shtukaturki','2025-07-10 16:22:39','2025-07-10 16:22:39','catalog/category',0,1),
+	(28,18,8,'Клеи',NULL,'klei',NULL,NULL,NULL,'active','/catalog/smesi-kraski-i-gruntovki/klei','2025-07-10 16:23:03','2025-07-10 16:23:03','catalog/category',0,1),
+	(51,2,1,'Политика конфидинциальности','<h2>1. Общие положения</h2>\n<p>\n    Настоящая Политика конфиденциальности (далее — «Политика») определяет порядок обработки и защиты персональных данных Пользователей сайта utepliteli.org (далее — «Сайт»).\n</p>\n<p>\n    Использование Сайта означает согласие Пользователя с настоящей Политикой и условиями обработки его персональных данных.\n</p>\n\n<h2>2. Персональные данные</h2>\n<p>\n    Под персональными данными понимается любая информация, относящаяся к прямо или косвенно определённому или определяемому физическому лицу (Пользователю), включая:\n</p>\n<ul>\n    <li>адрес электронной почты,</li>\n    <li>IP-адрес,</li>\n    <li>данные, передаваемые браузером, cookie,</li>\n    <li>иные сведения, добровольно переданные Пользователем при использовании Сайта.</li>\n</ul>\n\n<h2>3. Цели сбора данных</h2>\n<p>\n    Сбор и обработка персональных данных осуществляется исключительно для следующих целей:\n</p>\n<ul>\n    <li>Обеспечение корректной работы Сайта и его функциональности;</li>\n    <li>Обратная связь с Пользователем;</li>\n    <li>Анализ поведения Пользователей для улучшения сервиса (с использованием обезличенных данных);</li>\n    <li>Выполнение требований законодательства РФ.</li>\n</ul>\n\n<h2>4. Обработка и защита данных</h2>\n<p>\n    Обработка персональных данных осуществляется с соблюдением принципов и правил, предусмотренных Федеральным законом РФ № 152-ФЗ «О персональных данных».\n</p>\n<p>\n    Все данные хранятся в защищённых системах, доступ к которым имеют только уполномоченные лица. Передача данных третьим лицам без согласия Пользователя не производится, за исключением случаев, предусмотренных законодательством.\n</p>\n\n<h2>5. Использование файлов cookie</h2>\n<p>\n    Сайт может использовать cookie-файлы и аналогичные технологии для персонализации контента, хранения пользовательских предпочтений и сбора статистики.\n</p>\n<p>\n    Пользователь может отключить cookie в настройках своего браузера. Это может повлиять на корректность работы некоторых функций Сайта.\n</p>\n\n<h2>6. Права пользователя</h2>\n<p>\n    Пользователь имеет право:\n</p>\n<ul>\n    <li>Получать информацию о своих персональных данных;</li>\n    <li>Требовать их уточнения, блокировки или удаления в случае, если они являются устаревшими, неточными или обрабатываются с нарушением закона;</li>\n    <li>Отозвать согласие на обработку персональных данных.</li>\n</ul>\n<p>\n    Для реализации этих прав необходимо направить запрос на адрес, указанный ниже.\n</p>\n\n<h2>7. Изменение политики</h2>\n<p>\n    Администрация Сайта вправе вносить изменения в настоящую Политику. Новая редакция вступает в силу с момента её публикации на Сайте.\n</p>\n\n<h2>8. Контакты</h2>\n<p>По вопросам, связанным с обработкой персональных данных, вы можете обратиться:</p>\n\n<p>Email: shop@utepliteli.org</p>','privacy',NULL,NULL,NULL,'active','/','2025-07-25 14:07:12','2025-07-25 14:07:12',NULL,0,1);
+
+/*!40000 ALTER TABLE `section` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы section_link
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `section_link`;
+
+CREATE TABLE `section_link` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `parent_type_id` int NOT NULL,
+  `child_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_B31275FAB704F8D5` (`parent_type_id`),
+  KEY `IDX_B31275FAA7F8C488` (`child_type_id`),
+  CONSTRAINT `FK_B31275FAA7F8C488` FOREIGN KEY (`child_type_id`) REFERENCES `section_type` (`id`),
+  CONSTRAINT `FK_B31275FAB704F8D5` FOREIGN KEY (`parent_type_id`) REFERENCES `section_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `section_link` WRITE;
+/*!40000 ALTER TABLE `section_link` DISABLE KEYS */;
+
+INSERT INTO `section_link` (`id`, `parent_type_id`, `child_type_id`)
+VALUES
+	(1,7,8),
+	(2,5,13),
+	(3,8,8),
+	(4,2,10),
+	(5,14,15),
+	(6,1,14),
+	(7,1,1),
+	(8,5,16),
+	(9,16,13);
+
+/*!40000 ALTER TABLE `section_link` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы section_type
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `section_type`;
+
+CREATE TABLE `section_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `template` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `is_node` tinyint(1) NOT NULL DEFAULT '1',
+  `entity_class` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `crud_controller_class` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `controller_class` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `section_type` WRITE;
+/*!40000 ALTER TABLE `section_type` DISABLE KEYS */;
+
+INSERT INTO `section_type` (`id`, `code`, `name`, `template`, `description`, `is_node`, `entity_class`, `crud_controller_class`, `controller_class`)
+VALUES
+	(1,'section','Текстовая','section/text.html.twig',NULL,0,'App\\Entity\\Section','App\\Controller\\Admin\\SectionCrudController','App\\Controller\\SectionController::index'),
+	(2,'news_list','Список новостей','section/news_list.html.twig',NULL,1,'App\\Entity\\News','App\\Controller\\Admin\\NewsCrudController','App\\Controller\\NewsController::index'),
+	(3,'reviews','Отзывы','section/reviews.html.twig',NULL,1,NULL,NULL,NULL),
+	(4,'price','Цены','section/price.html.twig',NULL,1,NULL,NULL,NULL),
+	(5,'contacts','Контакты','contacts/list.html.twig',NULL,1,'App\\Entity\\Contacts','App\\Controller\\Admin\\ContactsCrudController','App\\Controller\\ContactsController::index'),
+	(6,'home','Главная','section/home.html.twig',NULL,1,NULL,NULL,NULL),
+	(7,'catalog','Каталог','catalog/root.html.twig',NULL,1,NULL,NULL,NULL),
+	(8,'category','Категория','catalog/category.html.twig',NULL,1,'App\\Entity\\Category','App\\Controller\\Admin\\CategoryCrudController','App\\Controller\\CategoryController::index'),
+	(10,'news','Новость','news/item.html.twig',NULL,0,'App\\Entity\\News','App\\Controller\\Admin\\NewsCrudController','App\\Controller\\NewsController::show'),
+	(13,'store','Магазин','store/item.html.twig',NULL,1,'App\\Entity\\Store','App\\Controller\\Admin\\StoreCrudController','App\\Controller\\StoreController::index'),
+	(14,'brandlist','Список брендов','brands/list',NULL,1,'App\\Entity\\BrandList','App\\Controller\\Admin\\BrandCrudController','App\\Controller\\BrandController::index'),
+	(15,'brand','Бренд','brands/item',NULL,0,'App\\Entity\\Brand','App\\Controller\\Admin\\BrandCrudController','App\\Controller\\BrandController::show'),
+	(16,'storelist','Список магазинов','store/list',NULL,1,'App\\Entity\\StoreList','App\\Controller\\Admin\\StoreListCrudController','App\\Controller\\ContactsController::list');
+
+/*!40000 ALTER TABLE `section_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы store
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `store`;
+
+CREATE TABLE `store` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ord` int NOT NULL DEFAULT '0',
+  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `parent` int DEFAULT NULL,
+  `addr` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `work_hours` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `coordinates` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `store` WRITE;
+/*!40000 ALTER TABLE `store` DISABLE KEYS */;
+
+INSERT INTO `store` (`id`, `title`, `slug`, `ord`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `created_at`, `updated_at`, `parent`, `addr`, `phone`, `email`, `work_hours`, `coordinates`)
+VALUES
+	(1,'Москва','moscow',0,NULL,NULL,NULL,'active','2025-07-23 18:22:39','2025-07-23 18:22:39',110,'г. Москва, ул. Деловая д. 18','+7(495) 545-39-00<br>+7(495) 332-54-57','shop@utepliteli.org','Пн - Пт: 9.00 - 18.00<br>Сб - Вс: выходные',NULL),
+	(2,'Санкт-Петербург','sankt-peterburg',0,NULL,NULL,NULL,'active','2025-07-25 14:02:20','2025-07-25 14:02:20',110,'Санкт-Петербург','+7(495) 545-39-00<br>+7(495) 332-54-57',NULL,NULL,NULL);
+
+/*!40000 ALTER TABLE `store` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы user
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `roles` json NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_verified` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

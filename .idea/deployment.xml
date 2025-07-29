@@ -6,7 +6,7 @@
       <paths name="tdst-timeweb.ru">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/new.utepliteli.org" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
