@@ -25,7 +25,9 @@
     {% else %}
         <h2 class="accordion-header" id="{{ item_id }}">
             <a href="{{ item.fullPath }}" class="accordion-button collapsed{{ item.children is empty ? ' no-arrow' : '' }}">
+                {% if item.image is not empty %}
                 <img src="/images/{{ item['image'] }}" class="me-2" width="32" height="32" alt="{{ item.label }}">
+                {% endif %}
                 {{ item.label }}
             </a>
         </h2>

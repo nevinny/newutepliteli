@@ -29,3 +29,29 @@ services:
             - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\Section }
             - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\Section }
 #            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Section }
+
+    # Маппер
+    App\Service\Product\ParameterKeyMapper: ~
+
+    # Стратегии группировки
+    App\Service\Product\Grouping\:
+        resource: '../src/Service/Product/Grouping/'
+        tags: ['product.parameter_grouping_strategy']
+        arguments:
+            $mapper: '@App\Service\Product\ParameterKeyMapper'
+
+    # Группировщик
+    App\Service\Product\ParameterGrouper:
+        arguments:
+            $strategies: !tagged_iterator product.parameter_grouping_strategy
+    # Расширение
+    App\Extension\ProductExtension:
+        tags:
+            - { name: twig.extension }
+        arguments:
+            $parameterGrouper: '@App\Service\Product\ParameterGrouper'
+
+#    App\Service\Cart\CartService:
+#        factory: ['@App\Service\Cart\CartStorageResolver', 'resolve']
+#        autowire: true
+#        autoconfigure: true

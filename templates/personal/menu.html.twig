@@ -1,0 +1,13 @@
+
+<ul class="left_menu">
+    {% for item in personal_menu %}
+        {% if item.visible %}
+        <li class="item{% if item.is_current %} current{% endif %}{% if item.is_exit|default(false) %} exit{% endif %}">
+            <a class="icons_fa" href="{{ item.path }}">
+                <i class="fas {{ item.icon }} me-2"></i>
+                <span>{{ item.title }}</span>
+            </a>
+        </li>
+        {% endif %}
+    {% endfor %}
+</ul>

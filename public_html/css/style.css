@@ -1,3 +1,14 @@
+body{width:100%;position:relative;margin:0 auto;padding:0;color:#555;}
+button, input[type='submit'], input[type='button'], .basket_button, .basket_button span {
+    text-transform:none;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    outline:none;
+}
+
+
 .carousel-control-prev-icon:hover {
     background: #d9002a;
     /*background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwYWFlMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDhmYzciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);*/
@@ -153,3 +164,155 @@
 .top-menu a {
     color: #FFFFFF !important;
 }
+
+/* Стили для формы регистрации */
+.registration-form {
+
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.registration-input {
+    margin-bottom: 5px;
+}
+
+.form-help-text {
+    color: #666;
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+
+/* Стили для ошибок */
+.invalid-feedback {
+    color: #de002b;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.form-label, .form-check-label {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* Дополнительные стили для чекбокса */
+.form-check-input {
+    margin-top: 0.2em;
+}
+
+/* Стиль для кнопки регистрации */
+.btn-primary {
+    background-color: #dc3545 !important;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 15px;
+}
+
+.btn-primary:hover {
+    background-color: #de002b !important;
+}
+
+/* Стили для невалидных полей */
+.form-control.is-invalid {
+    border-color: #de002b;
+    box-shadow: 0 0 0 0.25rem rgba(222, 0, 43, 0.1);
+}
+
+/* Дополнительные стили для чекбокса с ошибкой */
+.form-check-input.is-invalid {
+    border-color: #de002b;
+}
+
+.form-check-input.is-invalid ~ .form-check-label {
+    color: #de002b;
+}
+/* Анимация для ошибок */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+.is-invalid {
+    animation: shake 0.5s ease-in-out;
+}
+
+
+/* personal account  */
+.hover_shine a:hover {
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+.sale-personal-section-index-block {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    height: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.sale-personal-section-index-block:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+}
+.sale-personal-section-index-block-ico {
+    font-size: 2.5rem;
+    color: #0d6efd;
+    margin-bottom: 15px;
+    display: block;
+}
+.left_menu {
+    list-style: none;
+    padding-left: 0;
+}
+.left_menu li {
+    margin-bottom: 5px;
+}
+.left_menu li a {
+    display: block;
+    padding: 10px 15px;
+    color: #212529;
+    text-decoration: none;
+    border-radius: 4px;
+}
+.left_menu li a:hover, .left_menu li.current a {
+    background-color: #f8f9fa;
+    color: #de002b;
+}
+.left_menu li.exit a {
+    color: #dc3545;
+}
+.page-top-wrapper {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+.breadcrumbs {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+.subscribe-form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+.sale-personal-section-index-block{background-color:#fbfbfb;border:1px solid #f2f2f2;border-radius:0px;margin:0px 0px 20px;opacity:1;height:auto;text-transform:none;}
+.sale-personal-section-index-block:hover{border-color:#f2f2f2;}
+.sale-personal-section-row-flex{margin:0px -10px;display:block;}
+.personal_wrapper .sale-personal-section-row-flex.row > div[class*=col-md-]{padding:0px 10px;}
+.sale-personal-section-index-block-name{font-size:17px;margin:12px 0px 16px;}
+.sale-personal-section-index-block-link{width:100%;}
+.sale-personal-section-index-block-ico{margin-top:8px;display:inline-block;font-size:0px;background-color:#de002b;}
+.sale-personal-section-index-block-ico i{display:inline-block;width:50px;height:50px;background:url('/images/icons_mask.svg') 0px 0px no-repeat;}
+.sale-personal-section-index-block-ico i.bill{background-position:-50px 0px;}
+.sale-personal-section-index-block-ico i.personal{background-position:-100px 0px;}
+.sale-personal-section-index-block-ico i.filter_orders{background-position:-150px 0px;}
+.sale-personal-section-index-block-ico i.profile{background-position:-200px 0px;}
+.sale-personal-section-index-block-ico i.cart{background-position:-250px 0px;}
+.sale-personal-section-index-block-ico i.subscribe{background-position:-300px 0px;}
+.sale-personal-section-index-block-ico i.contact{background-position:-350px 0px;}
+.sale-personal-section-index-block-ico i.fa{font-size:45px;display:table-cell;vertical-align:middle;background:none;height:54px;}
+

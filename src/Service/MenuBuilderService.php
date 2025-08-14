@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Service;
+use App\Entity\Category;
+use App\Entity\Main;
 use App\Entity\Section;
 use App\Enum\Statuses;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,6 +23,7 @@ class MenuBuilderService
     public function getCatalogMenu(): array
     {
         $catalogRootId = 8;
+        $entityTypeId = 8;
         $images = [
             '9' => [
                 'image' => '844d7696accf071405a215bf3cdedda4.png',
@@ -105,7 +108,7 @@ class MenuBuilderService
         ];
 
 
-        $repo = $this->entityManager->getRepository(Section::class)
+        $repo = $this->entityManager->getRepository(Main::class)
         ;
 //        return $this->cache->get('catalog_menu', function(ItemInterface $item)  use ($catalogRootId, $repo) {
 
@@ -115,20 +118,23 @@ class MenuBuilderService
 //            }
             $categories = $repo->findBy([
                 'parent' => $catalogRootId,
-//                'status' => Statuses::Active
+                'entityType' => $entityTypeId,
+                'status' => Statuses::Active
             ],
                 [
                     'ord' => 'ASC',
                     'id' => 'ASC',
                 ]
             );
-
+//            dd($categories);
             $result = [];
             foreach($categories as $category)
             {
                 $subCategories = $repo->findBy(
                     [
                     'parent' => $category->getId(),
+                    'entityType' => $entityTypeId,
+                    'status' => Statuses::Active
                     ],
                     [
                         'ord' => 'ASC',
@@ -139,21 +145,23 @@ class MenuBuilderService
                 foreach($subCategories as $subCategory)
                 {
                     $childs[] = [
+                        'id' => $subCategory->getId(),
                         'label' => $subCategory->getTitle(),
                         'route' => 'index',
                         'fullPath' => $subCategory->getFullPath(),
-                        'image' => $images[$subCategory->getId()]['image'],
-                        'imageXs'=> $images[$subCategory->getId()]['imageXs'],
+                        'image' => $images[$subCategory->getEntityId()]['image'] ?? null,
+                        'imageXs'=> $images[$subCategory->getEntityId()]['imageXs'] ?? null,
                         'is_fav'=> true,
                         'children' => [],
                     ];
                 }
                 $result[] = [
+                    'id' => $category->getId(),
                     'label' => $category->getTitle(),
                     'route' => 'index',
                     'fullPath' => $category->getFullPath(),
-                    'image' => $images[$category->getId()]['image'],
-                    'imageXs'=> $images[$category->getId()]['imageXs'],
+                    'image' => $images[$category->getEntityId()]['image'] ?? null,
+                    'imageXs'=> $images[$category->getEntityId()]['imageXs'] ?? null,
                     'is_fav'=> true,
                     'children' => $childs,
                 ];

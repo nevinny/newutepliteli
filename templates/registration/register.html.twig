@@ -2,22 +2,87 @@
 
 {% block title %}Register{% endblock %}
 
-{% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center registration-form">
+            <div class="col-md-6 col-lg-4">
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
 
-    <h1>Register</h1>
+                <h1 class="h3 mb-3 font-weight-normal text-center">Регистрация</h1>
 
-    {{ form_errors(registrationForm) }}
+                {{ form_start(registrationForm, {
+                    'attr': {
+                        'class': 'needs-validation',
+                        'novalidate': 'novalidate'
+                    }
+                }) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+                <div class="mb-3">
+                    {{ form_label(registrationForm.email, null, {
+                        'label_attr': {'class': 'form-label'}
+                    }) }}
+                    {{ form_widget(registrationForm.email, {
+                        'attr': {
+                            'class': 'form-control' ~ (registrationForm.email.vars.errors|length ? ' is-invalid' : ''),
+                            'placeholder': 'example@mail.com'
+                        }
+                    }) }}
+                    {% if registrationForm.email.vars.errors|length > 0 %}
+                        <div class="invalid-feedback">
+                            {% for error in registrationForm.email.vars.errors %}
+                                {{ error.message }}{% if not loop.last %}<br>{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                </div>
+
+
+
+                <div class="mb-3">
+                    {{ form_label(registrationForm.plainPassword.first, null, {
+                        'label_attr': {'class': 'form-label'}
+                    }) }}
+                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Пароль'}}) }}
+
+
+                    {# Вывод ошибок для первого поля (если есть отдельные ошибки) #}
+                    {% if registrationForm.plainPassword.first.vars.errors|length > 0 %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in registrationForm.plainPassword.first.vars.errors %}
+                                {{ error.message }}{% if not loop.last %}<br>{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(registrationForm.plainPassword.second, null, {
+                        'label_attr': {'class': 'form-label'}
+                    }) }}
+                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Повторите пароль'}}) }}
+
+
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form_widget(registrationForm.agreeTerms, {
+                        'attr': {
+                            'class': 'form-check-input' ~ (registrationForm.agreeTerms.vars.errors|length ? ' is-invalid' : '')
+                        }
+                    }) }}
+                    {{ form_label(registrationForm.agreeTerms, null, {
+                        'label_attr': {'class': 'form-check-label'}
+                    }) }}
+
+                </div>
+
+                <button type="submit" class="btn btn-danger btn-register w-100">Зарегистрироваться</button>
+
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

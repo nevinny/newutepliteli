@@ -19,6 +19,7 @@ class NewsController extends AbstractController
     )
     {}
 
+    #[Route(name: 'news_list')]
     public function index(Request $request): Response
     {
         $main = $request->attributes->get('main');

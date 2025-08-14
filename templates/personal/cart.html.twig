@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Корзина - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="container-flex py-5">
+        <div class="bg-white rounded p-4">
+            <div class="d-flex align-items-center mb-4">
+                <i class="bi bi-cart-fill text-danger fs-3 me-2"></i>
+                <h1 class="h3 mb-0 me-2">Корзина</h1>
+                <span class="text-muted">({{ cartItems|length }} товаров)</span>
+            </div>
+
+            {% if cartItems|length > 0 %}
+                <div class="row g-4">
+                    <!-- Cart items -->
+                    <div class="col-lg-8">
+                        {% for item in cartItems %}
+                            {% set product = item.getProduct() %}
+                            <div class="card mb-3">
+                                <div class="card-body d-flex gap-3">
+                                    <div class="flex-shrink-0" style="width: 80px; height: 80px;">
+{#                                        <img src="{{ item.image }}" alt="{{ item.name }}" class="img-fluid rounded" style="object-fit: cover; width: 100%; height: 100%;">#}
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title">{{ product.title }}</h5>
+                                        {% if item.params %}
+                                            <ul class="list-unstyled mb-2 small">
+                                                {% for param in item.params %}
+                                                    <li><small><strong>{{ param.title }}:</strong> {{ param.val }}</small></li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+
+{#                                        {% if not item.inStock %}#}
+{#                                            <p class="text-danger small mb-2">Нет в наличии</p>#}
+{#                                        {% endif %}#}
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group" role="group">
+                                                <button class="btn btn-outline-secondary btn-sm"
+{#                                                        {% if not item.inStock %}disabled{% endif %}#}
+                                                >
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <span class="px-2">{{ items[item.id] }}</span>
+                                                <button class="btn btn-outline-secondary btn-sm"
+{#                                                        {% if not item.inStock %}disabled{% endif %}#}
+                                                >
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <strong>{{ (item.price * items[item.id])|number_format(0, '.', ' ') }} ₽</strong>
+                                                <button class="btn btn-outline-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Order summary -->
+                    <div class="col-lg-4">
+                        <div class="card  mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Итого по заказу</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li class="d-flex justify-content-between">
+                                        <span>Позиций ({{ cartItems|reduce((sum, i) => sum + items[i.id], 0) }})</span>
+                                        <span>
+                                        {{ cartItems|reduce((sum, i) => sum + (i.price * items[i.id]), 0)|number_format(0, '.', ' ') }} ₽
+                                      </span>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Доставка</span>
+                                        <span class="text-success">Бесплатно</span>
+                                    </li>
+                                    <hr>
+                                    <li class="d-flex justify-content-between fw-bold fs-5">
+                                        <span>Общая сумма</span>
+                                        <span>
+                    {{ cartItems|reduce((sum, i) => sum + (i.price * items[i.id]), 0)|number_format(0, '.', ' ') }} ₽
+                  </span>
+                                    </li>
+                                </ul>
+
+                                <a href="{{ path('cart_checkout') }}" class="btn btn-danger w-100 mb-2">Оформить заказ</a>
+                                <a href="{{ path('catalog') }}" class="btn btn-outline-secondary w-100">Продолжить покупки</a>
+
+                                <div class="text-muted mt-3 small">
+                                    <p>🚚 Бесплатная доставка от 3000 ₽</p>
+                                    <p>🔒 Безопасная оплата</p>
+                                    <p>↩️ Возврат в течение 30 дней</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-cart-x fs-1 text-muted mb-3"></i>
+                    <h3 class="mb-2">Корзина пуста</h3>
+                    <p class="text-muted mb-4">Добавьте товары из каталога</p>
+                    <a href="{{ path('page_show', {'slug' : 'catalog'}) }}" class="btn btn-danger">Перейти в каталог</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

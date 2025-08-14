@@ -1,0 +1,415 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let selectedImage = 0;
+        let selectedVariantIndex = 0;
+        let quantity = 1;
+
+        const variants = {{ product|product_grouped_parameters|json_encode|raw }};
+        const images = [];
+        const sizes = [];
+
+        function selectImage(index) {
+            selectedImage = index;
+            document.getElementById('main-image').src = images[index];
+
+            document.querySelectorAll('.image-thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('border-red-600', i === index);
+                thumb.classList.toggle('border-gray-200', i !== index);
+            });
+        }
+
+        function selectSize(index) {
+            selectedVariantIndex = index;
+            updatePrice();
+
+            const options = document.querySelectorAll('.size-option');
+            options.forEach((option, i) => {
+                option.classList.remove('btn-outline-danger', 'btn-outline-secondary', 'active');
+                if (i === index) {
+                    option.classList.add('btn-outline-danger', 'active');
+                } else {
+                    option.classList.add('btn-outline-secondary');
+                }
+            });
+        }
+
+        function updateQuantity(change) {
+            quantity = Math.max(1, quantity + change);
+            document.getElementById('quantity').textContent = quantity;
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const variant = variants[selectedVariantIndex];
+            const price = variant.price * quantity;
+
+            document.getElementById('current-price').textContent = price.toLocaleString() + ' ₽';
+
+            const oldPrice = {{ product.oldPrice ?? 'null' }};
+            // alert(oldPrice);
+            if (oldPrice && oldPrice > 0) {
+                const oldPriceTotal = oldPrice * quantity;
+                document.getElementById('old-price').textContent = oldPriceTotal.toLocaleString() + ' ₽';
+            } else {
+                document.getElementById('old-price').classList.add('d-none');
+                document.getElementById('discount').classList.add('d-none');
+            }
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('[data-tab-content]').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            document.querySelector(`[data-tab-content="${tabName}"]`).classList.remove('hidden');
+
+            document.querySelectorAll('[data-tab-trigger]').forEach(button => {
+                button.classList.remove('bg-white', 'border-gray-300', 'text-gray-900');
+                button.classList.add('bg-gray-50', 'text-gray-500', 'hover:text-gray-700');
+            });
+
+            document.querySelector(`[data-tab-trigger="${tabName}"]`).classList.add('bg-white', 'border-gray-300', 'text-gray-900');
+            document.querySelector(`[data-tab-trigger="${tabName}"]`).classList.remove('bg-gray-50', 'text-gray-500', 'hover:text-gray-700');
+        }
+
+        function addToCart() {
+            const variant = variants[selectedVariantIndex];
+            const variantId = variant.variantId;
+            console.log(variant.variantId);
+            // exit();
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({
+                    variantId: variantId,
+                    quantity: quantity
+                })
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Ошибка добавления в корзину');
+                    return response.json();
+                })
+                .then(data => {
+                    // alert('Товар добавлен в корзину!'); // Заменить на toast
+                    showToast(data.message, 5000); // например, 10 сек
+                })
+                .catch(error => {
+                    console.error(error);
+                    // alert('Ошибка при добавлении в корзину');
+                    showToast('Ошибка при добавлении в корзину:'+variantId, 2000); // например, 10 сек
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            selectImage(0);
+            selectSize(0);
+            showTab('description');
+        });
+        function showToast(message = 'Товар добавлен в корзину', delay = 15000) {
+            const toastElement = document.getElementById('cartToast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+
+            const toast = new bootstrap.Toast(toastElement, {
+                delay: delay,
+                autohide: true
+            });
+            toast.show();
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container-fluid my-4">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        Каталог продукции
+                    </div>
+                    {{ include('menu-catalog.html.twig') }}
+                </div>
+                {{ include('_block/subscription.html.twig') }}
+            </div>
+
+            <!-- Контент справа -->
+            <div class="col-lg-9">
+                <h1>{{ main.title }}</h1>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="ratio ratio-1x1 border rounded">
+                            <img id="main-image"
+                                {#                             src="{{ product.images[0] }}"#}
+                                 alt="{{ product.title }}"
+                                 class="img-fluid rounded object-fit-cover">
+                        </div>
+                        <div class="row row-cols-4 g-2 mt-2">
+                            {% for image in product.images|default([]) %}
+                                <div class="col">
+                                    <button onclick="selectImage({{ loop.index0 }})"
+                                            class="border {{ loop.first ? 'border-danger' : 'border-secondary' }} rounded w-100 h-100">
+                                        <img src="{{ image }}"
+                                             alt="{{ product.title }} {{ loop.index }}"
+                                             class="img-fluid rounded object-fit-cover">
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span class="badge bg-light text-dark mb-2">product.category</span>
+                        <h2 class="fw-bold mb-3">{{ product.title }}</h2>
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <div>
+{#                                                            {% if rating in product|keys %}#}
+                                                            {% for i in 1..5 %}
+                                                                <i class="bi bi-star{{ i <= product.rating ? '-fill text-warning' : '' }}"></i>
+                                                            {% endfor %}
+{#                                                            {% endif %}#}
+                            </div>
+                            <span class="text-muted small">{{ product.rating }} ({{ product.reviewCount }} отзывов)</span>
+                        </div>
+
+                        <p class="text-muted">{{ product.description }}</p>
+
+                        <hr>
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                        <span id="current-price" class="h4 fw-bold">
+{#                            {{ product.sizes[0].price|number_format(0, '.', ' ') }} ₽#} 0.00 ₽
+                        </span>
+                            {#                        {% if product.oldPrice %}#}
+                            <span id="old-price" class="text-muted text-decoration-line-through">
+{#                            {{ product.oldPrice|number_format(0, '.', ' ') }} ₽#} 0.00 ₽
+                            </span>
+                            <span id="discount" class="badge bg-danger">
+{#                            -{{ product.discount }}%#} - 10%
+                            </span>
+                            {#                        {% endif %}#}
+                        </div>
+{#                        <p class="text-muted small">за упаковку</p>#}
+
+                        <div class="mb-3">
+                            {% set variantsParams = product|product_grouped_parameters %}
+                            <div class="row g-2">
+                            {% for variant in variantsParams %}
+
+
+                            {% if variant.type == 'plate' %}
+                                <div class="col-6">
+                                    <button onclick="selectSize({{ loop.index0 }})"
+                                            class="size-option btn w-100 text-start {{ loop.first ? 'btn-outline-danger' : 'btn-outline-secondary' }}
+{#{{ size.inStock ? '' : 'disabled btn-light' }}#}
+">
+                                        <div class="fw-semibold">{{ variant.thickness.value }}</div>
+                                        <small class="text-muted">{{ variant.size.value }}</small><br>
+                                        {% if variant.packageQty.value is not empty %}<small class="text-muted">{{ variant.packageQty.label }} {{ variant.packageQty.value }}</small><br>{% endif %}
+                                        <small class="fw-bold">{{ variant.price|number_format(0, '.', ' ') }} ₽</small><br>
+{#                                            {% if not size.inStock %}#}
+{#                                                <small class="text-danger">Нет в наличии</small>#}
+{#                                            {% endif %}#}
+                                    </button>
+                                </div>
+                                {% elseif variant.type == 'roll' %}
+                                    <div class="col-6">
+                                        <button onclick="selectSize({{ loop.index0 }})"
+                                                class="size-option btn w-100 text-start {{ loop.first ? 'btn-outline-danger' : 'btn-outline-secondary' }}
+{#{{ size.inStock ? '' : 'disabled btn-light' }}#}
+">
+                                            <div class="fw-semibold">{{ variant.area.value }} <small class="text-muted">{{ variant.area.label }}</small></div>
+{#                                                <div class="fw-semibold">{{ variant.baseMaterial.label }}</div>#}
+                                            <small class="text-muted">{{ variant.baseMaterial.label }}: <b>{{ variant.baseMaterial.value }}</b></small><br>
+                                            <small class="text-muted">{{ variant.coatingMaterial.label }}: <b>{{ variant.coatingMaterial.value }}</b></small><br>
+
+{#                                                {% if variant.packageQty.value is not empty %}<small class="text-muted">{{ variant.packageQty.label }} {{ variant.packageQty.value }}</small><br>{% endif %}#}
+{#                                                <small class="fw-bold">{{ variant.price|number_format(0, '.', ' ') }} ₽</small><br>#}
+                                            {#                                            {% if not size.inStock %}#}
+                                            {#                                                <small class="text-danger">Нет в наличии</small>#}
+                                            {#                                            {% endif %}#}
+                                        </button>
+                                    </div>
+                                {% elseif variant.type == 'paint' %}
+                                    <div class="col-6">
+                                        <button onclick="selectSize({{ loop.index0 }})"
+                                                class="size-option btn w-100 text-start {{ loop.first ? 'btn-outline-danger' : 'btn-outline-secondary' }}
+{#{{ size.inStock ? '' : 'disabled btn-light' }}#}
+">
+                                            <div class="fw-semibold">{{ variant.volume.value }} <small class="text-muted">{{ variant.volume.label }}</small></div>
+                                            {#                                                <div class="fw-semibold">{{ variant.baseMaterial.label }}</div>#}
+                                            <small class="text-muted">{{ variant.color.label }}: <b>{{ variant.color.value }}</b></small><br>
+
+                                            {#                                                {% if variant.packageQty.value is not empty %}<small class="text-muted">{{ variant.packageQty.label }} {{ variant.packageQty.value }}</small><br>{% endif %}#}
+                                            {#                                                <small class="fw-bold">{{ variant.price|number_format(0, '.', ' ') }} ₽</small><br>#}
+                                            {#                                            {% if not size.inStock %}#}
+                                            {#                                                <small class="text-danger">Нет в наличии</small>#}
+                                            {#                                            {% endif %}#}
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                <div class="col-6">
+                                    <button onclick="selectSize({{ loop.index0 }})"
+                                            class="size-option btn w-100 text-start {{ loop.first ? 'btn-outline-danger' : 'btn-outline-secondary' }}
+{#{{ size.inStock ? '' : 'disabled btn-light' }}#}
+">
+                                        {% for param in variant.params %}
+                                            <div class="parameter">
+                                                <span class="label">{{ param.label }}:</span>
+                                                <span class="value">{{ param.value }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </button>
+                                </div>
+                                    {% endif %}
+
+{#                                    <div class="price">{{ variant.raw.price|default('Цена не указана') }}</div>#}
+{#                                </div>#}
+                            {% endfor %}
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Количество:</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <button onclick="updateQuantity(-1)" class="btn btn-outline-secondary">-</button>
+                                <span id="quantity" class="form-control text-center" style="width: 60px;">1</span>
+                                <button onclick="updateQuantity(1)" class="btn btn-outline-secondary">+</button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-danger flex-grow-1"  onclick="addToCart()">
+                                <i class="bi bi-cart"></i> В корзину
+                            </button>
+                            <button class="btn btn-outline-secondary">
+                                <i class="bi bi-heart"></i>
+                            </button>
+                            <button class="btn btn-outline-secondary">
+                                <i class="bi bi-share"></i>
+                            </button>
+                        </div>
+
+                        <div class="row mt-4 g-2">
+                            <div class="col-4 text-success small">
+                                <i class="bi bi-truck"></i> Быстрая доставка
+                            </div>
+                            <div class="col-4 text-primary small">
+                                <i class="bi bi-award"></i> Гарантия качества
+                            </div>
+                            <div class="col-4 text-warning small">
+                                <i class="bi bi-arrow-counterclockwise"></i> Возврат 30 дней
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab">
+                            Описание
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs" type="button" role="tab">
+                            Характеристики
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                            Отзывы ({{ product.reviewCount }})
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content border border-top-0 p-4" id="productTabContent">
+                    <div class="tab-pane fade show active" id="desc" role="tabpanel">
+                        <h5>Описание товара</h5>
+                        <p>{{ product.description }}</p>
+                        <h6>Преимущества:</h6>
+                        <ul>
+                            {#                        {% for feature in product.features %}#}
+                            <li>
+                                бла бла бла
+                                {#                            {{ feature }}#}
+                            </li>
+                            {#                        {% endfor %}#}
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="specs" role="tabpanel">
+                        <h5>Технические характеристики</h5>
+                        <dl class="row">
+                            <dt class="col-sm-3">Description lists</dt>
+                            <dd class="col-sm-9">A description list is perfect for defining terms.</dd>
+                            {#                        {% for key, value in product.specifications %}#}
+
+{#                                <strong>{{ key }}</strong>: {{ value }}#}
+                            {#                        {% endfor %}#}
+                        </dl>
+                    </div>
+                    <div class="tab-pane fade" id="reviews" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5>Отзывы покупателей</h5>
+                            <button class="btn btn-outline-secondary btn-sm">Написать отзыв</button>
+                        </div>
+                        <div>
+                            {#                        {% for review in reviews %}#}
+                            {#                            <div class="mb-4 border-bottom pb-3">#}
+                            {#                                <strong>{{ review.author }}</strong>#}
+                            {#                                <div class="text-warning">#}
+                            {#                                    {% for i in 1..5 %}#}
+                            {#                                        <i class="bi bi-star{{ i <= review.rating ? '-fill' : '' }}"></i>#}
+                            {#                                    {% endfor %}#}
+                            {#                                </div>#}
+                            {#                                <small class="text-muted">{{ review.date }}</small>#}
+                            {#                                <p>{{ review.comment }}</p>#}
+                            {#                                <button class="btn btn-link btn-sm text-muted">Полезно ({{ review.helpful }})</button>#}
+                            {#                            </div>#}
+                            {#                        {% endfor %}#}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Products -->
+{#                <section class="mt-5">#}
+{#                    <h5>Похожие товары</h5>#}
+{#                    <div class="row g-3">#}
+                        {#                    {% for relatedProduct in relatedProducts %}#}
+                        {#                        <div class="col-md-3">#}
+                        {#                            <div class="card h-100">#}
+                        {#                                <img src="{{ relatedProduct.image }}" class="card-img-top" alt="{{ relatedProduct.name }}">#}
+                        {#                                <div class="card-body">#}
+                        {#                                    <h6 class="card-title">{{ relatedProduct.name }}</h6>#}
+                        {#                                    <p class="card-text">{{ relatedProduct.price }} ₽</p>#}
+                        {#                                    <a href="{{ path('app_product', {id: relatedProduct.id}) }}" class="btn btn-outline-danger w-100">Подробнее</a>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {#                    {% endfor %}#}
+{#                    </div>#}
+{#                </section>#}
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <div id="cartToast" class="toast align-items-center text-white text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">
+                    Товар добавлен в корзину
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

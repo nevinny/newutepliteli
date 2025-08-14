@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+
+                        <h1 class="h3 mb-4 text-center">Сброс пароля</h1>
+
+                        {% for flash_error in app.flashes('reset_password_error') %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ flash_error }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {{ form_start(requestForm, {
+                            'attr': {
+                                'class': 'needs-validation',
+                                'novalidate': 'novalidate'
+                            }
+                        }) }}
+
+                        <div class="mb-3">
+                            {{ form_label(requestForm.email, null, {
+                                'label_attr': {'class': 'form-label'}
+                            }) }}
+                            {{ form_widget(requestForm.email, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'example@mail.com'
+                                }
+                            }) }}
+                            {{ form_errors(requestForm.email) }}
+                            <div class="form-text mt-2" style="color: #666; font-size: 0.875rem;">
+                                Введите email, указанный при регистрации, и мы отправим вам ссылку для сброса пароля.
+                            </div>
+                        </div>
+
+                        <button class="btn btn-danger btn-register w-100 py-2" type="submit">
+                            Отправить ссылку для сброса
+                        </button>
+
+                        {{ form_end(requestForm) }}
+
+                        <div class="text-center mt-3">
+                            <a href="{{ path('app_login') }}" class="text-decoration-none">Вернуться к входу</a>
+                        </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
