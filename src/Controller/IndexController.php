@@ -35,7 +35,7 @@ final class IndexController extends AbstractController
         $slug = '/' . trim($slug, '/');
 
         $main = $this->mainRepository->findOneByFullPath($slug);
-//        dd($main, $main->isPublished());
+//        dd($main);
         if (!$main || !$main->isPublished()) {
             throw $this->createNotFoundException('Страница не найдена');
         }
@@ -50,7 +50,7 @@ final class IndexController extends AbstractController
             'template' => $template
         ];
         $controller = $main->getEntityType()->getControllerClass();
-
+//        dd($template, $main, $controller);
         if (!$controller) {
             throw new \RuntimeException('No controller defined for page type: ' . $main->getEntityType()->getCode());
         }

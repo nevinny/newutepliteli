@@ -17,6 +17,7 @@ class ContactsController extends AbstractController
         private StoreRepository $storeRepository,
     ) {}
 
+    #[Route(name: 'contacts')]
     public function index(Request $request)
     {
         $main = $request->attributes->get('main');

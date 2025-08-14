@@ -43,15 +43,20 @@
 
             <!-- Авторизация и корзина -->
             <div class="d-flex align-items-center gap-4">
+                {% if app.user %}
+                <!-- Кабинет: если авторизован, отобразится вместо "войти" -->
+                <a href="/personal" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-person-circle"></i> Кабинет
+                </a>
+
+                {% else %}
                 <!-- Авторизация -->
-                <a href="/login" class="btn btn-outline-primary btn-sm">
+                <a href="/auth/login" class="btn btn-outline-primary btn-sm">
                     <i class="bi bi-person"></i>
                     <span class="d-none d-lg-inline">Войти</span>
                 </a>
-                <!-- Кабинет: если авторизован, отобразится вместо "войти" -->
-                <!-- <a href="/account" class="btn btn-outline-primary btn-sm">
-                  <i class="bi bi-person-circle"></i> Кабинет
-                </a> -->
+                {% endif %}
+
 
                 <!-- Корзина -->
                 <a href="/cart" class="btn btn-outline-secondary position-relative btn-sm">
@@ -67,7 +72,7 @@
     <nav class="top-menu navbar navbar-expand-lg navbar-light bg-light border-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Главная</a>
-            <a class="navbar-brand" href="/catalog/">Каталог</a>
+            <a class="navbar-brand" href="/catalog">Каталог</a>
             <!-- Кнопка для открытия меню (видна только на малых экранах) -->
             <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu">
                 <i class="bi bi-list"></i>
@@ -95,12 +100,15 @@
             <!-- Региональность -->
             <div>
                 <label for="regionSelect" class="form-label">Ваш регион:</label>
-                <select id="regionSelect" class="form-select">
-                    <option value="moscow">Москва</option>
-                    <option value="spb">Санкт-Петербург</option>
-                    <option value="ekb">Екатеринбург</option>
+                <select id="regionSelect" class="form-select" onchange="window.location=this.value">
+                    <option value="/contacts/stores/moscow">Москва</option>
+                    <option value="/contacts/stores/sankt-peterburg">Санкт-Петербург</option>
+                    <option value="/contacts/stores/rostov-na-donu">Ростов-на-Дону</option>
+                    <option value="/contacts/stores/tver">Тверь</option>
+                    <option value="/contacts/stores/krasnodar">Краснодар</option>
                     <!-- можно загружать динамически через JS -->
                 </select>
+
             </div>
 
             <!-- Авторизация -->

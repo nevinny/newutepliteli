@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
     {
     }
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: 'app_register', priority: 10001)]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -60,7 +60,9 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
+
+
+    #[Route('/verify/email', name: 'app_verify_email', priority: 10002)]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
     {
         $id = $request->query->get('id');

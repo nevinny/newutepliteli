@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Password Reset Email Sent{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-4">
+                            <i class="bi bi-envelope-check fs-1 text-primary"></i>
+                        </div>
+
+                        <h1 class="h3 mb-4">Проверьте вашу почту</h1>
+
+                        <div class="alert alert-info text-start">
+                            <p class="mb-2">
+                                Если существует аккаунт с указанным email, то мы отправили письмо со ссылкой для сброса пароля.
+                            </p>
+                            <p class="mb-0">
+                                Ссылка будет активна в течение
+                                <strong>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
+                            </p>
+                        </div>
+
+                        <p class="mb-4">
+                            Если вы не получили письмо, пожалуйста:
+                        </p>
+
+                        <ul class="list-unstyled text-start mb-4">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                                Проверьте папку "Спам"
+                            </li>
+                            <li>
+                                <i class="bi bi-arrow-repeat text-primary me-2"></i>
+                                <a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none">
+                                    Попробуйте отправить ссылку ещё раз
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="d-grid gap-2">
+                            <a href="{{ path('app_login') }}" class="btn btn-primary">
+                                Вернуться на страницу входа
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

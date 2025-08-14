@@ -5,27 +5,40 @@ namespace App\Controller;
 use App\Enum\Statuses;
 use App\Repository\CategoryRepository;
 use App\Repository\ContactsRepository;
+use App\Repository\ProductRepository;
 use App\Repository\StoreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CatalogController extends AbstractController
 {
     public function __construct(
         private CategoryRepository $repository,
+        private ProductRepository $listRepository
     ) {}
+
+    #[Route(name: 'catalog')]
     public function index(Request $request)
     {
         $main = $request->attributes->get('main');
         $template = $request->attributes->get('template');
         $context['page'] = $this->repository->findOneBy(['id' => $main->getEntityId()]);
-        $context['list'] = $this->repository->findBy([
-            'parent' => $main->getId(),
+        $context['list'] = $this->listRepository->findBy([
+//            'parent' => $main->getId(),
             'status' => Statuses::Active,
         ]);
-//        dd($main,$context);
+        $categoryCounter = [];
+        foreach ($context['list'] as $category) {
+            if(!array_key_exists($category->getParent(), $categoryCounter)) {
+                $categoryCounter[$category->getParent()] = 0;
+            }
+            $categoryCounter[$category->getParent()]++;
+        }
+//        dd($main,$categoryCounter,$context);
         return $this->render($template, [
             'main' => $main,
+            'categoryCounter' => $categoryCounter,
             'page' => $context['page'],
             'list' => $context['list'],
 //            'form' => $form->createView()

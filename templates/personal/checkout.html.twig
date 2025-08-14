@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Корзина - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="container-flex py-5">
+        <div class="bg-white rounded p-4">
+            <div class="d-flex align-items-center mb-4">
+                <i class="bi bi-cart-fill text-danger fs-3 me-2"></i>
+                <h1 class="h3 mb-0 me-2">Корзина</h1>
+                <span class="text-muted">(0 товаров)</span>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
