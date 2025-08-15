@@ -218,12 +218,6 @@ class ProductImportService
         $existing = $this->em->getRepository(Main::class)->findOneBy(['fullPath' => $fullPath]);
         $main->setFullPath($fullPath);
 
-//        dd($main, $fullPath, $existing);
-//        dump($product, $fullPath,$main, $existing);
-        if($fullPath == '/catalog/teploizolyaciya/Uteplitel-Rokvul-Rockwool-RUF-BATTS-N-E')
-        {
-            dd($existing, $main);
-        }
 
         if ($existing && $existing->getId() !== $main->getId()) {
 //            $this->logger->warning('Duplicate fullPath skipped', [

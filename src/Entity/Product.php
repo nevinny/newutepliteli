@@ -46,6 +46,9 @@ class Product implements SystemEntityInterface
     #[ORM\OneToMany(targetEntity: ProductVariant::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $variants;
 
+    #[ORM\Column(options: ['default' => '0'])]
+    private ?bool $isfp = null;
+
     public function __construct(
         private ParameterGrouper $parameterGrouper
     )
@@ -182,5 +185,17 @@ class Product implements SystemEntityInterface
 
     private function formatSize(string $width, string $length): string {
         return "$width × $length";
+    }
+
+    public function isfp(): ?bool
+    {
+        return $this->isfp;
+    }
+
+    public function setIsfp(bool $isfp): static
+    {
+        $this->isfp = $isfp;
+
+        return $this;
     }
 }
