@@ -28,12 +28,13 @@ class CatalogController extends AbstractController
 //            'parent' => $main->getId(),
             'status' => Statuses::Active,
         ]);
+//        dd($context['list']);
         $categoryCounter = [];
         foreach ($context['list'] as $category) {
-            if(!array_key_exists($category->getParent(), $categoryCounter)) {
-                $categoryCounter[$category->getParent()] = 0;
+            if(!array_key_exists($category['p_parent'], $categoryCounter)) {
+                $categoryCounter[$category['p_parent']] = 0;
             }
-            $categoryCounter[$category->getParent()]++;
+            $categoryCounter[$category['p_parent']]++;
         }
 //        dd($main,$categoryCounter,$context);
         return $this->render($template, [

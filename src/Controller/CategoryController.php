@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractController
 {
     public function __construct(
-        private SectionRepository $repository,
+        private CategoryRepository $repository,
         private ProductRepository $listRepository,
     ) {}
     #[Route(path: '/catalog/{slug}', name: 'category_index', requirements: ['slug' => '.+'], defaults: ['slug' => ''], priority: -3)]

@@ -3,20 +3,21 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="hit-tab" data-bs-toggle="tab" data-bs-target="#hit" type="button" role="tab">Хит</button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="recommend-tab" data-bs-toggle="tab" data-bs-target="#recommend" type="button" role="tab">Советуем</button>
-        </li>
+{#        <li class="nav-item" role="presentation">#}
+{#            <button class="nav-link" id="recommend-tab" data-bs-toggle="tab" data-bs-target="#recommend" type="button" role="tab">Советуем</button>#}
+{#        </li>#}
     </ul>
     <div class="tab-content pt-3" id="productTabsContent">
         <div class="tab-pane fade show active" id="hit" role="tabpanel">
             <div class="row g-3">
+                {% for item in list %}
                 <div class="col-md-6 col-lg-4">
                     <div class="bg-light rounded p-2 h-100 d-flex flex-column align-items-center text-center">
-                        <a href="/catalog/teploizolyatsiya/bazaltovyy_uteplitel/880/" class="d-block w-100">
+                        <a href="{{ item.m_fullPath }}" class="d-block w-100">
                             <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                <img class="img-fluid mh-100" style="max-height: 200px; width: auto;" src="/images/popular/aaeedbdfd57031e49948ebfae5156830.png" alt="Утеплитель Роквул (Rockwool) Лайт Баттс СКАНДИК">
+                                <img class="img-fluid mh-100" style="max-height: 200px; width: auto;" src="/images/popular/aaeedbdfd57031e49948ebfae5156830.png" alt="{{ item.p_title }}">
                             </div>
-                            <h6 class="mt-2 mb-1">Утеплитель Роквул (Rockwool) Лайт Баттс СКАНДИК</h6>
+                            <h6 class="mt-2 mb-1">{{ item.p_title }}</h6>
                         </a>
                         <div class="stars mb-1">
                             <span class="text-warning">★★★★★</span>
@@ -25,51 +26,7 @@
                         <div class="fw-bold">от 570.01 руб.</div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="bg-light rounded p-2 h-100 d-flex flex-column align-items-center text-center">
-                        <a href="/catalog/teploizolyatsiya/bazaltovyy_uteplitel/879/" class="d-block w-100">
-                            <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                <img class="img-fluid mh-100" style="max-height: 200px; width: auto;" src="/images/popular/5053178af60d0870a1754a918c9c8be9.png" alt="Утеплитель Роквул (Rockwool) Лайт Баттс">
-                            </div>
-                            <h6 class="mt-2 mb-1">Утеплитель Роквул (Rockwool) Лайт Баттс</h6>
-                        </a>
-                        <div class="stars mb-1">
-                            <span class="text-warning">★★★★★</span>
-                        </div>
-                        <div class="text-muted small mb-1">Нет в наличии</div>
-                        <div class="fw-bold">от 745.92 руб.</div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="bg-light rounded p-2 h-100 d-flex flex-column align-items-center text-center">
-                        <a href="/catalog/teploizolyatsiya/ekstruzionnyy_penopolistirol/877/" class="d-block w-100">
-                            <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                <img class="img-fluid mh-100" style="max-height: 200px; width: auto;" src="/images/popular/748d48295feca59c2dde6f84e2300c23.png" alt="Экструзионный пенополистирол ТЕХНОПЛЕКС">
-                            </div>
-                            <h6 class="mt-2 mb-1">Экструзионный пенополистирол ТЕХНОПЛЕКС</h6>
-                        </a>
-                        <div class="stars mb-1">
-                            <span class="text-warning">★★★★★</span>
-                        </div>
-                        <div class="text-muted small mb-1">Нет в наличии</div>
-                        <div class="fw-bold">от 1 055.34 руб.</div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="bg-light rounded p-2 h-100 d-flex flex-column align-items-center text-center">
-                        <a href="/catalog/teploizolyatsiya/bazaltovyy_uteplitel/871/" class="d-block w-100">
-                            <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                <img class="img-fluid mh-100" style="max-height: 200px; width: auto;" src="/images/popular/4c97392550ba455a784bc8265a8662e0.png" alt="Утеплитель Роквул (Rockwool) Рокфасад">
-                            </div>
-                            <h6 class="mt-2 mb-1">Утеплитель Роквул (Rockwool) Рокфасад</h6>
-                        </a>
-                        <div class="stars mb-1">
-                            <span class="text-warning">★★★★★</span>
-                        </div>
-                        <div class="text-muted small mb-1">Нет в наличии</div>
-                        <div class="fw-bold">от 757.80 руб.</div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
         <div class="tab-pane fade" id="recommend" role="tabpanel">

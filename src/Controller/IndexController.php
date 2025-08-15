@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Main;
 use App\Entity\News;
+use App\Enum\Statuses;
 use App\Repository\MainRepository;
 use App\Repository\NewsRepository;
+use App\Repository\ProductRepository;
 use App\Repository\SectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,11 +23,17 @@ final class IndexController extends AbstractController
     {}
     #[Route(path: '/', name: 'index', priority: 10000)]
     public function index(
-        EntityManagerInterface $entityManager,
+        ProductRepository $productRepository,
     ): Response
     {
+        $list = $productRepository->findBy([
+            'isfp' => true,
+            'status' => Statuses::Active,
+            ]);
+//        dd($list);
         return $this->render('index.html.twig', [
             'controller_name' => 'IndexController',
+            'list' => $list,
         ]);
     }
     #[Route(path: '/{slug}', name: 'page_show', requirements: ['slug' => '(?!admin/).+'], defaults: ['slug' => ''])]
