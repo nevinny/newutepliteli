@@ -7,6 +7,7 @@ use App\Entity\Trait\DefaultFields;
 use App\Entity\Trait\MetaSEO;
 use App\Entity\Trait\Status;
 use App\Repository\CategoryRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -22,6 +23,9 @@ class Category
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $externalId = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +39,18 @@ class Category
     public function setExternalId(?string $externalId): static
     {
         $this->externalId = $externalId;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
