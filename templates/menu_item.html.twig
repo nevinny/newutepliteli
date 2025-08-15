@@ -1,36 +1,49 @@
-
-{% set is_active = (app.request.get('_route') == item.route) ? 'active' : '' %}
-{% set has_active_child = item.children|filter(child => app.request.get('_route') == child.route) is not empty %}
-{% set class_name = is_active or has_active_child ? 'active' : '' %}
+{% set current_path = app.request.pathinfo %}
+{% set is_active = current_path starts with item.fullPath %}
 {% set item_id = 'item_' ~ loop.index %}
 {% set collapse_id = 'collapse_' ~ loop.index %}
 
 <div class="accordion-item">
     {% if item.children is not empty %}
         <h2 class="accordion-header" id="{{ item_id }}">
-            <a class="accordion-button collapsed{{ item.children is empty ? ' no-arrow' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ collapse_id }}" aria-expanded="false" aria-controls="{{ collapse_id }}">
-                <img src="/images/{{ item['image'] }}" class="me-2" width="32" height="32" alt="{{ item.label }}">
+            <a class="accordion-button{{ is_active ? '' : ' collapsed' }}{{ item.children is empty ? ' no-arrow' : '' }}"
+               type="button"
+               data-bs-toggle="collapse"
+               data-bs-target="#{{ collapse_id }}"
+               aria-expanded="{{ is_active ? 'true' : 'false' }}"
+               aria-controls="{{ collapse_id }}">
+                {% if item.image is not empty %}
+                    <img src="/images/{{ item.image }}" class="me-2" width="32" height="32" alt="{{ item.label }}">
+                {% endif %}
                 {{ item.label }}
             </a>
         </h2>
-        <div id="{{ collapse_id }}" class="accordion-collapse collapse" aria-labelledby="{{ item_id }}" data-bs-parent="#catalogMenu">
+        <div id="{{ collapse_id }}"
+             class="accordion-collapse collapse{{ is_active ? ' show' : '' }}"
+             aria-labelledby="{{ item_id }}"
+             data-bs-parent="#catalogMenu">
             <div class="accordion-body">
                 <ul class="list-unstyled">
-                    {% for child in item.children %}
+            {% for child in item.children %}
+                {% set child_active = current_path starts with child.fullPath %}
+                {% if child_active %}
+                    <li>{{ child.label }}</li>
+                    {% else %}
                     <li><a href="{{ child.fullPath }}">{{ child.label }}</a></li>
-                    {% endfor %}
+                {% endif %}
+            {% endfor %}
                 </ul>
             </div>
         </div>
     {% else %}
         <h2 class="accordion-header" id="{{ item_id }}">
-            <a href="{{ item.fullPath }}" class="accordion-button collapsed{{ item.children is empty ? ' no-arrow' : '' }}">
+            <a href="{{ item.fullPath }}"
+               class="accordion-button{{ is_active ? ' active' : ' collapsed' }}{{ item.children is empty ? ' no-arrow' : '' }}">
                 {% if item.image is not empty %}
-                <img src="/images/{{ item['image'] }}" class="me-2" width="32" height="32" alt="{{ item.label }}">
+                    <img src="/images/{{ item.image }}" class="me-2" width="32" height="32" alt="{{ item.label }}">
                 {% endif %}
                 {{ item.label }}
             </a>
         </h2>
     {% endif %}
 </div>
-
