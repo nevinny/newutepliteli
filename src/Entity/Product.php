@@ -49,6 +49,9 @@ class Product implements SystemEntityInterface
     #[ORM\Column(options: ['default' => '0'])]
     private ?bool $isfp = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $anons = null;
+
     public function __construct(
         private ParameterGrouper $parameterGrouper
     )
@@ -195,6 +198,18 @@ class Product implements SystemEntityInterface
     public function setIsfp(bool $isfp): static
     {
         $this->isfp = $isfp;
+
+        return $this;
+    }
+
+    public function getAnons(): ?string
+    {
+        return $this->anons;
+    }
+
+    public function setAnons(?string $anons): static
+    {
+        $this->anons = $anons;
 
         return $this;
     }

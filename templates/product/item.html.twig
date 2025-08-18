@@ -144,26 +144,83 @@
             <div class="col-lg-9">
                 <h1>{{ main.title }}</h1>
                 <div class="row g-4 mb-4">
+                    {% set placeholder = 'data:image/svg+xml;charset=UTF-8,' ~
+                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' ~
+                        '<defs>' ~
+                        '<linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">' ~
+                        '<stop offset="0%" stop-color="%23f8f9fa"/>' ~
+                        '<stop offset="100%" stop-color="%23e9ecef"/>' ~
+                        '</linearGradient>' ~
+                        '</defs>' ~
+                        '<rect width="100%" height="100%" fill="url(%23bgGrad)"/>' ~
+                        '<circle cx="60" cy="60" r="20" fill="%23ced4da"/>' ~
+                        '<path d="M 20 160 L 80 100 L 130 150 L 180 90 L 200 160 Z" fill="%23dee2e6"/>' ~
+                        '<path d="M 0 170 L 50 120 L 100 160 L 150 110 L 200 170 Z" fill="%23ced4da" opacity="0.8"/>' ~
+                        '</svg>'
+                        | url_encode %}
+
                     <div class="col-md-6">
                         <div class="ratio ratio-1x1 border rounded">
+                            {% if product.images|default([])|length > 0 %}
                             <img id="main-image"
-                                {#                             src="{{ product.images[0] }}"#}
+                                 src="{{ (product.images|default([])|length > 0) ? product.images[0] : placeholder }}"
                                  alt="{{ product.title }}"
-                                 class="img-fluid rounded object-fit-cover">
-                        </div>
-                        <div class="row row-cols-4 g-2 mt-2">
-                            {% for image in product.images|default([]) %}
-                                <div class="col">
-                                    <button onclick="selectImage({{ loop.index0 }})"
-                                            class="border {{ loop.first ? 'border-danger' : 'border-secondary' }} rounded w-100 h-100">
-                                        <img src="{{ image }}"
-                                             alt="{{ product.title }} {{ loop.index }}"
-                                             class="img-fluid rounded object-fit-cover">
-                                    </button>
+                                 class="img-fluid rounded object-fit-cover"
+                                 loading="lazy"
+                                 decoding="async">
+                            {% else %}
+                                <div class="d-flex justify-content-center align-items-center h-100 bg-light">
+                                    <img src="{{ placeholder }}"
+                                         alt="No image"
+                                         class="img-fluid rounded object-fit-cover"
+                                         loading="lazy"
+                                         decoding="async">
+                                    {#                                <svg width="100%" height="100%" fill="none" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="text-muted"> #}
+                                    {#                                    <defs> #}
+                                    {#                                    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"> #}
+                                    {#                                        <stop offset="0%" stop-color="%23f8f9fa"/> #}
+                                    {#                                        <stop offset="100%" stop-color="%23e9ecef"/> #}
+                                    {#                                    </linearGradient> #}
+                                    {#                                    </defs> #}
+                                    {#                                    <rect width="100%" height="100%" fill="url(%23bgGrad)"/> #}
+                                    {#                                    <circle cx="60" cy="60" r="20" fill="%23ced4da" opacity="0.3"/> #}
+                                    {#                                    <path d="M 0 170 L 50 120 L 100 160 L 150 110 L 200 170 Z" fill="%23ced4da" opacity="0.3"/> #}
+                                    {#                                    <path d="M 20 170 L 80 100 L 130 150 L 180 90 L 200 170 Z" fill="%23dee2e6" opacity="0.2"/> #}
+                                    {#                                </svg> #}
                                 </div>
-                            {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="row row-cols-4 g-2 mt-2">
+                            {% if product.images|default([])|length > 0 %}
+                                {% for image in product.images %}
+                                    <div class="col">
+                                        <button onclick="selectImage({{ loop.index0 }})"
+                                                class="border {{ loop.first ? 'border-danger' : 'border-secondary' }} rounded w-100 h-100">
+                                            <img src="{{ image }}"
+                                                 alt="{{ product.title }} {{ loop.index }}"
+                                                 class="img-fluid rounded object-fit-cover"
+                                                 loading="lazy"
+                                                 decoding="async">
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                {% for i in 1..4 %}
+                                    <div class="col">
+                                        <div class="border border-secondary rounded w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+                                            <img src="{{ placeholder }}"
+                                                 alt="No image"
+                                                 class="img-fluid rounded object-fit-cover"
+                                                 loading="lazy"
+                                                 decoding="async">
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
+
 
                     <div class="col-md-6">
                         <span class="badge bg-light text-dark mb-2">product.category</span>
@@ -180,7 +237,7 @@
                             <span class="text-muted small">{{ product.rating }} ({{ product.reviewCount }} отзывов)</span>
                         </div>
 
-
+                        <p class="text-muted">{{ product.anons|raw }}</p>
 
                         <hr>
                         <div class="d-flex align-items-center gap-3 mb-2">
@@ -188,12 +245,12 @@
 {#                            {{ product.sizes[0].price|number_format(0, '.', ' ') }} ₽#} 0.00 ₽
                         </span>
                             {#                        {% if product.oldPrice %}#}
-                            <span id="old-price" class="text-muted text-decoration-line-through">
-{#                            {{ product.oldPrice|number_format(0, '.', ' ') }} ₽#} 0.00 ₽
-                            </span>
-                            <span id="discount" class="badge bg-danger">
-{#                            -{{ product.discount }}%#} - 10%
-                            </span>
+                            {#                            <span id="old-price" class="text-muted text-decoration-line-through"> #}
+                            {#                            {{ product.oldPrice|number_format(0, '.', ' ') }} ₽ 0.00 ₽ #}
+                            {#                            </span> #}
+                            {#                            <span id="discount" class="badge bg-danger"> #}
+                            {#                            -{{ product.discount }}% - 10% #}
+                            {#                            </span> #}
                             {#                        {% endif %}#}
                         </div>
 {#                        <p class="text-muted small">за упаковку</p>#}

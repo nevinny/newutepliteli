@@ -30,7 +30,7 @@ class ProductController extends AbstractController
         $template = $request->attributes->get('template');
         $context['page'] = $this->repository->findOneBy(['id' => $main->getEntityId()]);
 //        $context['list'] = $this->listRepository->findBy(['parent' => $main->getEntityId()]);
-//        dd($main,$context['page']->getParams());
+//        dd($main,$context['page']);
         return $this->render($template, [
             'main' => $main,
             'product' => $context['page'],
