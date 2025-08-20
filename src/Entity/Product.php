@@ -15,9 +15,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[Vich\Uploadable]
 class Product implements SystemEntityInterface
 {
     use DefaultFields, MetaSEO, Status, Created;
@@ -30,7 +33,13 @@ class Product implements SystemEntityInterface
     private ?string $externalId = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $anons = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column(options: ['default' => '0'])]
+    private ?bool $isfp = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $rating = null;
@@ -46,11 +55,17 @@ class Product implements SystemEntityInterface
     #[ORM\OneToMany(targetEntity: ProductVariant::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $variants;
 
-    #[ORM\Column(options: ['default' => '0'])]
-    private ?bool $isfp = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preview = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $anons = null;
+    #[Vich\UploadableField(mapping: 'product_preview', fileNameProperty: 'preview')]
+    private ?File $previewFile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'image')]
+    private ?File $imageFile = null;
 
     public function __construct(
         private ParameterGrouper $parameterGrouper
@@ -212,5 +227,88 @@ class Product implements SystemEntityInterface
         $this->anons = $anons;
 
         return $this;
+    }
+
+    public function getPreview(): ?string
+    {
+        return $this->preview;
+    }
+
+    public function setPreview(?string $preview): static
+    {
+        $this->preview = $preview;
+
+        return $this;
+    }
+
+    public function getPreviewFile(): ?File
+    {
+        return $this->previewFile;
+    }
+
+    public function setPreviewFile(?File $file = null): void
+    {
+        $this->previewFile = $file;
+
+        if ($file !== null) {
+            $this->updated_at = new \DateTime();
+        }
+    }
+
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $file = null): void
+    {
+        $this->imageFile = $file;
+
+        if ($file !== null) {
+            $this->updated_at = new \DateTime();
+        }
+    }
+
+    public function getPreviewUrl(): ?string
+    {
+        if (!$this->preview) {
+            return null;
+        }
+
+        // если в БД уже полный путь
+        if (str_starts_with($this->preview, '/uploads/')) {
+            return $this->preview;
+        }
+
+        // если только имя
+        return '/uploads/products/' . $this->preview;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        if (!$this->imageName) {
+            return null;
+        }
+
+        // если в БД уже полный путь
+        if (str_starts_with($this->imageName, '/uploads/')) {
+            return $this->imageName;
+        }
+
+        // если только имя
+        return '/uploads/products/' . $this->imageName;
     }
 }
