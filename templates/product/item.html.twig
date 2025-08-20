@@ -13,7 +13,7 @@
 
         function selectImage(index) {
             selectedImage = index;
-            document.getElementById('main-image').src = images[index];
+            // document.getElementById('main-image').src = images[index];
 
             document.querySelectorAll('.image-thumbnail').forEach((thumb, i) => {
                 thumb.classList.toggle('border-red-600', i === index);
@@ -161,13 +161,15 @@
 
                     <div class="col-md-6">
                         <div class="ratio ratio-1x1 border rounded">
-                            {% if product.images|default([])|length > 0 %}
+                            {% if product.image|default([])|length > 0 %}
+                                <div class="d-flex justify-content-center align-items-center h-100 bg-light">
                             <img id="main-image"
-                                 src="{{ (product.images|default([])|length > 0) ? product.images[0] : placeholder }}"
+                                 src="{{ (product.image|default([])|length > 0) ? vich_uploader_asset(product, 'imageFile') : placeholder }}"
                                  alt="{{ product.title }}"
                                  class="img-fluid rounded object-fit-cover"
                                  loading="lazy"
                                  decoding="async">
+                                </div>
                             {% else %}
                                 <div class="d-flex justify-content-center align-items-center h-100 bg-light">
                                     <img src="{{ placeholder }}"

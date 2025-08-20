@@ -260,11 +260,11 @@ class DefaultCrudController extends AbstractCrudController
     {
         $entityFqcn = $this->getEntityFqcn();
         $entityFields = $this->getEntityFields($entityFqcn);
-
+//        dd($entityFields);
         foreach ($entityFields as $fieldName => $fieldConfig)
         {
             // Пропускаем системные, meta и image поля
-            if (in_array($fieldName, ['id', 'parent', 'created_at', 'updated_at', 'ord', 'status', 'metaTitle', 'metaKeywords', 'metaDescription', 'image', 'logo'])) {
+            if (in_array($fieldName, ['id', 'parent', 'created_at', 'updated_at', 'ord', 'status', 'metaTitle', 'metaKeywords', 'metaDescription', 'image', 'logo', 'preview'])) {
                 continue;
             }
 
@@ -365,7 +365,13 @@ class DefaultCrudController extends AbstractCrudController
                 }
                 return TextField::new($fieldName)->setMaxLength(255);
             case 'text':
-                return TextEditorField::new($fieldName)->setNumOfRows(9);
+                return TextEditorField::new($fieldName)
+                    ->setNumOfRows(9)
+                    ->setTrixEditorConfig([
+                        'blockAttributes' => [
+                            'heading1' => ['tagName' => 'h2']
+                        ]
+                    ]);
             case 'datetime':
                 return DateTimeField::new($fieldName);
             case 'boolean':
@@ -382,13 +388,44 @@ class DefaultCrudController extends AbstractCrudController
         $metadata = $this->entityManager->getClassMetadata($entityFqcn);
 
         $fields = [];
-
+        // Явно задаем порядок важных полей
+        $priorityOrder = [
+            'id', 'externalId', 'title', 'slug', // основные поля
+            'anons', 'description', 'preview', 'image', // контент
+//            'isfp', 'rating', 'reviewCount', 'ord', // дополнительные
+//            'parent', // отношения
+//            'metaTitle', 'metaDescription', 'metaKeywords', // meta из трейтов
+//            'status', 'created_at', 'updated_at' // системные из трейтов
+        ];
         foreach ($metadata->fieldMappings as $field) {
             $fields[$field['fieldName']] = [
                 'type' => $field['type'],
                 'nullable' => $field['nullable'] ?? false,
             ];
         }
+        // Сортируем согласно нашему порядку
+        uksort($fields, function ($a, $b) use ($priorityOrder) {
+            $aIndex = array_search($a, $priorityOrder);
+            $bIndex = array_search($b, $priorityOrder);
+
+            // Если оба поля есть в нашем порядке
+            if ($aIndex !== false && $bIndex !== false) {
+                return $aIndex <=> $bIndex;
+            }
+
+            // Если только A есть в порядке - ставим его первым
+            if ($aIndex !== false) {
+                return -1;
+            }
+
+            // Если только B есть в порядке - ставим его первым
+            if ($bIndex !== false) {
+                return 1;
+            }
+
+            // Если оба отсутствуют - сортируем по алфавиту
+            return strcmp($a, $b);
+        });
 
         return $fields;
     }

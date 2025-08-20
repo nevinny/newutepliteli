@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Enum\Statuses;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SectionRepository;
@@ -22,7 +24,11 @@ class CategoryController extends AbstractController
         $template = $request->attributes->get('template');
         $context['page'] = $this->repository->findOneBy(['id' => $main->getEntityId()]);
 //        dd($main, $template, $context);
-        $context['list'] = $this->listRepository->findBy(['parent' => $main->getId()]);
+        $context['list'] = $this->listRepository->findBy([
+            'parent' => $main->getId(),
+            'status' => Statuses::Active,
+        ]);
+//        dd($context['list']);
 //        dd($main,$context);
         return $this->render($template, [
             'main' => $main,
