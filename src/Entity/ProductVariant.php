@@ -47,9 +47,16 @@ class ProductVariant implements SystemEntityInterface
     #[ORM\OneToMany(targetEntity: ProductParams::class, mappedBy: 'variant', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $params;
 
+    /**
+     * @var Collection<int, ProductPrice>
+     */
+    #[ORM\OneToMany(targetEntity: ProductPrice::class, mappedBy: 'variant', orphanRemoval: true)]
+    private Collection $prices;
+
     public function __construct()
     {
         $this->params = new ArrayCollection();
+        $this->prices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -164,5 +171,35 @@ class ProductVariant implements SystemEntityInterface
 
     private function formatSize(string $width, string $length): string {
         return "$width × $length";
+    }
+
+    /**
+     * @return Collection<int, ProductPrice>
+     */
+    public function getPrices(): Collection
+    {
+        return $this->prices;
+    }
+
+    public function addPrice(ProductPrice $price): static
+    {
+        if (!$this->prices->contains($price)) {
+            $this->prices->add($price);
+            $price->setVariant($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrice(ProductPrice $price): static
+    {
+        if ($this->prices->removeElement($price)) {
+            // set the owning side to null (unless already changed)
+            if ($price->getVariant() === $this) {
+                $price->setVariant(null);
+            }
+        }
+
+        return $this;
     }
 }

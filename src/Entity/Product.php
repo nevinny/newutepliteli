@@ -39,7 +39,7 @@ class Product implements SystemEntityInterface
     private ?string $description = null;
 
     #[ORM\Column(options: ['default' => '0'])]
-    private ?bool $isfp = null;
+    private ?bool $isfp = false;
 
     #[ORM\Column(nullable: true)]
     private ?float $rating = null;
@@ -68,7 +68,7 @@ class Product implements SystemEntityInterface
     private ?File $imageFile = null;
 
     public function __construct(
-        private ParameterGrouper $parameterGrouper
+//        private ParameterGrouper $parameterGrouper
     )
     {
         $this->variants = new ArrayCollection();

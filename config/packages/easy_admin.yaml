@@ -1,0 +1,8 @@
+easy_admin:
+    design:
+        assets:
+            css:
+                - 'https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.css'
+            js:
+                - 'https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js'
+                - '/js/ckeditor-init.js'

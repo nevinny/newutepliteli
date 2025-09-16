@@ -28,12 +28,18 @@ class ProductController extends AbstractController
     {
         $main = $request->attributes->get('main');
         $template = $request->attributes->get('template');
-        $context['page'] = $this->repository->findOneBy(['id' => $main->getEntityId()]);
+        $product = $this->repository->findOneBy(['id' => $main->getEntityId()]);
+        if ($product->getImage() && str_contains($product->getImage(), '/')) {
+            $imagePath = $product->getImage();
+            $fileName = basename($imagePath);
+            $product->setImage($fileName);
+        }
+
 //        $context['list'] = $this->listRepository->findBy(['parent' => $main->getEntityId()]);
-//        dd($main,$context['page']);
+//        dd($main,$product);
         return $this->render($template, [
             'main' => $main,
-            'product' => $context['page'],
+            'product' => $product,
 //            'list' => $context['list'],
 //            'form' => $form->createView()
         ]);

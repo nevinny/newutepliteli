@@ -46,7 +46,7 @@
             const variant = variants[selectedVariantIndex];
             const price = variant.price * quantity;
 
-            document.getElementById('current-price').textContent = price.toLocaleString() + ' ₽';
+            // document.getElementById('current-price').textContent = price.toLocaleString() + ' ₽';
 
             const oldPrice = {{ product.oldPrice ?? 'null' }};
             // alert(oldPrice);
@@ -225,7 +225,7 @@
 
 
                     <div class="col-md-6">
-                        <span class="badge bg-light text-dark mb-2">product.category</span>
+                        {#                        <span class="badge bg-light text-dark mb-2">product.category</span> #}
                         <h2 class="fw-bold mb-3">{{ product.title }}</h2>
 
                         <div class="d-flex align-items-center gap-2 mb-3">
@@ -244,15 +244,15 @@
                         <hr>
                         <div class="d-flex align-items-center gap-3 mb-2">
                         <span id="current-price" class="h4 fw-bold">
-{#                            {{ product.sizes[0].price|number_format(0, '.', ' ') }} ₽#} 0.00 ₽
+{#                            {{ product.sizes[0].price|number_format(0, '.', ' ') }} ₽ #}
                         </span>
                             {#                        {% if product.oldPrice %}#}
-                            {#                            <span id="old-price" class="text-muted text-decoration-line-through"> #}
+                            <span id="old-price" class="text-muted text-decoration-line-through">
                             {#                            {{ product.oldPrice|number_format(0, '.', ' ') }} ₽ 0.00 ₽ #}
-                            {#                            </span> #}
-                            {#                            <span id="discount" class="badge bg-danger"> #}
+                                                        </span>
+                            <span id="discount" class="badge bg-danger">
                             {#                            -{{ product.discount }}% - 10% #}
-                            {#                            </span> #}
+                                                        </span>
                             {#                        {% endif %}#}
                         </div>
 {#                        <p class="text-muted small">за упаковку</p>#}
@@ -272,7 +272,9 @@
                                         <div class="fw-semibold">{{ variant.thickness.value }}</div>
                                         <small class="text-muted">{{ variant.size.value }}</small><br>
                                         {% if variant.packageQty.value is not empty %}<small class="text-muted">{{ variant.packageQty.label }} {{ variant.packageQty.value }}</small><br>{% endif %}
-                                        <small class="fw-bold">{{ variant.price|number_format(0, '.', ' ') }} ₽</small><br>
+                                        <small class="fw-bold">
+                                            {#                                            {{ variant.price|number_format(0, '.', ' ') }} ₽ #}
+                                        </small><br>
 {#                                            {% if not size.inStock %}#}
 {#                                                <small class="text-danger">Нет в наличии</small>#}
 {#                                            {% endif %}#}

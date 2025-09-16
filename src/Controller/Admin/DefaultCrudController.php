@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Admin\FormField\CKEditorField;
 use App\Controller\Admin\Trait\EntityTypeRedirectActionsTrait;
 use App\Entity\Main;
 use App\Entity\SectionLink;
@@ -31,6 +32,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -321,10 +323,18 @@ class DefaultCrudController extends AbstractCrudController
 
     protected function getMetaFields(): iterable
     {
-        yield TextField::new('metaTitle', 'Meta Title')->setMaxLength(255)->hideOnIndex();
-        yield TextField::new('metaKeywords', 'Meta Keywords')->setMaxLength(255)->hideOnIndex();
-        yield TextField::new('metaDescription', 'Meta Description')
-            ->setMaxLength(255)->hideOnIndex();
+        $entityFqcn = $this->getEntityFqcn();
+        $entityFields = $this->getEntityFields($entityFqcn);
+        if (array_key_exists('metaTitle', $entityFields)) {
+            yield TextField::new('metaTitle', 'Meta Title')->setMaxLength(255)->hideOnIndex();
+        }
+        if (array_key_exists('metaKeywords', $entityFields)) {
+            yield TextField::new('metaKeywords', 'Meta Keywords')->setMaxLength(255)->hideOnIndex();
+        }
+        if (array_key_exists('metaDescription', $entityFields)) {
+            yield TextField::new('metaDescription', 'Meta Description')
+                ->setMaxLength(255)->hideOnIndex();
+        }
     }
 
     /**
@@ -365,13 +375,15 @@ class DefaultCrudController extends AbstractCrudController
                 }
                 return TextField::new($fieldName)->setMaxLength(255);
             case 'text':
-                return TextEditorField::new($fieldName)
-                    ->setNumOfRows(9)
-                    ->setTrixEditorConfig([
-                        'blockAttributes' => [
-                            'heading1' => ['tagName' => 'h2']
-                        ]
-                    ]);
+//                return TextEditorField::new($fieldName)
+//                    ->setFormType(CKEditorType::class)
+//                    ->setNumOfRows(9)
+//                    ->setTrixEditorConfig([
+//                        'blockAttributes' => [
+//                            'heading1' => ['tagName' => 'h2']
+//                        ]
+//                    ]);
+                return CKEditorField::new($fieldName);
             case 'datetime':
                 return DateTimeField::new($fieldName);
             case 'boolean':
