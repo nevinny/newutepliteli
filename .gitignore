@@ -17,6 +17,8 @@
 /public_html/assets/
 /public_html/bundles/
 /public_html/images/
+/public_html/webdata/
+/public_html/webdata-*/
 /assets/vendor/
 ###< symfony/asset-mapper ###
 /node_modules/
