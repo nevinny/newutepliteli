@@ -1,0 +1,92 @@
+{# templates/bundles/EasyAdminBundle/layout.html.twig #}
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/46.0.2/ckeditor5.css">
+    <style>
+        .ckeditor-container {
+            margin-bottom: 1rem;
+        }
+
+        .ck-editor__editable {
+            min-height: 300px;
+            line-height: 1.6;
+        }
+
+        /* Убедимся что наше поле видно */
+
+    </style>
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // alert('layout');
+            // Основная функция инициализации CKEditor
+            function initializeCKEditors() {
+                if (typeof ClassicEditor === 'undefined') {
+                    console.warn('CKEditor not loaded');
+                    return;
+                }
+
+                // Инициализируем все textarea с классом ckeditor-field
+                document.querySelectorAll('textarea.ckeditor-field').forEach(textarea => {
+                    // Пропускаем уже инициализированные
+                    if (textarea.hasAttribute('data-ckeditor-initialized')) {
+                        return;
+                    }
+
+                    // Убедимся что поле видно
+                    // textarea.style.display = 'block';
+                    // textarea.style.visibility = 'visible';
+                    // textarea.style.opacity = '1';
+                    // textarea.classList.remove('d-none');
+
+                    // Инициализируем CKEditor
+                    ClassicEditor
+                        .create(textarea, {
+                            toolbar: {
+                                items: [
+                                    'heading', '|',
+                                    'bold', 'italic', 'underline', 'strikethrough', '|',
+                                    'link', 'blockQuote', '|',
+                                    'bulletedList', 'numberedList', '|',
+                                    'sourceEditing', '|',
+                                    'undo', 'redo'
+                                ]
+                            },
+                            language: 'ru',
+                            placeholder: 'Введите текст...'
+                        })
+                        .then(editor => {
+                            textarea.setAttribute('data-ckeditor-initialized', 'true');
+                            console.log('CKEditor initialized for', textarea.name);
+                        })
+                        .catch(error => {
+                            console.error('CKEditor initialization error:', error);
+                        });
+                });
+            }
+
+            // Первая инициализация
+            initializeCKEditors();
+
+            // Для асинхронно загружаемых форм (коллекции, табы)
+            document.addEventListener('ea.collection.item-added', initializeCKEditors);
+            document.addEventListener('ea.tab.loaded', initializeCKEditors);
+
+            // Также периодическая проверка для надежности
+            setInterval(initializeCKEditors, 1000);
+        });
+
+        // Глобальная функция для ручной инициализации
+        function initCKEditor(element) {
+            if (typeof ClassicEditor !== 'undefined' && element && !element.hasAttribute('data-ckeditor-initialized')) {
+                ClassicEditor.create(element).catch(console.error);
+            }
+        }
+    </script>
+{% endblock %}

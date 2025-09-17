@@ -26,4 +26,21 @@ class ImportController extends AbstractController
 
         return new Response("Импортировано товаров: $imported");
     }
+
+    #[Route('/admin/import/offers', name: 'admin_offer_import', priority: 500)]
+    public function importOffers(ProductImportService $importService): Response
+    {
+        $token = $_GET['token'] ?? null;
+
+        // простой токен, для продакшена лучше JWT/API Token и доступ по роли
+        if ($token !== $_ENV['IMPORT_SECRET_TOKEN']) {
+            return new Response('Unauthorized', 401);
+        }
+
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/webdata/offers0_1.xml';
+
+        $imported = $importService->importOffers($filePath);
+
+        return new Response("Импортировано товарных предложений: $imported");
+    }
 }

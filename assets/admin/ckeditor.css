@@ -1,0 +1,21 @@
+/* assets/admin/ckeditor.css */
+
+.ea-text-editor {
+    min-height: 400px;
+}
+
+.ck-editor__editable {
+    min-height: 400px;
+    line-height: 1.6;
+}
+
+/* Кастомизация внешнего вида */
+.ck.ck-editor {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+}
+
+.ck.ck-editor__editable:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}

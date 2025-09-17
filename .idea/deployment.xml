@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="tdst-timeweb.ru" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
     <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="tdst-timeweb.ru">
         <serverdata>
           <mappings>
             <mapping deploy="/new.utepliteli.org" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="utepliteli.org">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/utepliteli.org" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

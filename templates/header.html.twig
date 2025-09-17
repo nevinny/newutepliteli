@@ -24,9 +24,10 @@
             </div>
 
             <!-- Форма поиска -->
-            <form class="d-none d-md-block flex-grow-0 mx-2" action="/catalog/" role="search">
+            <form class="d-none d-md-block flex-grow-0 mx-2" action="/search/" role="search">
                 <div class="input-group">
-                    <input type="search" name="q" class="form-control" placeholder="Поиск по каталогу…" />
+                    <input type="search" name="q" class="form-control" placeholder="Поиск по каталогу…"
+                           value="{{ query|default('') }}"/>
                     <button type="submit" class="btn btn-outline-secondary">Найти</button>
                 </div>
             </form>
