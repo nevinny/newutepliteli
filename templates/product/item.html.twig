@@ -208,17 +208,17 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                {% for i in 1..4 %}
-                                    <div class="col">
-                                        <div class="border border-secondary rounded w-100 h-100 d-flex align-items-center justify-content-center bg-light">
-                                            <img src="{{ placeholder }}"
-                                                 alt="No image"
-                                                 class="img-fluid rounded object-fit-cover"
-                                                 loading="lazy"
-                                                 decoding="async">
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                                {#                                {% for i in 1..4 %} #}
+                                {#                                    <div class="col"> #}
+                                {#                                        <div class="border border-secondary rounded w-100 h-100 d-flex align-items-center justify-content-center bg-light"> #}
+                                {#                                            <img src="{{ placeholder }}" #}
+                                {#                                                 alt="No image" #}
+                                {#                                                 class="img-fluid rounded object-fit-cover" #}
+                                {#                                                 loading="lazy" #}
+                                {#                                                 decoding="async"> #}
+                                {#                                        </div> #}
+                                {#                                    </div> #}
+                                {#                                {% endfor %} #}
                             {% endif %}
                         </div>
                     </div>
@@ -265,6 +265,7 @@
 
                             {% if variant.type == 'plate' %}
                                 <div class="col-6">
+
                                     <button onclick="selectSize({{ loop.index0 }})"
                                             class="size-option btn w-100 text-start {{ loop.first ? 'btn-outline-danger' : 'btn-outline-secondary' }}
 {#{{ size.inStock ? '' : 'disabled btn-light' }}#}
@@ -278,6 +279,7 @@
 {#                                            {% if not size.inStock %}#}
 {#                                                <small class="text-danger">Нет в наличии</small>#}
 {#                                            {% endif %}#}
+                                        <a href="?id={{ variant.variantId }}&action=disable">x</a>
                                     </button>
                                 </div>
                                 {% elseif variant.type == 'roll' %}
@@ -296,6 +298,7 @@
                                             {#                                            {% if not size.inStock %}#}
                                             {#                                                <small class="text-danger">Нет в наличии</small>#}
                                             {#                                            {% endif %}#}
+                                            <a href="?id={{ variant.variantId }}&action=disable">x</a>
                                         </button>
                                     </div>
                                 {% elseif variant.type == 'paint' %}
@@ -327,6 +330,7 @@
                                                 <span class="value">{{ param.value }}</span>
                                             </div>
                                         {% endfor %}
+                                        <a href="?id={{ variant.variantId }}&action=disable">x</a>
                                     </button>
                                 </div>
                                     {% endif %}
