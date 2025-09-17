@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Product;
+use App\Enum\Statuses;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -64,5 +65,35 @@ class ProductRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getScalarResult();
+    }
+
+    public function searchProducts(string $query, int $page = 1, int $limit = 12): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('App\Entity\Main', 'm', 'WITH', 'm.entityId = p.id AND m.entityType = :typeId')
+            ->setParameter('typeId', self::ENTITY_TYPE_ID);
+        $qb->addSelect('p AS product', 'm AS main');
+        return $qb
+            ->where('p.status = :status')
+            ->andWhere('(p.title LIKE :query OR p.description LIKE :query)')
+            ->setParameter('status', Statuses::Active)
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('p.title', 'ASC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getScalarResult();
+    }
+
+    public function countSearchResults(string $query): int
+    {
+        return (int)$this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->where('p.status = :status')
+            ->andWhere('(p.title LIKE :query OR p.description LIKE :query)')
+            ->setParameter('status', Statuses::Active)
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

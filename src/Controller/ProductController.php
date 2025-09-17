@@ -16,7 +16,7 @@ class ProductController extends AbstractController
 
     #[Route(
         path: '/catalog/{path}/p-{product}',
-//        name: 'product_index',
+        name: 'product_index',
         requirements: [
             'path' => '.+',
             'product' => '.+',
