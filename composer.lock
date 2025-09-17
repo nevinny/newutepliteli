@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd1b346048d73dfd43a441b20835f4d1",
+    "content-hash": "5145d5d74bebff0f6949240d1e7a18e5",
     "packages": [
         {
             "name": "composer/semver",
@@ -2249,6 +2249,37 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
             "time": "2024-09-11T13:17:53+00:00"
+        },
+        {
+            "name": "simple-html-dom/simple-html-dom",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/miclf/simple-html-dom.git",
+                "reference": "961610576c460546677a635062e9d3d7b6dab745"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/miclf/simple-html-dom/zipball/961610576c460546677a635062e9d3d7b6dab745",
+                "reference": "961610576c460546677a635062e9d3d7b6dab745",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "S.C. Chen",
+                    "email": "me578022@gmail.com"
+                }
+            ],
+            "description": "A copy of the PHP Simple HTML DOM Parser project.",
+            "support": {
+                "source": "https://github.com/miclf/simple-html-dom/tree/1.5.0"
+            },
+            "time": "2013-05-14T22:27:35+00:00"
         },
         {
             "name": "symfony/asset",
