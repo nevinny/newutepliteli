@@ -4,6 +4,7 @@ namespace App\Extension;
 
 use App\Entity\Product;
 use App\Entity\ProductVariant;
+use App\Enum\Statuses;
 use App\Service\Product\ParameterGrouper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -24,14 +25,14 @@ class ProductExtension extends AbstractExtension
         $result = [];
 
         foreach ($product->getVariants() as $variant) {
-            $params = $this->extractRawParameters($variant);
-            $grouped = $this->parameterGrouper->group($params);
-            $grouped['price'] = $variant->getPrice();
-//            dd($grouped);
-            $grouped['variantId'] = $variant->getId();
-            $result[] = $grouped;
+            if ($variant->getStatus() == Statuses::Active) {
+                $params = $this->extractRawParameters($variant);
+                $grouped = $this->parameterGrouper->group($params);
+                $grouped['price'] = $variant->getPrice();
+                $grouped['variantId'] = $variant->getId();
+                $result[] = $grouped;
+            }
         }
-//        dd($result);
         return $result;
     }
 
