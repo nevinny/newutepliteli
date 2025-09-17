@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Enum\Statuses;
 use App\Repository\ProductRepository;
+use App\Repository\ProductVariantRepository;
 use App\Repository\SectionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,6 +15,8 @@ class ProductController extends AbstractController
 {
     public function __construct(
         private ProductRepository $repository,
+        private ProductVariantRepository $variantRepository,
+        private EntityManagerInterface   $em,
     ) {}
 
     #[Route(
@@ -34,7 +39,16 @@ class ProductController extends AbstractController
             $fileName = basename($imagePath);
             $product->setImage($fileName);
         }
-
+        $queryId = $request->query->get('id');
+//        dd($main,$product);
+        if ($queryId !== null) {
+            $variant = $this->variantRepository->findOneBy(['id' => $queryId]);
+            $variant->setStatus(Statuses::Disabled);
+            $this->em->persist($variant);
+            $this->em->flush();
+            return $this->redirect($main->getFullPath());
+//            dd($product);
+        }
 //        $context['list'] = $this->listRepository->findBy(['parent' => $main->getEntityId()]);
 //        dd($main,$product);
         return $this->render($template, [
