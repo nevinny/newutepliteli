@@ -279,7 +279,7 @@
 {#                                            {% if not size.inStock %}#}
 {#                                                <small class="text-danger">Нет в наличии</small>#}
 {#                                            {% endif %}#}
-                                        <a href="?id={{ variant.variantId }}&action=disable">x</a>
+                                        {#                                        <a href="?id={{ variant.variantId }}&action=disable">x</a> #}
                                     </button>
                                 </div>
                                 {% elseif variant.type == 'roll' %}
@@ -298,7 +298,7 @@
                                             {#                                            {% if not size.inStock %}#}
                                             {#                                                <small class="text-danger">Нет в наличии</small>#}
                                             {#                                            {% endif %}#}
-                                            <a href="?id={{ variant.variantId }}&action=disable">x</a>
+                                            {#                                            <a href="?id={{ variant.variantId }}&action=disable">x</a> #}
                                         </button>
                                     </div>
                                 {% elseif variant.type == 'paint' %}
@@ -330,7 +330,7 @@
                                                 <span class="value">{{ param.value }}</span>
                                             </div>
                                         {% endfor %}
-                                        <a href="?id={{ variant.variantId }}&action=disable">x</a>
+                                        {#                                        <a href="?id={{ variant.variantId }}&action=disable">x</a> #}
                                     </button>
                                 </div>
                                     {% endif %}
