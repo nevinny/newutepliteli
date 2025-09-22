@@ -50,12 +50,46 @@ class ProductController extends AbstractController
 //            dd($product);
         }
 //        $context['list'] = $this->listRepository->findBy(['parent' => $main->getEntityId()]);
-//        dd($main,$product);
+        $specs = $this->parseTextToArray($product->getSpecs());
+//        dd($product);
+//        $this->parseTextToArray($specs)
         return $this->render($template, [
             'main' => $main,
             'product' => $product,
+            'specs' => $specs,
 //            'list' => $context['list'],
 //            'form' => $form->createView()
         ]);
+    }
+
+    private function parseTextToArray($text)
+    {
+        // Разбиваем текст по переносам строк
+        $lines = explode("\n", $text);
+        $result = [];
+
+        $currentKey = null;
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if (empty($line)) {
+                continue; // Пропускаем пустые строки
+            }
+
+            if ($currentKey === null) {
+                // Это ключ (название характеристики)
+                $currentKey = $line;
+            } else {
+                // Это значение
+                $result[] = [
+                    'property' => $currentKey,
+                    'value' => $line
+                ];
+                $currentKey = null;
+            }
+        }
+
+        return $result;
     }
 }

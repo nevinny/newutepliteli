@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ main.title }}{% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script>
@@ -279,7 +280,7 @@
 {#                                            {% if not size.inStock %}#}
 {#                                                <small class="text-danger">Нет в наличии</small>#}
 {#                                            {% endif %}#}
-                                        {#                                        <a href="?id={{ variant.variantId }}&action=disable">x</a> #}
+                                        {#                                      <a href="?id={{ variant.variantId }}&action=disable">x</a> #}
                                     </button>
                                 </div>
                                 {% elseif variant.type == 'roll' %}
@@ -391,6 +392,14 @@
                             Характеристики
                         </button>
                     </li>
+                    {% if product.sizes is not empty %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="sizes-tab" data-bs-toggle="tab" data-bs-target="#sizes"
+                                    type="button" role="tab">
+                                Размеры
+                            </button>
+                        </li>
+                    {% endif %}
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
                             Отзывы ({{ product.reviewCount }})
@@ -399,8 +408,8 @@
                 </ul>
                 <div class="tab-content border border-top-0 p-4" id="productTabContent">
                     <div class="tab-pane fade show active" id="desc" role="tabpanel">
-                        <h5>Описание товара</h5>
-                        <p>{{ product.description|raw }}</p>
+                        {#                        <h5>Описание товара</h5> #}
+                        {{ product.description|raw }}
 {#                        <h6>Преимущества:</h6>#}
 {#                        <ul>#}
                             {#                        {% for feature in product.features %}#}
@@ -413,14 +422,38 @@
                     <div class="tab-pane fade" id="specs" role="tabpanel">
                         <h5>Технические характеристики</h5>
                         <dl class="row">
-                            <dt class="col-sm-3">Description lists</dt>
-                            <dd class="col-sm-9">A description list is perfect for defining terms.</dd>
-                            {#                        {% for key, value in product.specifications %}#}
 
+                            {% for spec in specs %}
+                                <dt class="col-sm-6">{{ spec.property }}</dt>
+                                <dd class="col-sm-6">{{ spec.value }}</dd>
 {#                                <strong>{{ key }}</strong>: {{ value }}#}
-                            {#                        {% endfor %}#}
+                            {% endfor %}
                         </dl>
                     </div>
+                    {% if product.sizes is not empty %}
+                        {% set tableData = product.sizes|format_product_sizes %}
+                        <div class="tab-pane fade" id="sizes" role="tabpanel">
+                            <h5>Размеры</h5>
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead class="table-light">
+                                <tr>
+                                    {% for header in tableData.headers %}
+                                        <th>{{ header }}</th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for row in tableData.rows %}
+                                    <tr>
+                                        {% for cell in row %}
+                                            <td nowrap="nowrap">{{ cell }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
                     <div class="tab-pane fade" id="reviews" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5>Отзывы покупателей</h5>
