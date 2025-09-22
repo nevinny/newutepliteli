@@ -163,7 +163,7 @@ class Product implements SystemEntityInterface
         return $this;
     }
 
-    public function getSizes(): string
+    public function getSizes(): ?string
     {
         return $this->sizes;
     }
