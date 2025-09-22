@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
 {#    <base href="http://www.utepliteli.org/">#}
-    <title>Теплый Дом</title>
+    <title>{% block title %}Теплый Дом{% endblock %}</title>
+    {% block meta %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="HandheldFriendly" content="true"/>
     <meta name="yes" content="yes"/>

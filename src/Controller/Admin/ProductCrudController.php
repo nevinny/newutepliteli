@@ -2,11 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Main;
 use App\Entity\Product;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ProductCrudController extends DefaultCrudController
 {
@@ -15,14 +13,23 @@ class ProductCrudController extends DefaultCrudController
         return Product::class;
     }
 
-    /*
-    public function configureFields(string $pageName): iterable
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        parent::updateEntity($entityManager, $entityInstance);
+
+        $repo = $entityManager->getRepository(Main::class);
+        $main = $repo->findOneBy([
+            'entityType' => 18,
+            'entityId' => $entityInstance->getId()
+        ]);
+        // Обновляем статус в связанной сущности
+        if ($main) {
+            $main->setStatus($entityInstance->getStatus());
+            $main->setTitle($entityInstance->getTitle());
+            $main->setSlug($entityInstance->getSlug());
+            $entityManager->persist($main);
+            $entityManager->flush();
+        }
     }
-    */
 }

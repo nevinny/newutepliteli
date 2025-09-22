@@ -67,6 +67,12 @@ class Product implements SystemEntityInterface
     #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'image')]
     private ?File $imageFile = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $specs = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $sizes = null;
+
     public function __construct(
 //        private ParameterGrouper $parameterGrouper
     )
@@ -157,48 +163,9 @@ class Product implements SystemEntityInterface
         return $this;
     }
 
-    public function getSizes(ParameterMapperInterface $mapper = null): array {
-        if ($this->cachedSizes !== null) {
-            return $this->cachedSizes;
-        }
-
-        $mapper = $mapper ?? new DefaultParameterMapper();
-
-        $sizes = [];
-        foreach ($this->getVariants() as $variant) {
-            $sizeData = $mapper->getSizeData($variant);
-            if (!$sizeData) {
-                continue;
-            }
-
-            $sizes[] = [
-                'thickness' => $sizeData['thickness'],
-                'size' => $this->formatSize($sizeData['width'], $sizeData['length']),
-                'price' => $variant->getPrice(),
-                'packageQty' => $sizeData['packageQty'] ?? null, // Новое поле
-                'inStock' => true, // Можно добавить логику
-                'variantId' => $variant->getId(),
-            ];
-        }
-        // Сортировка по толщине (thickness), затем по количеству в упаковке (packageQty)
-        usort($sizes, function ($a, $b) {
-            // Сначала сравниваем толщину (если строки, преобразуем в числа для правильной сортировки)
-            $thicknessA = (float) preg_replace('/[^0-9.]/', '', $a['thickness']);
-            $thicknessB = (float) preg_replace('/[^0-9.]/', '', $b['thickness']);
-
-            if ($thicknessA != $thicknessB) {
-                return $thicknessA <=> $thicknessB; // Сортировка по возрастанию
-            }
-
-            // Если толщина одинаковая, сортируем по количеству в упаковке
-            $qtyA = (int) preg_replace('/[^0-9]/', '', $a['packageQty'] ?? '0');
-            $qtyB = (int) preg_replace('/[^0-9]/', '', $b['packageQty'] ?? '0');
-
-            return $qtyA <=> $qtyB; // Сортировка по возрастанию
-        });
-
-        $this->cachedSizes = $sizes;
-        return $sizes;
+    public function getSizes(): string
+    {
+        return $this->sizes;
     }
 
     private function formatSize(string $width, string $length): string {
@@ -310,5 +277,24 @@ class Product implements SystemEntityInterface
 
         // если только имя
         return '/uploads/products/' . $this->imageName;
+    }
+
+    public function getSpecs(): ?string
+    {
+        return $this->specs;
+    }
+
+    public function setSpecs(?string $specs): static
+    {
+        $this->specs = $specs;
+
+        return $this;
+    }
+
+    public function setSizes(?string $sizes): static
+    {
+        $this->sizes = $sizes;
+
+        return $this;
     }
 }

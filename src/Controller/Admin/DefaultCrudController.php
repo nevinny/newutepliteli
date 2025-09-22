@@ -28,12 +28,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
@@ -205,6 +207,8 @@ class DefaultCrudController extends AbstractCrudController
                 $qb->andWhere('entity.parent IS NULL');
             }
         }
+        $qb->andWhere('entity.status != :status')
+            ->setParameter(':status', Statuses::Deleted);
         return $qb;
     }
 
@@ -375,6 +379,12 @@ class DefaultCrudController extends AbstractCrudController
                 }
                 return TextField::new($fieldName)->setMaxLength(255);
             case 'text':
+                if (str_contains($fieldName, 'specs')) {
+                    return TextareaField::new($fieldName);
+                }
+                if (str_contains($fieldName, 'sizes')) {
+                    return TextareaField::new($fieldName);
+                }
 //                return TextEditorField::new($fieldName)
 //                    ->setFormType(CKEditorType::class)
 //                    ->setNumOfRows(9)

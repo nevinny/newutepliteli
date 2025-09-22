@@ -30,7 +30,6 @@ class CategoryCrudController extends DefaultCrudController
         // Обновляем статус в связанной сущности
         if ($main) {
             $main->setStatus($entityInstance->getStatus());
-//            dd(($entityInstance->getStatus() == Statuses::Active),$entityInstance->getStatus(),$main);
             $entityManager->persist($main);
             $entityManager->flush();
         }
