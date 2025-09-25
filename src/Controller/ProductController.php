@@ -51,7 +51,7 @@ class ProductController extends AbstractController
         }
 //        $context['list'] = $this->listRepository->findBy(['parent' => $main->getEntityId()]);
         $specs = $this->parseTextToArray($product->getSpecs());
-//        dd($product);
+//        dd($product,$main->getParent()->getTitle());
 //        $this->parseTextToArray($specs)
         return $this->render($template, [
             'main' => $main,

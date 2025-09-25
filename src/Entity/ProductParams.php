@@ -59,7 +59,7 @@ class ProductParams implements SystemEntityInterface
 
     public function setTitle(?string $title): static
     {
-        $this->title = $title;
+        $this->title = trim($title);
 
         return $this;
     }
@@ -71,7 +71,7 @@ class ProductParams implements SystemEntityInterface
 
     public function setVal(?string $val): static
     {
-        $this->val = $val;
+        $this->val = trim($val);
 
         return $this;
     }

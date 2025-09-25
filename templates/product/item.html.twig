@@ -167,7 +167,7 @@
                             <img id="main-image"
                                  src="{{ (product.image|default([])|length > 0) ? vich_uploader_asset(product, 'imageFile') : placeholder }}"
                                  alt="{{ product.title }}"
-                                 class="img-fluid rounded object-fit-cover"
+                                 class="img-fluid rounded object-fit-cover h-100"
                                  loading="lazy"
                                  decoding="async">
                                 </div>
@@ -226,7 +226,8 @@
 
 
                     <div class="col-md-6">
-                        {#                        <span class="badge bg-light text-dark mb-2">product.category</span> #}
+                        <span class="badge bg-light text-dark mb-2"><a
+                                href="{{ main.parent.fullPath }}">{{ main.parent.title }}</a></span>
                         <h2 class="fw-bold mb-3">{{ product.title }}</h2>
 
                         <div class="d-flex align-items-center gap-2 mb-3">
@@ -457,7 +458,7 @@
                     <div class="tab-pane fade" id="reviews" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5>Отзывы покупателей</h5>
-                            <button class="btn btn-outline-secondary btn-sm">Написать отзыв</button>
+                            {#                            <button class="btn btn-outline-secondary btn-sm">Написать отзыв</button> #}
                         </div>
                         <div>
                             {#                        {% for review in reviews %}#}
