@@ -15,6 +15,7 @@ use App\Entity\SectionType;
 use App\Entity\Warehouse;
 use App\Enum\Statuses;
 use App\Repository\ProductParamsRepository;
+use App\Repository\ProductVariantRepository;
 use App\Service\SectionPathGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use SimpleXMLElement;
@@ -36,6 +37,10 @@ class ProductImportService
 
     public function importFromFile(string $filePath): int
     {
+        $variantRepository = $this->em->getRepository(ProductVariant::class);
+        $productRepository = $this->em->getRepository(Product::class);
+        $categoryRepository = $this->em->getRepository(Category::class);
+        $paramRepository = $this->em->getRepository(ProductParams::class);
         $reader = new XMLReader();
 
         if (!$reader->open($filePath)) {
@@ -56,7 +61,7 @@ class ProductImportService
 //        dd($categoryGroups);
         $reader->close();
 
-        $existingCategories = $this->em->getRepository(Category::class)
+        $existingCategories = $categoryRepository
             ->createQueryBuilder('c')
             ->select('c')
             ->indexBy('c', 'c.externalId')
@@ -64,21 +69,22 @@ class ProductImportService
             ->getResult();
 
 //        dd($existingCategories);
-        $existingProducts = $this->em->getRepository(Product::class)
+        $existingProducts = $productRepository
             ->createQueryBuilder('p')
             ->select('p')
             ->indexBy('p', 'p.externalId')
             ->getQuery()
             ->getResult();
 
-        $existingProductVariants = $this->em->getRepository(ProductVariant::class)
+        $existingProductVariants = $variantRepository
             ->createQueryBuilder('pv')
             ->select('pv')
             ->indexBy('pv', 'pv.externalId')
             ->getQuery()
             ->getResult();
 
-        $existingParams = $this->em->getRepository(ProductParams::class)->findAll();
+        $existingParams = $paramRepository
+            ->findAll();
         $paramsCache = $this->buildParamsCache($existingParams);
 
         $seenExternalIds = [];
@@ -133,7 +139,9 @@ class ProductImportService
                 $product->setExternalId($baseId);
                 $product->setTitle($fullTitle);
                 $product->setSlug((string) $this->slugger->slug($fullTitle));
-                $product->setDescription($description);
+                if (strlen($description) > 20) {
+                    $product->setDescription($description);
+                }
                 if ($skip) {
                     $product->setStatus(Statuses::Disabled);
                 } else {
@@ -143,10 +151,16 @@ class ProductImportService
                 $seenExternalIds[] = $baseId;
 
                 // создать ProductVariant
-                $variant = $existingProductVariants[$variantId] ?? new ProductVariant();
+                if (array_key_exists($variantId, $existingProductVariants)) {
+                    $variant = $existingProductVariants[$variantId];
+                } else {
+                    $variant = new ProductVariant();
+                    $variant->setStatus(Statuses::Active);
+                }
+//                $variant = $existingProductVariants[$variantId] ?? new ProductVariant();
                 $variant->setExternalId($variantId);
                 $variant->setProduct($product);
-                $variant->setStatus(Statuses::Active);
+
                 $this->em->persist($variant);
                 // Характеристики
                 foreach ($xml->ХарактеристикиТовара->ХарактеристикаТовара ?? [] as $paramXml) {
@@ -194,6 +208,10 @@ class ProductImportService
                 $product->setStatus(Statuses::Deleted);
             }
         }
+
+        // почистить пустые варианты
+        $removedVariants = $variantRepository->removeVariantsWithoutParams();
+//        dd($removedVariants);
 
         // лог импорта
         $log = new ImportLog();
