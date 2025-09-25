@@ -52,6 +52,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('SectionLink', 'fas fa-list', SectionLink::class);
         yield MenuItem::section('Пользователи');
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
+
+        yield MenuItem::linkToRoute('System', 'fas fa-cogs', 'admin_system_index')//            ->setPermission('ROLE_ADMIN')
+        ;
     }
 
     private function buildSectionTree(?Main $parent = null, int $level = 0): iterable
