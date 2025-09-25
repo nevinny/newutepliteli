@@ -1,0 +1,164 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    <i class="fas fa-cogs"></i> Системные функции
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-broom"></i> Очистка кеша
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Очистить кеш приложения Symfony.</p>
+                    <button type="button" class="btn btn-primary" id="clearCacheBtn">
+                        <i class="fas fa-broom"></i> Очистить кеш
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-download"></i> Создание бэкапа
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Запустить скрипт создания резервной копии.</p>
+                    <button type="button" class="btn btn-success" id="backupBtn">
+                        <i class="fas fa-download"></i> Создать бэкап
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Область для вывода результатов -->
+    <div class="row">
+        <div class="col-12">
+            <div id="systemOutput" class="alert" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для вывода детальной информации -->
+    <div class="modal fade" id="outputModal" tabindex="-1" aria-labelledby="outputModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="outputModalLabel">Результат выполнения</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <pre id="modalOutput"
+                         style="background: #f8f9fa; padding: 1rem; border-radius: 0.375rem; max-height: 400px; overflow-y: auto;"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const clearCacheBtn = document.getElementById('clearCacheBtn');
+            const backupBtn = document.getElementById('backupBtn');
+            const systemOutput = document.getElementById('systemOutput');
+            const outputModal = new bootstrap.Modal(document.getElementById('outputModal'));
+            const modalOutput = document.getElementById('modalOutput');
+
+            function showMessage(message, type = 'info', output = null) {
+                systemOutput.className = `alert alert-${type}`;
+                systemOutput.textContent = message;
+                systemOutput.style.display = 'block';
+
+                if (output) {
+                    modalOutput.textContent = output;
+                    outputModal.show();
+                }
+
+                setTimeout(() => {
+                    systemOutput.style.display = 'none';
+                }, 5000);
+            }
+
+            function setButtonLoading(button, loading) {
+                if (loading) {
+                    button.disabled = true;
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Выполняется...';
+                } else {
+                    button.disabled = false;
+                    // Восстанавливаем исходный текст кнопки
+                    if (button.id === 'clearCacheBtn') {
+                        button.innerHTML = '<i class="fas fa-broom"></i> Очистить кеш';
+                    } else if (button.id === 'backupBtn') {
+                        button.innerHTML = '<i class="fas fa-download"></i> Создать бэкап';
+                    }
+                }
+            }
+
+            clearCacheBtn.addEventListener('click', function () {
+                setButtonLoading(this, true);
+
+                fetch('{{ path('admin_system_clear_cache') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage(data.message, 'success', data.output);
+                        } else {
+                            showMessage(data.message, 'danger', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Произошла ошибка при выполнении запроса', 'danger');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        setButtonLoading(clearCacheBtn, false);
+                    });
+            });
+
+            backupBtn.addEventListener('click', function () {
+                setButtonLoading(this, true);
+
+                fetch('{{ path('admin_system_backup') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage(data.message, 'success', data.output);
+                        } else {
+                            showMessage(data.message, 'danger', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Произошла ошибка при выполнении запроса', 'danger');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        setButtonLoading(backupBtn, false);
+                    });
+            });
+        });
+    </script>
+{% endblock %}
