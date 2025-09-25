@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ProductVariant;
+use App\Enum\Statuses;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,44 @@ class ProductVariantRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductVariant::class);
     }
 
-    //    /**
-    //     * @return ProductVariant[] Returns an array of ProductVariant objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Находит варианты товаров без параметров
+     *
+     * @return ProductVariant[]
+     */
+    public function findVariantsWithoutParams(): array
+    {
+        return $this->createQueryBuilder('pv')
+            ->leftJoin('pv.params', 'pp')
+            ->where('pp.variant IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?ProductVariant
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Удаляет варианты товаров без параметров
+     *
+     * @return int Количество удаленных записей
+     */
+    public function removeVariantsWithoutParams(): int
+    {
+        $variantsToRemove = $this->findVariantsWithoutParams();
+
+        if (empty($variantsToRemove)) {
+            return 0;
+        }
+
+        $entityManager = $this->getEntityManager();
+        $count = 0;
+
+        foreach ($variantsToRemove as $variant) {
+            $variant->setStatus(Statuses::Deleted);
+            $entityManager->persist($variant);
+            $count++;
+        }
+
+        $entityManager->flush();
+
+        return $count;
+    }
 }
