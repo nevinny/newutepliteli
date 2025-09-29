@@ -3,21 +3,22 @@
 namespace App\Controller\Admin;
 
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class SystemController extends AbstractDashboardController
+class SystemController extends AbstractController
 {
-    #[Route('/admin/system/system', name: 'admin_system_index', priority: 500)]
+    #[Route('/admin/system', name: 'admin_system_index', priority: 500)]
     public function index(): Response
     {
         return $this->render('admin/system/index.html.twig');
     }
 
-    #[Route('/admin/system/system/clear-cache', name: 'admin_system_clear_cache', methods: ['GET', 'POST'])]
+    #[Route('/admin/system/clear-cache', name: 'admin_system_clear_cache', methods: ['GET', 'POST'])]
     public function clearCache(): JsonResponse
     {
         try {
@@ -46,7 +47,7 @@ class SystemController extends AbstractDashboardController
         }
     }
 
-    #[Route('/admin/system/system/backup', name: 'admin_system_backup', methods: ['POST'])]
+    #[Route('/admin/system/backup', name: 'admin_system_backup', methods: ['POST'])]
     public function createBackup(): JsonResponse
     {
         try {

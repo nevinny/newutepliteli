@@ -38,6 +38,39 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-broom"></i> Загрузка товаров
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Загрузить товары, размеры из 1С</p>
+                    <button type="button" class="btn btn-primary" id="importBtn">
+                        <i class="fas fa-file-import"></i> Загрузить
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-broom"></i> Загрузка цен
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Загрузить цены из 1С</p>
+                    <button type="button" class="btn btn-primary" id="importOffersBtn">
+                        <i class="fas fa-file-import"></i> Загрузить
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <!-- Область для вывода результатов -->
     <div class="row">
@@ -72,6 +105,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             const clearCacheBtn = document.getElementById('clearCacheBtn');
             const backupBtn = document.getElementById('backupBtn');
+            const importBtn = document.getElementById('importBtn');
+            const importOffersBtn = document.getElementById('importOffersBtn');
             const systemOutput = document.getElementById('systemOutput');
             const outputModal = new bootstrap.Modal(document.getElementById('outputModal'));
             const modalOutput = document.getElementById('modalOutput');
@@ -102,6 +137,8 @@
                         button.innerHTML = '<i class="fas fa-broom"></i> Очистить кеш';
                     } else if (button.id === 'backupBtn') {
                         button.innerHTML = '<i class="fas fa-download"></i> Создать бэкап';
+                    } else if (button.id === 'importBtn') {
+                        button.innerHTML = '<i class="fas fa-file-import"></i> Загрузить';
                     }
                 }
             }
@@ -157,6 +194,60 @@
                     })
                     .finally(() => {
                         setButtonLoading(backupBtn, false);
+                    });
+            });
+
+            importBtn.addEventListener('click', function () {
+                setButtonLoading(this, true);
+
+                fetch('{{ path('admin_product_import', {'token' : app.request.server.get('IMPORT_SECRET_TOKEN')}) }}', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage(data.message, 'success', data.output);
+                        } else {
+                            showMessage(data.message, 'danger', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Произошла ошибка при выполнении запроса', 'danger');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        setButtonLoading(importBtn, false);
+                    });
+            });
+
+            importOffersBtn.addEventListener('click', function () {
+                setButtonLoading(this, true);
+
+                fetch('{{ path('admin_offer_import', {'token' : app.request.server.get('IMPORT_SECRET_TOKEN')}) }}', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage(data.message, 'success', data.output);
+                        } else {
+                            showMessage(data.message, 'danger', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Произошла ошибка при выполнении запроса', 'danger');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        setButtonLoading(importBtn, false);
                     });
             });
         });
