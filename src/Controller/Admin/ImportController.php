@@ -24,7 +24,11 @@ class ImportController extends AbstractController
 
         $imported = $importService->importFromFile($filePath);
 
-        return new Response("Импортировано товаров: $imported");
+        return $this->json([
+            'success' => true,
+            'message' => "Импортировано товаров: $imported",
+            'output' => 'output'
+        ]);
     }
 
     #[Route('/admin/import/offers', name: 'admin_offer_import', priority: 500)]
@@ -41,6 +45,11 @@ class ImportController extends AbstractController
 
         $imported = $importService->importOffers($filePath);
 
-        return new Response("Импортировано товарных предложений: $imported");
+        return $this->json([
+            'success' => true,
+            'message' => "Импортировано цен: $imported",
+            'output' => 'output'
+        ]);
+//        return new Response("Импортировано товарных предложений: $imported");
     }
 }

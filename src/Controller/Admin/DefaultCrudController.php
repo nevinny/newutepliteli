@@ -113,7 +113,8 @@ class DefaultCrudController extends AbstractCrudController
                 ->setController($controller)
                 ->setAction(Action::NEW)
                 ->set('parent_id', $parentId)
-                ->generateUrl();
+                ->generateUrl()//                ->setDashboard()
+            ;
 
             $label = '+ ' . $type->getName();
 
