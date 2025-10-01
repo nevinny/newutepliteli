@@ -34,6 +34,21 @@ class Contacts
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $coordinates = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $storeAddr = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $storePhone = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $storeEmail = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $storeWorkHours = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $storeCoordinates = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,6 +110,66 @@ class Contacts
     public function setCoordinates(?string $coordinates): static
     {
         $this->coordinates = $coordinates;
+
+        return $this;
+    }
+
+    public function getStoreAddr(): ?string
+    {
+        return $this->storeAddr;
+    }
+
+    public function setStoreAddr(?string $storeAddr): static
+    {
+        $this->storeAddr = $storeAddr;
+
+        return $this;
+    }
+
+    public function getStorePhone(): ?string
+    {
+        return $this->storePhone;
+    }
+
+    public function setStorePhone(?string $storePhone): static
+    {
+        $this->storePhone = $storePhone;
+
+        return $this;
+    }
+
+    public function getStoreEmail(): ?string
+    {
+        return $this->storeEmail;
+    }
+
+    public function setStoreEmail(?string $storeEmail): static
+    {
+        $this->storeEmail = $storeEmail;
+
+        return $this;
+    }
+
+    public function getStoreWorkHours(): ?string
+    {
+        return $this->storeWorkHours;
+    }
+
+    public function setStoreWorkHours(?string $storeWorkHours): static
+    {
+        $this->storeWorkHours = $storeWorkHours;
+
+        return $this;
+    }
+
+    public function getStoreCoordinates(): ?string
+    {
+        return $this->storeCoordinates;
+    }
+
+    public function setStoreCoordinates(?string $storeCoordinates): static
+    {
+        $this->storeCoordinates = $storeCoordinates;
 
         return $this;
     }
