@@ -14,22 +14,22 @@ class ProductCrudController extends DefaultCrudController
     }
 
 
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        parent::updateEntity($entityManager, $entityInstance);
-
-        $repo = $entityManager->getRepository(Main::class);
-        $main = $repo->findOneBy([
-            'entityType' => 18,
-            'entityId' => $entityInstance->getId()
-        ]);
-        // Обновляем статус в связанной сущности
-        if ($main) {
-            $main->setStatus($entityInstance->getStatus());
-            $main->setTitle($entityInstance->getTitle());
-            $main->setSlug($entityInstance->getSlug());
-            $entityManager->persist($main);
-            $entityManager->flush();
-        }
-    }
+//    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+//    {
+//        parent::updateEntity($entityManager, $entityInstance);
+//
+//        $repo = $entityManager->getRepository(Main::class);
+//        $main = $repo->findOneBy([
+//            'entityType' => 18,
+//            'entityId' => $entityInstance->getId()
+//        ]);
+//        // Обновляем статус в связанной сущности
+//        if ($main) {
+//            $main->setStatus($entityInstance->getStatus());
+//            $main->setTitle($entityInstance->getTitle());
+//            $main->setSlug($entityInstance->getSlug());
+//            $entityManager->persist($main);
+//            $entityManager->flush();
+//        }
+//    }
 }

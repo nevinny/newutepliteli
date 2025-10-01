@@ -473,4 +473,30 @@ class DefaultCrudController extends AbstractCrudController
 
         return $vichFields;
     }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        parent::updateEntity($entityManager, $entityInstance);
+
+        $reflectionClass = new \ReflectionClass($entityInstance);
+        $sectionType = $entityManager->getRepository(SectionType::class)
+            ->findOneBy([
+                'entityClass' => $reflectionClass->getName(),
+            ]);
+//        dd($entityInstance,$reflectionClass,$sectionType);
+
+        $repo = $entityManager->getRepository(Main::class);
+        $main = $repo->findOneBy([
+            'entityType' => $sectionType->getId(),
+            'entityId' => $entityInstance->getId()
+        ]);
+        // Обновляем статус в связанной сущности
+        if ($main) {
+            $main->setStatus($entityInstance->getStatus());
+            $main->setTitle($entityInstance->getTitle());
+            $main->setSlug($entityInstance->getSlug());
+            $entityManager->persist($main);
+            $entityManager->flush();
+        }
+    }
 }
