@@ -1,117 +1,119 @@
 {% extends 'base.html.twig' %}
 
+{% set personal_menu = [
+    {
+        'title': 'Мой кабинет',
+        'visible': true,
+        'visibleIndex': true,
+        'icon': 'fa-user',
+        'iconLarge': '',
+        'path': '/personal',
+        'is_current': app.request.pathInfo starts with '/personal' and not (
+    app.request.pathInfo starts with '/personal/orders' or
+    app.request.pathInfo starts with '/personal/account' or
+    app.request.pathInfo starts with '/personal/private' or
+    app.request.pathInfo starts with '/personal/change-password' or
+    app.request.pathInfo starts with '/personal/profiles' or
+    app.request.pathInfo starts with '/personal/subscribe'
+    )
+    },
+    {
+        'title': 'Личные данные',
+        'visible': true,
+        'visibleIndex': true,
+        'icon': 'fa-user-edit',
+        'iconLarge': 'personal',
+        'path': '/personal/private',
+        'is_current': app.request.pathInfo starts with '/personal/private'
+    },
+    {
+        'title': 'Текущие заказы',
+        'visible': true,
+        'visibleIndex': true,
+        'icon': 'fa-shopping-cart',
+        'iconLarge': '',
+        'path': '/personal/orders',
+        'is_current': app.request.pathInfo starts with '/personal/orders' and
+        not app.request.pathInfo starts with '/personal/orders/?filter_history=Y'
+    },
+    {
+        'title': 'История заказов',
+        'visible': true,
+        'visibleIndex': true,
+        'icon': 'fa-history',
+        'iconLarge': 'filter_orders',
+        'path': '/personal/orders/?filter_history=Y',
+        'is_current': app.request.pathInfo starts with '/personal/orders/?filter_history=Y' or
+        app.request.query.get('filter_history') == 'Y'
+    },
+    {
+        'title': 'Личный счет',
+        'visible': false,
+        'visibleIndex': false,
+        'icon': 'fa-wallet',
+        'iconLarge': 'bill',
+        'path': '/personal/account',
+        'is_current': app.request.pathInfo starts with '/personal/account'
+    },
+    {
+        'title': 'Сменить пароль',
+        'visible': true,
+        'visibleIndex': false,
+        'icon': 'fa-key',
+        'iconLarge': '',
+        'path': '/personal/change-password',
+        'is_current': app.request.pathInfo starts with '/personal/change-password'
+    },
+    {
+        'title': 'Профили заказов',
+        'visible': false,
+        'visibleIndex': false,
+        'icon': 'fa-clipboard-list',
+        'iconLarge': 'profile',
+        'path': '/personal/profiles',
+        'is_current': app.request.pathInfo starts with '/personal/profiles'
+    },
+    {
+        'title': 'Корзина',
+        'visible': false,
+        'visibleIndex': true,
+        'icon': 'fa-shopping-basket',
+        'iconLarge': 'cart',
+        'path': '/cart',
+        'is_current': app.request.pathInfo starts with '/basket'
+    },
+    {
+        'title': 'Подписки',
+        'visible': false,
+        'visibleIndex': false,
+        'icon': 'fa-bell',
+        'iconLarge': 'subscribe',
+        'path': '/personal/subscribe',
+        'is_current': app.request.pathInfo starts with '/personal/subscribe'
+    },
+    {
+        'title': 'Контакты',
+        'visible': false,
+        'visibleIndex': false,
+        'icon': 'fa-address-book',
+        'iconLarge': 'contact',
+        'path': '/contacts',
+        'is_current': app.request.pathInfo starts with '/contacts'
+    },
+    {
+        'title': 'Выйти',
+        'visible': true,
+        'visibleIndex': false,
+        'icon': 'fa-sign-out-alt',
+        'iconLarge': '',
+        'path': '/auth/logout',
+        'is_exit': true,
+        'is_current': false
+    }
+] %}
+
 {% block content %}
-    {% set personal_menu = [
-        {
-            'title': 'Мой кабинет',
-            'visible': true,
-            'visibleIndex': true,
-            'icon': 'fa-user',
-            'iconLarge': '',
-            'path': '/personal',
-            'is_current': app.request.pathInfo starts with '/personal' and not (
-        app.request.pathInfo starts with '/personal/orders' or
-        app.request.pathInfo starts with '/personal/account' or
-        app.request.pathInfo starts with '/personal/private' or
-        app.request.pathInfo starts with '/personal/change-password' or
-        app.request.pathInfo starts with '/personal/profiles' or
-        app.request.pathInfo starts with '/personal/subscribe'
-        )
-        },
-        {
-            'title': 'Личные данные',
-            'visible': true,
-            'visibleIndex': true,
-            'icon': 'fa-user-edit',
-            'iconLarge': 'personal',
-            'path': '/personal/private',
-            'is_current': app.request.pathInfo starts with '/personal/private'
-        },
-        {
-            'title': 'Текущие заказы',
-            'visible': true,
-            'visibleIndex': true,
-            'icon': 'fa-shopping-cart',
-            'iconLarge': '',
-            'path': '/personal/orders',
-            'is_current': app.request.pathInfo starts with '/personal/orders' and
-            not app.request.pathInfo starts with '/personal/orders/?filter_history=Y'
-        },
-        {
-            'title': 'История заказов',
-            'visible': true,
-            'visibleIndex': true,
-            'icon': 'fa-history',
-            'iconLarge': 'filter_orders',
-            'path': '/personal/orders/?filter_history=Y',
-            'is_current': app.request.pathInfo starts with '/personal/orders/?filter_history=Y' or
-            app.request.query.get('filter_history') == 'Y'
-        },
-        {
-            'title': 'Личный счет',
-            'visible': false,
-            'visibleIndex': false,
-            'icon': 'fa-wallet',
-            'iconLarge': 'bill',
-            'path': '/personal/account',
-            'is_current': app.request.pathInfo starts with '/personal/account'
-        },
-        {
-            'title': 'Сменить пароль',
-            'visible': true,
-            'visibleIndex': false,
-            'icon': 'fa-key',
-            'iconLarge': '',
-            'path': '/personal/change-password',
-            'is_current': app.request.pathInfo starts with '/personal/change-password'
-        },
-        {
-            'title': 'Профили заказов',
-            'visible': false,
-            'visibleIndex': false,
-            'icon': 'fa-clipboard-list',
-            'iconLarge': 'profile',
-            'path': '/personal/profiles',
-            'is_current': app.request.pathInfo starts with '/personal/profiles'
-        },
-        {
-            'title': 'Корзина',
-            'visible': false,
-            'visibleIndex': true,
-            'icon': 'fa-shopping-basket',
-            'iconLarge': 'cart',
-            'path': '/cart',
-            'is_current': app.request.pathInfo starts with '/basket'
-        },
-        {
-            'title': 'Подписки',
-            'visible': false,
-            'visibleIndex': false,
-            'icon': 'fa-bell',
-            'iconLarge': 'subscribe',
-            'path': '/personal/subscribe',
-            'is_current': app.request.pathInfo starts with '/personal/subscribe'
-        },
-        {
-            'title': 'Контакты',
-            'visible': false,
-            'visibleIndex': false,
-            'icon': 'fa-address-book',
-            'iconLarge': 'contact',
-            'path': '/contacts',
-            'is_current': app.request.pathInfo starts with '/contacts'
-        },
-        {
-            'title': 'Выйти',
-            'visible': true,
-            'visibleIndex': false,
-            'icon': 'fa-sign-out-alt',
-            'iconLarge': '',
-            'path': '/auth/logout',
-            'is_exit': true,
-            'is_current': false
-        }
-    ] %}
+
 
     <div class="container-fluid wraps hover_shine" id="content">
         <!-- Title Content -->

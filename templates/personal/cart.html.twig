@@ -75,10 +75,10 @@
                                         {{ cartItems|reduce((sum, i) => sum + (i.price * items[i.id]), 0)|number_format(0, '.', ' ') }} ₽
                                       </span>
                                     </li>
-                                    <li class="d-flex justify-content-between">
-                                        <span>Доставка</span>
-                                        <span class="text-success">Бесплатно</span>
-                                    </li>
+                                    {#                                    <li class="d-flex justify-content-between"> #}
+                                    {#                                        <span>Доставка</span> #}
+                                    {#                                        <span class="text-success">Бесплатно</span> #}
+                                    {#                                    </li> #}
                                     <hr>
                                     <li class="d-flex justify-content-between fw-bold fs-5">
                                         <span>Общая сумма</span>

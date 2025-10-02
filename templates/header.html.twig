@@ -36,7 +36,7 @@
             <div class="d-none d-lg-block text-end me-3">
                 <div class="fw-bold">
                     <i class="bi bi-phone"></i>
-                    +7 (495) 545‑39‑00</div>
+                    {{ globalContacts.phone|default('+7 (499) 553-03-01') }}</div>
                 <button class="btn btn-sm btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#callbackModal">
                     Заказать звонок
                 </button>
@@ -46,13 +46,13 @@
             <div class="d-flex align-items-center gap-4">
                 {% if app.user %}
                 <!-- Кабинет: если авторизован, отобразится вместо "войти" -->
-                <a href="/personal" class="btn btn-outline-primary btn-sm">
+                    <a href="{{ path('personal_account') }}" class="btn btn-outline-primary btn-sm">
                   <i class="bi bi-person-circle"></i> Кабинет
                 </a>
 
                 {% else %}
                 <!-- Авторизация -->
-                <a href="/auth/login" class="btn btn-outline-primary btn-sm">
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-primary btn-sm">
                     <i class="bi bi-person"></i>
                     <span class="d-none d-lg-inline">Войти</span>
                 </a>
@@ -60,7 +60,7 @@
 
 
                 <!-- Корзина -->
-                <a href="/cart" class="btn btn-outline-secondary position-relative btn-sm">
+                <a href="{{ path('cart_index') }}" class="btn btn-outline-secondary position-relative btn-sm">
                     <i class="bi bi-cart"></i>
 {#                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2<span class="visually-hidden">товаров в корзине</span></span>#}
                 </a>
@@ -114,16 +114,18 @@
 
             <!-- Авторизация -->
             <div>
-                <a href="/login" class="btn btn-outline-primary w-100">
+                {% if app.user %}
+                    <div class="d-flex flex-column gap-2">
+                        <span>Здравствуйте, {{ app.user.firstName|default('') }}</span>
+                        <a href="{{ path('personal_account') }}" class="btn btn-outline-secondary w-100">Личный
+                            кабинет</a>
+                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger w-100">Выйти</a>
+                    </div>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100">
                     <i class="bi bi-person"></i> Войти / Регистрация
                 </a>
-                <!-- если пользователь авторизован:
-                <div class="d-flex flex-column gap-2">
-                  <span>Здравствуйте, Антон</span>
-                  <a href="/profile" class="btn btn-outline-secondary w-100">Личный кабинет</a>
-                  <a href="/logout" class="btn btn-outline-danger w-100">Выйти</a>
-                </div>
-                -->
+                {% endif %}
             </div>
 
 
@@ -170,7 +172,7 @@
 
             <!-- Корзина -->
             <div>
-                <a href="/cart" class="btn btn-outline-success w-100">
+                <a href="{{ path('cart_index') }}" class="btn btn-outline-success w-100">
                     <i class="bi bi-cart"></i> Корзина
                 </a>
             </div>
