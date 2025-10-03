@@ -73,6 +73,9 @@ class Product implements SystemEntityInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $sizes = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Brand $brand = null;
+
     public function __construct(
 //        private ParameterGrouper $parameterGrouper
     )
@@ -294,6 +297,18 @@ class Product implements SystemEntityInterface
     public function setSizes(?string $sizes): static
     {
         $this->sizes = $sizes;
+
+        return $this;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(?Brand $brand): static
+    {
+        $this->brand = $brand;
 
         return $this;
     }
