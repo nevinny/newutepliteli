@@ -65,7 +65,10 @@ class DefaultCrudController extends AbstractCrudController
 
     public function configureFilters(Filters $filters): Filters
     {
-        return $filters//            ->add('status')
+        return $filters
+            ->add('title')
+//            ->add('entityType')
+            ->add('status')
             ;
     }
 
