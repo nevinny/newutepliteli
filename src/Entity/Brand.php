@@ -7,6 +7,8 @@ use App\Entity\Trait\DefaultFields;
 use App\Entity\Trait\MetaSEO;
 use App\Entity\Trait\Status;
 use App\Repository\BrandRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -34,6 +36,17 @@ class Brand
 
     #[Vich\UploadableField(mapping: 'brand_logo', fileNameProperty: 'logo')]
     private ?File $logoFile = null;
+
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'brand')]
+    private Collection $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -88,5 +101,35 @@ class Brand
     public function getLogoFile(): ?File
     {
         return $this->logoFile;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setBrand($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getBrand() === $this) {
+                $product->setBrand(null);
+            }
+        }
+
+        return $this;
     }
 }

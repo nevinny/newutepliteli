@@ -59,6 +59,13 @@ class ProductVariant implements SystemEntityInterface
         $this->prices = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return sprintf("ID: %s", $this->id);
+//        return $this->id . ' - ' . $this->externalId;
+//        return $this->getProduct()->getTitle() . ' - ' . $this->externalId ?? 'Без названия';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

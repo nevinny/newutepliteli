@@ -18,6 +18,11 @@ trait DefaultFields
     #[ORM\Column(options: ['default' => '0'])]
     private ?int $ord = 0;
 
+    public function __toString(): string
+    {
+        return $this->title ?? 'Без названия';
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
