@@ -32,8 +32,17 @@ class ProductParams implements SystemEntityInterface
     private ?string $val = null;
 
     #[ORM\ManyToOne(inversedBy: 'params')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'variant_id', referencedColumnName: 'id', nullable: false)]
     private ?ProductVariant $variant = null;
+
+//    #[ORM\ManyToOne(targetEntity: ProductVariant::class, inversedBy: 'params')]
+//    #[ORM\JoinColumn(name: 'variant_id', referencedColumnName: 'id', nullable: false)]
+//    private ?ProductVariant $variant = null;
+
+    public function __toString(): string
+    {
+        return sprintf("%s %s", $this->title, $this->val);
+    }
 
     public function getId(): ?int
     {

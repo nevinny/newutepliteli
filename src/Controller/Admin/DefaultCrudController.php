@@ -15,10 +15,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -58,6 +60,15 @@ class DefaultCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined(true)
+            ;
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('title')
+//            ->add('entityType')
+            ->add('status')
             ;
     }
 
@@ -271,7 +282,12 @@ class DefaultCrudController extends AbstractCrudController
         foreach ($entityFields as $fieldName => $fieldConfig)
         {
             // Пропускаем системные, meta и image поля
-            if (in_array($fieldName, ['id', 'parent', 'created_at', 'updated_at', 'ord', 'status', 'metaTitle', 'metaKeywords', 'metaDescription', 'image', 'logo', 'preview'])) {
+            if (in_array($fieldName, [
+                'id', 'parent', 'created_at', 'updated_at', 'ord', 'status',
+                'metaTitle', 'metaKeywords', 'metaDescription',
+                'image', 'logo', 'preview',
+                'variants'
+            ])) {
                 continue;
             }
 
@@ -370,6 +386,11 @@ class DefaultCrudController extends AbstractCrudController
 
     protected function createFieldByType(string $fieldName, array $fieldConfig): FieldInterface
     {
+        // Обрабатываем ассоциации
+        if ($fieldConfig['type'] === 'association') {
+            return AssociationField::new($fieldName);
+        }
+
         switch ($fieldConfig['type']) {
             case 'string':
                 if (str_contains($fieldName, 'slug')) {
@@ -410,6 +431,7 @@ class DefaultCrudController extends AbstractCrudController
     {
         $metadata = $this->entityManager->getClassMetadata($entityFqcn);
 
+//        dd($metadata);
         $fields = [];
         // Явно задаем порядок важных полей
         $priorityOrder = [
@@ -426,6 +448,17 @@ class DefaultCrudController extends AbstractCrudController
                 'nullable' => $field['nullable'] ?? false,
             ];
         }
+
+        // Обрабатываем ассоциации (связанные сущности)
+        foreach ($metadata->associationMappings as $association) {
+            $fields[$association['fieldName']] = [
+                'type' => 'association',
+                'associationType' => $association['type'],
+                'targetEntity' => $association['targetEntity'],
+                'nullable' => $association['joinColumns'][0]['nullable'] ?? true,
+            ];
+        }
+
         // Сортируем согласно нашему порядку
         uksort($fields, function ($a, $b) use ($priorityOrder) {
             $aIndex = array_search($a, $priorityOrder);
