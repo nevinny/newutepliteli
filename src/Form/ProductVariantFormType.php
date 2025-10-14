@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\ProductVariant;
+use App\Enum\Availability;
 use App\Enum\Statuses;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,6 +34,11 @@ class ProductVariantFormType extends AbstractType
                 'label' => 'Status',
                 'required' => false,
                 'choices' => Statuses::choices(),
+            ])
+            ->add('availability', ChoiceType::class, [
+                'label' => 'Доступность',
+                'required' => false,
+                'choices' => Availability::choices(),
             ])
             ->add('params', CollectionType::class, [
                 'entry_type' => ProductParamsFormType::class,

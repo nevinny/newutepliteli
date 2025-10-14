@@ -266,7 +266,6 @@
                             <div class="row g-2">
                             {% for variant in variantsParams %}
 
-
                             {% if variant.type == 'plate' %}
                                 <div class="col-6">
 
@@ -277,6 +276,9 @@
                                         <div class="fw-semibold">{{ variant.thickness.value }}</div>
                                         <small class="text-muted">{{ variant.size.value }}</small><br>
                                         {% if variant.packageQty.value is not empty %}<small class="text-muted">{{ variant.packageQty.label }} {{ variant.packageQty.value }}</small><br>{% endif %}
+                                        {% if variant.packageType.value is not empty %}<small
+                                            class="text-muted">{{ variant.packageType.label }} {{ variant.packageType.value }}</small>
+                                            <br>{% endif %}
                                         <small class="fw-bold">
                                             {#                                            {{ variant.price|number_format(0, '.', ' ') }} ₽ #}
                                         </small><br>
@@ -323,20 +325,27 @@
                                         </button>
                                     </div>
                                     {% else %}
+                                        {% if variant.params %}
                                 <div class="col-6">
                                     <button onclick="selectSize({{ loop.index0 }})"
                                             class="size-option btn w-100 text-start {{ loop.first ? 'btn-outline-danger' : 'btn-outline-secondary' }}
 {#{{ size.inStock ? '' : 'disabled btn-light' }}#}
 ">
+
+
                                         {% for param in variant.params %}
                                             <div class="parameter">
                                                 <span class="label">{{ param.label }}:</span>
                                                 <span class="value">{{ param.value }}</span>
                                             </div>
                                         {% endfor %}
+
+                                        {#                                        <a href="?id={{ variant.variantId }}&action=disable">x</a> #}
                                         {#                                        <a href="?id={{ variant.variantId }}&action=disable">x</a> #}
                                     </button>
                                 </div>
+
+                                        {% endif %}
                                     {% endif %}
 
 {#                                    <div class="price">{{ variant.raw.price|default('Цена не указана') }}</div>#}
