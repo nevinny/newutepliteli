@@ -28,7 +28,6 @@ class ProductExtension extends AbstractExtension
             if ($variant->getStatus() == Statuses::Active) {
                 $params = $this->extractRawParameters($variant);
                 $grouped = $this->parameterGrouper->group($params);
-//                dd($grouped);
                 $grouped['price'] = $variant->getPrice();
                 $grouped['variantId'] = $variant->getId();
                 $result[] = $grouped;

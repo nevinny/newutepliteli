@@ -40,7 +40,7 @@ class ProductController extends AbstractController
             $product->setImage($fileName);
         }
         $queryId = $request->query->get('id');
-
+//        dd($main,$product);
         if ($queryId !== null) {
             $variant = $this->variantRepository->findOneBy(['id' => $queryId]);
             $variant->setStatus(Statuses::Disabled);
