@@ -20,6 +20,10 @@ use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\UniqueConstraint(
+    name: "product_unique_idx",
+    columns: ["brand_id", "title"],
+)]
 #[Vich\Uploadable]
 class Product implements SystemEntityInterface
 {

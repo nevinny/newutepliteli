@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\DataMapper\DefaultParameterMapper;
 use App\Entity\Trait\Created;
 use App\Entity\Trait\Status;
+use App\Enum\Availability;
 use App\Interface\ParameterMapperInterface;
 use App\Interface\SystemEntityInterface;
 use App\Repository\ProductVariantRepository;
@@ -52,6 +53,15 @@ class ProductVariant implements SystemEntityInterface
      */
     #[ORM\OneToMany(targetEntity: ProductPrice::class, mappedBy: 'variant', orphanRemoval: true)]
     private Collection $prices;
+
+    #[ORM\Column(length: 20, enumType: Availability::class, options: ['default' => Availability::PreOrder])]
+    private ?Availability $availability = Availability::PreOrder;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $originUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $originImage = null;
 
     public function __construct()
     {
@@ -206,6 +216,42 @@ class ProductVariant implements SystemEntityInterface
                 $price->setVariant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvailability(): string|Availability|null
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(Availability $availability): static
+    {
+        $this->availability = $availability;
+
+        return $this;
+    }
+
+    public function getOriginUrl(): ?string
+    {
+        return $this->originUrl;
+    }
+
+    public function setOriginUrl(?string $originUrl): static
+    {
+        $this->originUrl = $originUrl;
+
+        return $this;
+    }
+
+    public function getOriginImage(): ?string
+    {
+        return $this->originImage;
+    }
+
+    public function setOriginImage(?string $originImage): static
+    {
+        $this->originImage = $originImage;
 
         return $this;
     }

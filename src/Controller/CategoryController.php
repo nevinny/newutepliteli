@@ -25,7 +25,7 @@ class CategoryController extends AbstractController
         $context['page'] = $this->repository->findOneBy(['id' => $main->getEntityId()]);
 //        dd($main, $template, $context);
         $context['list'] = $this->listRepository->findBy([
-            'parent' => $main->getId(),
+            'parent' => $context['page']->getId(),
             'status' => Statuses::Active,
         ]);
 //        dd($context['list']);

@@ -42,6 +42,10 @@ class PlateMaterialsGrouping implements ParameterGroupingStrategyInterface
                 'value' => $mapped['packageQty'] ?? null,
                 'label' => $this->mapper->getHumanReadableName('packageQty'),
             ],
+            'packageType' => [
+                'value' => $mapped['packageType'] ?? null,
+                'label' => $this->mapper->getHumanReadableName('packageType'),
+            ],
             'raw' => $mapped, // Все параметры
         ];
     }
