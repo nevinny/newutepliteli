@@ -31,9 +31,13 @@
                         <a href="{{ item.m_fullPath }}" class="d-block w-100">
                             <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
                                 {% if item.p_preview|default([])|length > 0 %}
-
-                                    <img class="img-fluid mh-100" style="max-height: 200px; width: auto;"
-                                         src="{{ item.p_preview }}" alt="{{ item.p_title }}">
+                                    {% if item.p_preview starts with '/images/' %}
+                                        <img class="img-fluid mh-100" style="max-height: 200px; width: auto;"
+                                             src="{{ item.p_preview }}" alt="{{ item.p_title }}">
+                                    {% else %}
+                                        <img class="img-fluid mh-100" style="max-height: 200px; width: auto;"
+                                             src="/images/product/{{ item.p_preview }}" alt="{{ item.p_title }}">
+                                    {% endif %}
                                 {% else %}
                                     <img class="img-fluid mh-100" style="max-height: 200px; width: auto;"
                                          src="{{ placeholder }}" alt="{{ item.p_title }}">
