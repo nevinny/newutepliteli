@@ -22,6 +22,7 @@ class DefaultGrouping implements ParameterGroupingStrategyInterface
     public function group(array $params): array
     {
         $mapped = $this->mapper->mapArrayKeys($params);
+
         $result = [
             'type' => 'list',
             'price' => 0,
@@ -40,7 +41,6 @@ class DefaultGrouping implements ParameterGroupingStrategyInterface
                 'value' => $value,
             ];
         }
-
         return $result;
     }
 }

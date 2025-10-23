@@ -59,16 +59,25 @@ final class UniversalEntityListener
 
     private function prepareMain(object $entity): ?Main
     {
-        $entityType = $this->resolveEntityType($entity);
+        try {
+            $entityType = $this->resolveEntityType($entity);
 
-        $main = $this->findOrCreateMain($entity, $entityType);
+            $main = $this->findOrCreateMain($entity, $entityType);
 
-        $parent = $this->resolveParent($entity, $main);
-        $this->updateMainData($main, $entity, $entityType, $parent);
-        $this->generateAndValidateFullPath($main);
-        $this->setAdditionalFields($main, $entity);
+            $parent = $this->resolveParent($entity, $main);
+            $this->updateMainData($main, $entity, $entityType, $parent);
+            $this->generateAndValidateFullPath($main);
+            $this->setAdditionalFields($main, $entity);
 
-        return $main;
+            return $main;
+        } catch (\RuntimeException $e) {
+            $this->logger->error('Failed to prepare Main entity', [
+                'entity' => get_class($entity),
+                'entityId' => method_exists($entity, 'getId') ? $entity->getId() : null,
+                'error' => $e->getMessage(),
+            ]);
+            return null;
+        }
     }
 
     private function resolveEntityType(object $entity): SectionType

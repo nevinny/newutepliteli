@@ -30,6 +30,7 @@ class ProductImportService
         private SluggerInterface $slugger,
         private readonly SectionPathGenerator $pathGenerator,
 //        private ProductParamsRepository $productParamsRepo,
+        private readonly MainSyncService $mainSyncService, // Добавьте это
     )
     {
         $this->defaultPriceTypeId = 'base_price'; // или ваш ID из CommerceML
@@ -187,7 +188,7 @@ class ProductImportService
                 if ($skip === false) {
                     $this->em->persist($product);
                     $this->em->flush();
-                    $this->syncForProduct($product);
+                    $this->mainSyncService->syncProduct($product);
                 }
 
 //                dd($product);

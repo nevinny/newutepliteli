@@ -27,7 +27,7 @@ class CategoryController extends AbstractController
         $context['list'] = $this->listRepository->findBy([
             'parent' => $context['page']->getId(),
             'status' => Statuses::Active,
-        ]);
+        ], ['title' => 'ASC']);
 //        dd($context['list']);
 //        dd($main,$context);
         return $this->render($template, [

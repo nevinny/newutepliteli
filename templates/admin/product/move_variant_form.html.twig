@@ -1,0 +1,93 @@
+{# templates/admin/product/move_variant_form.html.twig #}
+
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Перенос варианта продукта{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            Перенос варианта из продукта: <strong>{{ product.title }}</strong>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{{ ea_url()
+                            .setController('App\\Controller\\Admin\\ProductCrudController')
+                            .setAction('processVariantMove') }}">
+
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="variant_id" class="form-label required">Выберите вариант для
+                                            переноса:</label>
+                                        <select name="variant_id" id="variant_id" class="form-select" required>
+                                            <option value="">-- Выберите вариант --</option>
+                                            {% for variant in variants %}
+                                                <option value="{{ variant.id }}">
+                                                    ID: {{ variant.id }} - {{ variant.sku ?: variant.externalId }}
+                                                    {% if variant.price %}
+                                                        - {{ variant.price|number_format(2, ',', ' ') }} руб.
+                                                    {% endif %}
+                                                    {% if variant.availability %}
+                                                        ({{ variant.availability.value }})
+                                                    {% endif %}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="target_product_id" class="form-label required">Выберите целевой
+                                            продукт:</label>
+                                        <select name="target_product_id" id="target_product_id" class="form-select"
+                                                required>
+                                            <option value="">-- Выберите продукт --</option>
+                                            {% for targetProduct in availableProducts %}
+                                                <option value="{{ targetProduct.id }}">
+                                                    {{ targetProduct.title }}
+                                                    (ID: {{ targetProduct.id }})
+                                                    {% if targetProduct.brand %}
+                                                        - {{ targetProduct.brand.title }}
+                                                    {% endif %}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading">Внимание!</h6>
+                                <p class="mb-0">
+                                    После переноса вариант будет перемещен в выбранный продукт.
+                                    Если текущий продукт останется без вариантов, он будет автоматически помечен как
+                                    "disabled".
+                                </p>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-warning me-2">
+                                    <i class="fa fa-random me-1"></i> Перенести вариант
+                                </button>
+                                <a href="{{ ea_url()
+                                    .setController('App\\Controller\\Admin\\ProductCrudController')
+                                    .setAction('INDEX') }}"
+                                   class="btn btn-secondary">
+                                    <i class="fa fa-arrow-left me-1"></i> Вернуться к списку
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
