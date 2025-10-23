@@ -41,6 +41,7 @@ class ProductController extends AbstractController
         }
         $queryId = $request->query->get('id');
 //        dd($main,$product);
+
         if ($queryId !== null) {
             $variant = $this->variantRepository->findOneBy(['id' => $queryId]);
             $variant->setStatus(Statuses::Disabled);

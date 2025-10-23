@@ -16,6 +16,9 @@ class ParameterKeyMapper
         'c3e76665-8861-11ea-b94f-001e671f818d' => 'area',
         '106df5a6-f11b-11eb-951b-001e671f818d' => 'diameter',
         '132c9887-025d-11eb-9daf-001e671f818d' => 'grain',
+        'units' => 'units',
+        'ral' => 'ral',
+        'color' => 'color',
     ];
 
     private const HUMAN_READABLE_NAMES = [
@@ -30,6 +33,9 @@ class ParameterKeyMapper
         'area' => 'Площадь покрытия',
         'diameter' => 'Диаметр',
         'grain' => 'Зерно',
+        'units' => 'Единицы',
+        'ral' => 'RAL',
+        'color' => 'Цвет',
     ];
 
     public function getKeyByExternalId(string $externalId): ?string

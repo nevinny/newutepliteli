@@ -5,22 +5,15 @@ namespace App\Controller\Admin;
 use App\Entity\Section;
 use App\Enum\Statuses;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class SectionCrudController extends DefaultCrudController
@@ -31,11 +24,10 @@ class SectionCrudController extends DefaultCrudController
     public function __construct(
         RequestStack $requestStack,
         EntityManagerInterface $entityManager,
-        private AdminUrlGenerator $adminUrlGenerator,
+        protected AdminUrlGenerator $adminUrlGenerator,
     )
     {
         $this->requestStack = $requestStack;
-        // Вызываем конструктор родителя с теми же аргументами
         parent::__construct($requestStack, $entityManager, $adminUrlGenerator);
     }
 

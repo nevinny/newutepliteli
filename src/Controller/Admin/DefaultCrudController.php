@@ -31,13 +31,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
@@ -48,7 +44,7 @@ class DefaultCrudController extends AbstractCrudController
     public function __construct(
         private RequestStack             $requestStack,
         protected EntityManagerInterface $entityManager,
-        private AdminUrlGenerator $adminUrlGenerator,
+        protected AdminUrlGenerator $adminUrlGenerator,
     )
     {}
     protected function getAdminUrlGenerator(): AdminUrlGenerator
@@ -140,62 +136,6 @@ class DefaultCrudController extends AbstractCrudController
         return $actions;
     }
 
-    public function configureActionsOld(Actions $actions): Actions
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        $parentId = $request?->query->getInt('parent_id');
-        $actions = $actions->remove(Crud::PAGE_INDEX, Action::NEW);
-
-        $availableTypes = [];
-
-        if ($parentId) {
-            $parent = $this->entityManager->getRepository(Main::class)->find($parentId);
-            if (!$parent) {
-                throw new \RuntimeException("Main with ID $parentId not found");
-            }
-
-            $parentType = $parent->getEntityType();
-
-            // Получаем все дочерние типы для данного родителя
-            $sectionLinks = $this->entityManager->getRepository(SectionLink::class)
-                ->findBy(['parentType' => $parentType]);
-//            dd($sectionLinks);
-            foreach ($sectionLinks as $link) {
-                $availableTypes[] = $link->getChildType();
-            }
-        } else {
-            $availableTypes = $this->entityManager
-                ->getRepository(SectionType::class)
-                ->findAll();
-        }
-//        dd($availableTypes);
-        foreach ($availableTypes as $type) {
-            $controller = $type->getCrudControllerClass();
-            $entityClass = $type->getEntityClass();
-
-            if (!$controller || !$entityClass) {
-                continue; // Пропускаем типы, которые не связаны с сущностью
-            }
-
-            $url = $this->adminUrlGenerator
-                ->setController($controller)
-                ->setAction('new')
-                ->set('parent_id', $parentId)
-                ->generateUrl();
-
-            $label = '+ ' . $type->getName();
-
-            $customNewAction = Action::new('add_' . $type->getCode(), $label)
-                ->linkToUrl($url)
-                ->setCssClass('btn btn-outline-primary')
-                ->createAsGlobalAction();
-
-            $actions = $actions->add(Crud::PAGE_INDEX, $customNewAction);
-        }
-
-        return $actions;
-    }
-
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
@@ -264,7 +204,7 @@ class DefaultCrudController extends AbstractCrudController
         $parentId = $request?->query->get('parent_id', 0);
 
         $parentField = IdField::new('parent', 'Родитель')->hideOnIndex();
-        $parentField->setFormTypeOption('data', $parentId);
+//        $parentField->setFormTypeOption('data', $parentId);
 
         yield $parentField;
         yield ChoiceField::new('status', 'Статус')
@@ -295,24 +235,6 @@ class DefaultCrudController extends AbstractCrudController
         }
     }
 
-//    protected function getImageFields(): iterable
-//    {
-//        yield Field::new('imageFile', 'Загрузить изображение')
-//            ->setFormType(FileType::class)
-//            ->onlyOnForms()
-//            ->setRequired(false);
-//
-//        yield ImageField::new('imagePreview', 'Превью')
-//            ->setBasePath('/uploads/news')
-//            ->onlyOnIndex()
-//            ->setLabel('Превью');
-//
-//        yield Field::new('image', 'Текущее изображение')
-//            ->onlyOnForms()
-//            ->setFormTypeOption('required', false)
-//            ->setFormTypeOption('disabled', true)
-//            ->setTemplatePath('admin/fields/image_preview.html.twig');
-//    }
 
     /**
      * @throws \ReflectionException

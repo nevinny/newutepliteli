@@ -15,6 +15,10 @@ class ProductParamsFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('externalId', TextType::class, [
+                'label' => 'External ID',
+                'required' => false,
+            ])
             ->add('title', TextType::class, [
                 'label' => 'Название',
                 'required' => false,
