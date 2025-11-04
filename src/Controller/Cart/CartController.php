@@ -9,6 +9,7 @@ use App\Service\Cart\CartStorageResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -58,7 +59,7 @@ class CartController extends AbstractController
     }
 
     #[Route('/add', name: 'add', priority: 10000)]
-    public function add(Request $request, EntityManagerInterface $em)
+    public function add(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $content = json_decode($request->getContent(), true);
 
@@ -98,5 +99,60 @@ class CartController extends AbstractController
 //            return $this->json(['error' => 'Failed to add to cart: ' . $e->getMessage()], 500);
         }
 
+    }
+
+    #[Route('/update', name: 'update', methods: ['POST'])]
+    public function update(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $variantId = (int)($data['id'] ?? 0);
+        $quantity = max(1, (int)($data['quantity'] ?? 1));
+
+        if (!$variantId) {
+            return $this->json(['success' => false, 'message' => 'ID товара не указан.'], 400);
+        }
+
+        try {
+            $this->cartService->update($variantId, $quantity);
+            return $this->json([
+                'success' => true,
+                'message' => 'Количество обновлено.',
+                'cartCount' => $this->cartService->getCount(),
+                'totalPrice' => $this->cartService->getTotal(),
+                'totalCount' => $this->cartService->getPositionCount(),
+            ]);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка обновления количества: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    #[Route('/remove', name: 'remove', methods: ['POST'])]
+    public function remove(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $variantId = (int)($data['id'] ?? 0);
+
+        if (!$variantId) {
+            return $this->json(['success' => false, 'message' => 'ID товара не указан.'], 400);
+        }
+
+        try {
+            $this->cartService->removeVariant($variantId);
+            return $this->json([
+                'success' => true,
+                'message' => 'Товар удалён из корзины.',
+                'cartCount' => $this->cartService->getCount(),
+                'totalPrice' => $this->cartService->getTotal(),
+                'totalCount' => $this->cartService->getCount(),
+            ]);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка удаления: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

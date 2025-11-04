@@ -5,9 +5,11 @@ namespace App\Controller\Admin;
 use App\Controller\Admin\FormField\CKEditorField;
 use App\Controller\Admin\Trait\EntityTypeRedirectActionsTrait;
 use App\Entity\Main;
+use App\Entity\Product;
 use App\Entity\SectionLink;
 use App\Entity\SectionType;
 use App\Enum\Statuses;
+use App\Service\SectionPathGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
@@ -45,6 +47,7 @@ class DefaultCrudController extends AbstractCrudController
         private RequestStack             $requestStack,
         protected EntityManagerInterface $entityManager,
         protected AdminUrlGenerator $adminUrlGenerator,
+        private SectionPathGenerator $pathGenerator,
     )
     {}
     protected function getAdminUrlGenerator(): AdminUrlGenerator
@@ -204,7 +207,8 @@ class DefaultCrudController extends AbstractCrudController
         $parentId = $request?->query->get('parent_id', 0);
 
         $parentField = IdField::new('parent', 'Родитель')->hideOnIndex();
-//        $parentField->setFormTypeOption('data', $parentId);
+        $parentField->setFormTypeOption('data', $parentId);
+
 
         yield $parentField;
         yield ChoiceField::new('status', 'Статус')
@@ -450,8 +454,32 @@ class DefaultCrudController extends AbstractCrudController
             $main->setStatus($entityInstance->getStatus());
             $main->setTitle($entityInstance->getTitle());
             $main->setSlug($entityInstance->getSlug());
+            $main->setFullPath($this->pathGenerator->generateFullPath($main));
+
             $entityManager->persist($main);
             $entityManager->flush();
+        } else {
+            $main = new Main();
+            $main->setEntityType($sectionType);
+            $main->setEntityId($entityInstance->getId());
+            $main->setTitle($entityInstance->getTitle());
+            $main->setSlug($entityInstance->getSlug());
+            $main->setStatus($entityInstance->getStatus());
+            $main->setIsNode($entityInstance->getIsNode());
+            $main->setCreatedAt($entityInstance->getCreatedAt());
+            $main->setUpdatedAt($entityInstance->getUpdatedAt());
+            if ($entityInstance instanceof Product) {
+                if ($entityInstance->getParent()) {
+                    $categoryType = $this->entityManager->getRepository(SectionType::class)
+                        ->findOneBy(['code' => 'category']);
+
+                    $parentMain = $this->entityManager->getRepository(Main::class)->findOneBy([
+                        'entityId' => $categoryType->getId(),
+                        'entityType' => $categoryType,
+                    ]);
+                    $main->setParent($parentMain);
+                }
+            }
         }
     }
 }

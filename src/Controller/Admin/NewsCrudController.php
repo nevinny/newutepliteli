@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\News;
 use App\Enum\Statuses;
 use App\Service\ImageUploaderService;
+use App\Service\SectionPathGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -27,9 +28,10 @@ class NewsCrudController extends DefaultCrudController
         private RequestStack $requestStack,
         EntityManagerInterface $entityManager,
         protected AdminUrlGenerator $adminUrlGenerator,
+        private SectionPathGenerator $pathGenerator,
 
     ) {
-        parent::__construct($requestStack, $entityManager, $adminUrlGenerator);
+        parent::__construct($requestStack, $entityManager, $adminUrlGenerator, $pathGenerator);
     }
 
     public static function getEntityFqcn(): string

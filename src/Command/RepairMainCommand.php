@@ -35,7 +35,7 @@ class RepairMainCommand extends Command
 
             $io->warning(sprintf('Found %d products without Main records', count($products)));
 
-            if (!$io->confirm('Do you want to repair these records?', false)) {
+            if (!$io->confirm('Do you want to repair these records?', true)) {
                 return Command::SUCCESS;
             }
 

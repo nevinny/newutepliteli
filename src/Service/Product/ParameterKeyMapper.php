@@ -59,4 +59,39 @@ class ParameterKeyMapper
         }
         return $result;
     }
+
+    public function getExternalIdMap(): array
+    {
+        return self::EXTERNAL_ID_MAP;
+    }
+
+    public function getHumanReadableNames(): array
+    {
+        return self::HUMAN_READABLE_NAMES;
+    }
+
+    public function getExternalIdByKey(string $key): ?string
+    {
+        return array_search($key, self::EXTERNAL_ID_MAP) ?: null;
+    }
+
+    public function getKeyByHumanReadableName(string $humanName): ?string
+    {
+        return array_search($humanName, self::HUMAN_READABLE_NAMES) ?: null;
+    }
+
+    /**
+     * Возвращает массив для datalist в формате ['human_name' => 'external_id']
+     */
+    public function getDatalistOptions(): array
+    {
+        $options = [];
+        foreach (self::HUMAN_READABLE_NAMES as $key => $humanName) {
+            $externalId = $this->getExternalIdByKey($key);
+            if ($externalId) {
+                $options[$humanName] = $externalId;
+            }
+        }
+        return $options;
+    }
 }
