@@ -62,6 +62,31 @@ class DatabaseCartStorage implements CartStorageInterface
         $this->em->flush();
     }
 
+
+    public function updateItem(int $variantId, int $quantity): void
+    {
+        $variant = $this->variantRepo->find($variantId);
+
+        if (!$variant) {
+            throw new \InvalidArgumentException('Variant not found');
+        }
+
+        $existingItem = $this->cart->getItemByVariant($variant);
+
+        if ($existingItem) {
+            $existingItem->setQuantity($quantity);
+        } else {
+            $newItem = new CartItem();
+            $newItem->setVariant($variant);
+            $newItem->setQuantity($quantity);
+            $this->cart->addItem($newItem);
+
+            $this->em->persist($newItem);
+        }
+
+        $this->em->flush();
+    }
+
     public function removeItem(int $variantId): void
     {
         $variant = $this->variantRepo->find($variantId);

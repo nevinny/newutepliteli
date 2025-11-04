@@ -2,13 +2,130 @@
 
 {% block title %}Корзина - {{ parent() }}{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Инициализация количества из Twig
+            const quantities = {};
+            const prices = {};
+            {% for item in cartItems %}
+            quantities['{{ item.id }}'] = {{ items[item.id] }};
+            prices['{{ item.id }}'] = {{ item.price }};
+
+
+            {% endfor %}
+
+            /**
+             * Обновить количество
+             */
+            window.updateQuantity = function (id, change) {
+                const newQty = Math.max(1, (quantities[id] ?? 1) + change);
+                quantities[id] = newQty;
+                document.getElementById('quantity_' + id).textContent = newQty;
+                document.getElementById('price_' + id).textContent = (newQty * prices[id]).toLocaleString() + ' ₽';
+
+                fetch('/cart/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({id: id, quantity: newQty})
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateTotals(data);
+                        } else {
+                            showToast('Ошибка обновления количества');
+                        }
+                    })
+                    .catch(() => showToast('Ошибка обновления количества'));
+            };
+
+            /**
+             * Удаление товара
+             */
+            window.removeItem = function (id) {
+                if (!confirm('Удалить этот товар из корзины?')) return;
+
+                fetch('/cart/remove', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({id})
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('cart-item-' + id).remove();
+                            updateTotals(data);
+
+                            if (data.cartCount === 0) {
+                                document.getElementById('cart-content').innerHTML = `
+                                    <div class="text-center py-5">
+                                        <i class="bi bi-cart-x fs-1 text-muted mb-3"></i>
+                                        <h3 class="mb-2">Корзина пуста</h3>
+                                        <p class="text-muted mb-4">Добавьте товары из каталога</p>
+                                        <a href="{{ path('page_show', {'slug' : 'catalog'}) }}" class="btn btn-danger">Перейти в каталог</a>
+                                    </div>`;
+                            }
+                        } else {
+                            showToast('Ошибка удаления товара');
+                        }
+                    })
+                    .catch(() => showToast('Ошибка удаления товара'));
+            };
+
+            /**
+             * Обновить блок итогов
+             */
+            // function updateTotals(data) {
+            //     document.getElementById('total-sum').textContent = data.totalPrice.toLocaleString() + ' ₽';
+            //     document.getElementById('total-items').textContent = data.totalCount;
+            // }
+
+            function updateTotals(data) {
+                document.getElementById('total-sum').textContent = data.totalPrice.toLocaleString() + ' ₽';
+                document.getElementById('total-items').textContent = data.totalCount;
+
+                // Также обновляем отображение количества позиций в заголовке
+                const totalItemsElements = document.querySelectorAll('#total-items');
+                totalItemsElements.forEach(element => {
+                    if (element.id === 'total-items') {
+                        element.textContent = data.totalCount;
+                    }
+                });
+            }
+
+            /**
+             * Показ тоста
+             */
+            window.showToast = function (message, delay = 3000) {
+                const toastElement = document.getElementById('cartToast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = message;
+
+                const toast = new bootstrap.Toast(toastElement, {
+                    delay: delay,
+                    autohide: true
+                });
+                toast.show();
+            };
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
-    <div class="container-flex py-5">
+    <div class="container-flex py-5" id="cart-content">
         <div class="bg-white rounded p-4">
             <div class="d-flex align-items-center mb-4">
                 <i class="bi bi-cart-fill text-danger fs-3 me-2"></i>
                 <h1 class="h3 mb-0 me-2">Корзина</h1>
-                <span class="text-muted">({{ cartItems|length }} товаров)</span>
+                <span class="text-muted">(<span id="total-items-title">{{ cartItems|length }}</span> товаров)</span>
             </div>
 
             {% if cartItems|length > 0 %}
@@ -17,42 +134,51 @@
                     <div class="col-lg-8">
                         {% for item in cartItems %}
                             {% set product = item.getProduct() %}
-                            <div class="card mb-3">
+                            <div class="card mb-3" id="cart-item-{{ item.id }}">
                                 <div class="card-body d-flex gap-3">
                                     <div class="flex-shrink-0" style="width: 80px; height: 80px;">
-{#                                        <img src="{{ item.image }}" alt="{{ item.name }}" class="img-fluid rounded" style="object-fit: cover; width: 100%; height: 100%;">#}
+                                        {% if product.image %}
+                                            <img src="{{ product.image }}" alt="{{ product.title }}"
+                                                 class="img-fluid rounded"
+                                                 style="object-fit: cover; width: 100%; height: 100%;">
+                                        {% endif %}
                                     </div>
+
                                     <div class="flex-grow-1">
-                                        <h5 class="card-title">{{ product.title }}</h5>
+                                        <h5 class="card-title mb-1">{{ product.title }}</h5>
+                                        <div class="mb-2">
+                                            <small class="text-muted">Цена за
+                                                шт.: {{ item.price|number_format(0, '.', ' ') }} ₽</small>
+                                        </div>
+
                                         {% if item.params %}
-                                            <ul class="list-unstyled mb-2 small">
+                                            <ul class="list-unstyled mb-2 small text-muted">
                                                 {% for param in item.params %}
-                                                    <li><small><strong>{{ param.title }}:</strong> {{ param.val }}</small></li>
+                                                    <li>{{ param.title }}: {{ param.val }}</li>
                                                 {% endfor %}
                                             </ul>
                                         {% endif %}
 
-{#                                        {% if not item.inStock %}#}
-{#                                            <p class="text-danger small mb-2">Нет в наличии</p>#}
-{#                                        {% endif %}#}
-
-                                        <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex justify-content-between align-items-center mt-2">
                                             <div class="btn-group" role="group">
                                                 <button class="btn btn-outline-secondary btn-sm"
-{#                                                        {% if not item.inStock %}disabled{% endif %}#}
-                                                >
+                                                        onclick="updateQuantity({{ item.id }}, -1)">
                                                     <i class="bi bi-dash"></i>
                                                 </button>
-                                                <span class="px-2">{{ items[item.id] }}</span>
+                                                <span class="px-2"
+                                                      id="quantity_{{ item.id }}">{{ items[item.id] }}</span>
                                                 <button class="btn btn-outline-secondary btn-sm"
-{#                                                        {% if not item.inStock %}disabled{% endif %}#}
-                                                >
+                                                        onclick="updateQuantity({{ item.id }}, 1)">
                                                     <i class="bi bi-plus"></i>
                                                 </button>
                                             </div>
+
                                             <div class="d-flex align-items-center gap-2">
-                                                <strong>{{ (item.price * items[item.id])|number_format(0, '.', ' ') }} ₽</strong>
-                                                <button class="btn btn-outline-danger btn-sm">
+                                                <strong
+                                                    id="price_{{ item.id }}">{{ (item.price * items[item.id])|number_format(0, '.', ' ') }}
+                                                    ₽</strong>
+                                                <button class="btn btn-outline-danger btn-sm"
+                                                        onclick="removeItem({{ item.id }})">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
@@ -65,26 +191,25 @@
 
                     <!-- Order summary -->
                     <div class="col-lg-4">
-                        <div class="card  mb-3">
+                        <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Итого по заказу</h5>
                                 <ul class="list-unstyled mb-3">
                                     <li class="d-flex justify-content-between">
-                                        <span>Позиций ({{ cartItems|reduce((sum, i) => sum + items[i.id], 0) }})</span>
-                                        <span>
-                                        {{ cartItems|reduce((sum, i) => sum + (i.price * items[i.id]), 0)|number_format(0, '.', ' ') }} ₽
-                                      </span>
+                                        <span>Позиций</span>
+                                        <span id="total-items">{{ cartItems|length }}</span>
                                     </li>
-                                    {#                                    <li class="d-flex justify-content-between"> #}
-                                    {#                                        <span>Доставка</span> #}
-                                    {#                                        <span class="text-success">Бесплатно</span> #}
-                                    {#                                    </li> #}
+                                    <li class="d-flex justify-content-between">
+                                        <span>Товаров</span>
+                                        <span
+                                            id="total-items-count">{{ cartItems|reduce((sum, item) => sum + items[item.id], 0) }}</span>
+                                    </li>
                                     <hr>
                                     <li class="d-flex justify-content-between fw-bold fs-5">
                                         <span>Общая сумма</span>
-                                        <span>
-                    {{ cartItems|reduce((sum, i) => sum + (i.price * items[i.id]), 0)|number_format(0, '.', ' ') }} ₽
-                  </span>
+                                        <span id="total-sum">
+                                            {{ cartItems|reduce((sum, i) => sum + (i.price * items[i.id]), 0)|number_format(0, '.', ' ') }} ₽
+                                        </span>
                                     </li>
                                 </ul>
 
@@ -92,9 +217,7 @@
                                 <a href="{{ path('catalog') }}" class="btn btn-outline-secondary w-100">Продолжить покупки</a>
 
                                 <div class="text-muted mt-3 small">
-                                    {#                                    <p>🚚 Бесплатная доставка от 3000 ₽</p> #}
                                     <p>🔒 Безопасная оплата</p>
-                                    {#                                    <p>↩️ Возврат в течение 30 дней</p> #}
                                 </div>
                             </div>
                         </div>
@@ -108,6 +231,16 @@
                     <a href="{{ path('page_show', {'slug' : 'catalog'}) }}" class="btn btn-danger">Перейти в каталог</a>
                 </div>
             {% endif %}
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="cartToast" class="toast align-items-center text-white bg-dark border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">Товар добавлен в корзину</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
         </div>
     </div>
 {% endblock %}

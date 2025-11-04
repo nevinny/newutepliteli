@@ -1,0 +1,79 @@
+{# templates/form/combo_box.html.twig #}
+{% block combo_box_widget %}
+    <div>
+        Field ID: {{ id }}<br>
+        External ID Field: {{ external_id_field }}<br>
+        Options count: {{ datalist_options|length }}<br>
+        Parent form: {{ form.parent ? form.parent.vars.name : 'none' }}
+    </div>
+
+    <div class="combo-box-wrapper">
+        <input type="text"
+            {{ block('widget_attributes') }}
+               value="{{ value }}"
+            {% if datalist_options is not empty %}list="combo-list-{{ id }}"{% endif %} />
+
+        {% if datalist_options is not empty %}
+            <datalist id="combo-list-{{ id }}">
+                {% for humanName, externalId in datalist_options %}
+                <option value="{{ humanName }}" data-external-id="{{ externalId }}">
+                    {% endfor %}
+            </datalist>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const comboField = document.getElementById('{{ id }}');
+
+            if (!comboField) return;
+
+            // Находим поле externalId в том же блоке параметра
+            function findExternalIdField(comboField) {
+                // Ищем родительский элемент параметра
+                let paramElement = comboField.closest('.form-group, .field-group');
+
+                // Для EasyAdmin коллекций
+                if (!paramElement) {
+                    paramElement = comboField.closest('[data-field]');
+                }
+
+                // Ищем среди соседних элементов
+                if (paramElement) {
+                    // Ищем поле externalId в том же блоке
+                    const externalIdField = paramElement.querySelector('[data-param-field="externalId"], [name*="externalId"]');
+                    return externalIdField;
+                }
+
+                return null;
+            }
+
+            const externalIdField = findExternalIdField(comboField);
+
+            if (externalIdField) {
+                comboField.addEventListener('input', function () {
+                    const selectedValue = this.value;
+                    const datalist = document.getElementById('combo-list-{{ id }}');
+
+                    if (datalist) {
+                        const options = datalist.getElementsByTagName('option');
+                        let foundExternalId = null;
+
+                        for (let option of options) {
+                            if (option.value === selectedValue) {
+                                foundExternalId = option.getAttribute('data-external-id');
+                                break;
+                            }
+                        }
+
+                        if (foundExternalId && !externalIdField.value) {
+                            externalIdField.value = foundExternalId;
+                        } else if (!foundExternalId && externalIdField.value) {
+                            externalIdField.value = '';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

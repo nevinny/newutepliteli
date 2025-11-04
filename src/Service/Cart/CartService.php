@@ -12,7 +12,9 @@ class CartService
     public function __construct(
         private CartStorageResolver $resolver,
         private ProductVariantRepository $variantRepo
-    ) {}
+    )
+    {
+    }
 
     public function getStorage(): CartStorageInterface
     {
@@ -46,5 +48,50 @@ class CartService
     public function add(int $variantId, int $quantity = 1): void
     {
         $this->getStorage()->addItem($variantId, $quantity);
+    }
+
+    public function getTotal(): float
+    {
+        $items = $this->getItems();
+//        dd($items);
+        $variants = $this->variantRepo->findBy(['id' => array_keys($items)]);
+        $total = 0;
+        $log = [];
+        foreach ($variants as $variant) {
+            $total += $variant->getPrice() * max(1, $items[$variant->getId()]);
+            $log[] = [
+                'id' => $variant->getId(),
+//                'name' => $variant->getName(),
+                'price' => $variant->getPrice(),
+                'quantity' => max(1, $items[$variant->getId()]),
+                'itogo' => $variant->getPrice() * max(1, $items[$variant->getId()]),
+
+            ];
+//            dump($variant->getPrice() * max(1,$items[$variant->getId()]));
+        }
+//        dd($log);
+        return max(0, $total);
+    }
+
+    public function getCount(): int
+    {
+        return count($this->getItems());
+    }
+
+    public function getPositionCount(): int
+    {
+        $count = 0;
+        foreach ($this->getItems() as $cnt) {
+            $count += $cnt;
+        }
+        return $count;
+    }
+
+    public function update(int $variantId, mixed $quantity): void
+    {
+        $cart = $this->getItems();
+        if (array_key_exists($variantId, $cart)) {
+            $this->getStorage()->updateItem($variantId, $quantity);
+        }
     }
 }

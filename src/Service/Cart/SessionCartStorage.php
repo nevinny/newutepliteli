@@ -33,6 +33,13 @@ class SessionCartStorage implements CartStorageInterface
         $this->session->set('cart', $cart);
     }
 
+    public function updateItem(int $variantId, int $quantity): void
+    {
+        $cart = $this->getItems();
+        $cart[$variantId] = $quantity;
+        $this->session->set('cart', $cart);
+    }
+
     public function removeItem(int $variantId): void
     {
         $cart = $this->getItems();

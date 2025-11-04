@@ -78,17 +78,37 @@ class ProductController extends AbstractController
                 continue; // Пропускаем пустые строки
             }
 
-            if ($currentKey === null) {
-                // Это ключ (название характеристики)
+            // Проверяем, содержит ли строка разделитель ":" (новый формат)
+            if (strpos($line, ':') !== false) {
+                // Разделяем строку на ключ и значение по первому вхождению двоеточия
+                $parts = explode(':', $line, 2);
+                $key = trim($parts[0]);
+                $value = trim($parts[1]);
+
+                $result[] = [
+                    'property' => $key,
+                    'value' => $value
+                ];
+                $currentKey = null;
+            } elseif ($currentKey === null) {
+                // Это ключ (название характеристики) в старом формате
                 $currentKey = $line;
             } else {
-                // Это значение
+                // Это значение в старом формате
                 $result[] = [
                     'property' => $currentKey,
                     'value' => $line
                 ];
                 $currentKey = null;
             }
+        }
+
+        // Обрабатываем случай, когда последняя строка была ключом без значения
+        if ($currentKey !== null) {
+            $result[] = [
+                'property' => $currentKey,
+                'value' => '' // или можно установить значение по умолчанию
+            ];
         }
 
         return $result;

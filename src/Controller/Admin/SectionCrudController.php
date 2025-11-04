@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Section;
 use App\Enum\Statuses;
+use App\Service\SectionPathGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -25,10 +26,11 @@ class SectionCrudController extends DefaultCrudController
         RequestStack $requestStack,
         EntityManagerInterface $entityManager,
         protected AdminUrlGenerator $adminUrlGenerator,
+        private SectionPathGenerator $pathGenerator,
     )
     {
         $this->requestStack = $requestStack;
-        parent::__construct($requestStack, $entityManager, $adminUrlGenerator);
+        parent::__construct($requestStack, $entityManager, $adminUrlGenerator, $pathGenerator);
     }
 
     public static function getEntityFqcn(): string
