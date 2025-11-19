@@ -143,6 +143,14 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/vich/uploader-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfonycasts/reset-password-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/simple-html-dom/simple-html-dom" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/httpRequests" />
+      <excludeFolder url="file://$MODULE_DIR$/assets/vendor" />
+      <excludeFolder url="file://$MODULE_DIR$/public_html/bundles/fosckeditor" />
+      <excludeFolder url="file://$MODULE_DIR$/public_html/images/product" />
+      <excludeFolder url="file://$MODULE_DIR$/public_html/webdata" />
+      <excludeFolder url="file://$MODULE_DIR$/public_html/webdata-20250810" />
+      <excludeFolder url="file://$MODULE_DIR$/var" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

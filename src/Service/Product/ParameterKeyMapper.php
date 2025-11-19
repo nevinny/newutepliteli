@@ -83,13 +83,17 @@ class ParameterKeyMapper
     /**
      * Возвращает массив для datalist в формате ['human_name' => 'external_id']
      */
-    public function getDatalistOptions(): array
+    public function getDatalistOptions($onlyTitles = false): array
     {
         $options = [];
         foreach (self::HUMAN_READABLE_NAMES as $key => $humanName) {
             $externalId = $this->getExternalIdByKey($key);
             if ($externalId) {
-                $options[$humanName] = $externalId;
+                if ($onlyTitles) {
+                    $options[$humanName] = $humanName;
+                } else {
+                    $options[$humanName] = $externalId;
+                }
             }
         }
         return $options;

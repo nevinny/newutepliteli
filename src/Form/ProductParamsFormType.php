@@ -42,12 +42,13 @@ class ProductParamsFormType extends AbstractType
 //                'label' => 'Название',
 //                'required' => false,
 //            ])
-            ->add('title', ComboBoxType::class, [
+            ->add('title', ChoiceType::class, [
                 'label' => 'Название параметра',
                 'required' => false,
-                'datalist_options' => $parameterOptions,
-                'external_id_field' => 'externalId', // Просто имя поля, без префиксов
-                'placeholder' => 'Выберите параметр или введите свой вариант',
+                'choices' => $this->parameterKeyMapper->getDatalistOptions(true),
+//                'datalist_options' => $parameterOptions,
+//                'external_id_field' => 'externalId', // Просто имя поля, без префиксов
+//                'placeholder' => 'Выберите параметр или введите свой вариант',
             ])
             ->add('val', TextType::class, [
                 'label' => 'Значение',
@@ -55,8 +56,9 @@ class ProductParamsFormType extends AbstractType
             ])
             ->add('status', ChoiceType::class, [
                 'label' => 'Status',
-                'required' => false,
+                'required' => true,
                 'choices' => Statuses::choices(),
+                'data' => Statuses::Active,
             ]);
 
 

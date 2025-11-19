@@ -12,6 +12,7 @@ use App\Repository\ProductVariantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProductVariantRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -19,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
     name: "product_unique_idx",
     columns: ["product_id", "external_id"],
 )]
+#[UniqueEntity(fields: ["external_id"], message: "Этот external_id уже используется")]
 class ProductVariant implements SystemEntityInterface
 {
     use Created, Status;

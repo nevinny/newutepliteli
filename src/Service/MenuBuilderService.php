@@ -27,7 +27,7 @@ class MenuBuilderService
         $images = [
             '9' => [
                 'image' => '844d7696accf071405a215bf3cdedda4.png',
-                'imageXs' => '29a7003809dbd7f79e29902cea1ba6d2.png',
+                'imageXs' => '3-zs.png',
             ],
             '10' => [
                 'image' => '4de621ec964168162cdaf2e6ef390569.jpg',
@@ -104,6 +104,22 @@ class MenuBuilderService
             '28' => [
                 'image' => '97051bedbacfa2a4c175cd73d6da9f94.png',
                 'imageXs' => '97051bedbacfa2a4c175cd73d6da9f94.png',
+            ],
+            '35' => [
+                'image' => 'fasads.png',
+                'imageXs' => 'fasads.png',
+            ],
+            '39' => [
+                'image' => 'krovla-xs.png',
+                'imageXs' => 'krovla-xs.png',
+            ],
+            '46' => [
+                'image' => 'geo.png',
+                'imageXs' => 'geo.png',
+            ],
+            '50' => [
+                'image' => 'membrane-xs.png',
+                'imageXs' => 'membrane-xs.png',
             ],
         ];
 
