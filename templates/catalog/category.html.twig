@@ -34,26 +34,85 @@
                 <div>{{ page.description|raw }}</div>
                 {% endif %}
                 <div class="row g-3">
-                    {% for item in list %}
+                    {% for item in newList %}
                     <div class="col-md-6 col-lg-4">
                         <div class="bg-light rounded p-2 h-100 d-flex flex-column align-items-center text-center">
-                            <a href="{{ item.m_fullPath }}" class="d-block w-100">
+                            <a href="{{ item.product.m_fullPath }}" class="d-block w-100">
                                 <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                    {% if item.p_preview|default([])|length > 0 %}
-                                        {% if item.p_preview starts with '/images/' %}
+                                    {# Блок вариантов - компактный вид #}
+
+
+                                    {% if item.variants|default([])|length > 0 %}
+                                        <div class="variants mt-2">
+                                            <div class="d-flex flex-wrap justify-content-center gap-1">
+                                                {% for variant in item.variants|slice(0, 6) %}
+                                                    {#                                                    {% if variant.color %} #}
+                                                    {#                                                        <a href="{{ variant.url }}" #}
+                                                    {#                                                           class="variant-color d-inline-block rounded-circle border" #}
+                                                    {#                                                           style="width: 20px; height: 20px; background-color: {{ variant.color }};" #}
+                                                    {#                                                           title="{{ variant.name }}"></a> #}
+                                                    {#                                                    {% else %} #}
+                                                    {#                                                        <a href="{{ variant.url }}" #}
+                                                    {#                                                           class="variant-btn btn btn-outline-secondary btn-sm py-0 px-1" #}
+                                                    {#                                                           title="{{ variant.name }}"> #}
+                                                    {#                                                            {{ variant.short_name }} #}
+                                                    {#                                                        </a> #}
+                                                    {#                                                    {% endif %} #}
+                                                {% endfor %}
+
+                                                {% if item.variants|length > 6 %}
+                                                    <button class="btn btn-outline-secondary btn-sm py-0 px-1"
+                                                            data-bs-toggle="tooltip"
+                                                            title="Еще {{ item.variants|length - 6 }} вариантов">
+                                                        +{{ item.variants|length - 6 }}
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+
+                                    {% if item.product.p_preview|default([])|length > 0 %}
+                                        {% if item.product.p_preview starts with '/images/' %}
                                             <img class="img-fluid mh-100" style="max-height: 200px; width: auto;"
-                                                 src="{{ item.p_preview }}" alt="{{ item.p_title }}">
+                                                 src="{{ item.product.p_preview }}" alt="{{ item.product.p_title }}">
                                         {% else %}
                                             <img class="img-fluid mh-100" style="max-height: 200px; width: auto;"
-                                                 src="/images/product/{{ item.p_preview }}" alt="{{ item.p_title }}">
+                                                 src="/images/product/{{ item.product.p_preview }}"
+                                                 alt="{{ item.product.p_title }}">
                                         {% endif %}
                                     {% else %}
                                         <img class="img-fluid mh-100" style="max-height: 200px; width: auto;"
-                                             src="{{ placeholder }}" alt="{{ item.p_title }}">
+                                             src="{{ placeholder }}" alt="{{ item.product.p_title }}">
                                     {% endif %}
+
                                 </div>
-                                <h6 class="mt-2 mb-1">{{ item.p_title }}</h6>
+                                {% if item.hasVariants %}
+                                    <div class="variants mt-2 w-100">
+                                        <div class="d-flex flex-wrap justify-content-center gap-1">
+                                            {% for variant in item.variants %}
+                                                {% if variant.color %}
+                                                    <a
+                                                        href="{{ item.product.m_fullPath }}?variant={{ loop.index0 }}"
+                                                        {#                                                            href="{{ variant.url }}" #}
+                                                        class="variant-color d-inline-block rounded-circle border"
+                                                        style="width: 16px; height: 16px; background-color: {{ variant.color }};"
+                                                        title="{{ variant.name }}"></a>
+                                                    {#                                                    {% else %} #}
+                                                    {#                                                        <a #}
+                                                    {#                                                            href="{{ variant.url }}" #}
+                                                    {#                                                           class="variant-btn btn btn-outline-secondary btn-sm py-0 px-1" #}
+                                                    {#                                                           title="{{ variant.name }}"> #}
+                                                    {#                                                            {{ variant.name|length > 10 ? variant.name|slice(0, 10) ~ '...' : variant.name }} #}
+                                                    {#                                                        </a> #}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <h6 class="mt-2 mb-1">{{ item.product.p_title }}</h6>
                             </a>
+
                             <div class="stars mb-1">
                                 <span class="text-warning">★★★★★</span>
                             </div>

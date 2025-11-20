@@ -40,6 +40,7 @@ class ProductController extends AbstractController
             $product->setImage($fileName);
         }
         $queryId = $request->query->get('id');
+        $queryVariandIndex = $request->query->get('variant');
 //        dd($main,$product);
 
         if ($queryId !== null) {
@@ -58,7 +59,7 @@ class ProductController extends AbstractController
             'main' => $main,
             'product' => $product,
             'specs' => $specs,
-//            'list' => $context['list'],
+            'queryVariandIndex' => $queryVariandIndex,
 //            'form' => $form->createView()
         ]);
     }
