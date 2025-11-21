@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ main.title }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('product') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('product') }}
+{% endblock %}
+
+{% block content %}
+    {% set placeholderSvg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="%23e5e5e5"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="42" fill="%23999">No image</text></svg>' %}
+
+    <div id="variants-data" class="d-none">
+        {{ product|product_grouped_parameters|json_encode|raw }}
+    </div>
+
+    <div id="variant-images" class="d-none">
+        {{ product.variants|map(v => v.originImage ?? placeholderSvg)|json_encode|raw }}
+    </div>
+
+    <div class="container-fluid my-4">
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="ratio ratio-1x1 border rounded bg-light d-flex align-items-center justify-content-center">
+                    <img id="main-image"
+                         src="{{ product.image ? asset(product.image) : placeholderSvg }}"
+                         data-default-image="{{ product.image ? asset(product.image) : placeholderSvg }}"
+
+                         alt="{{ product.title }}"
+                         class="img-fluid object-fit-cover rounded">
+                </div>
+
+                <div class="row row-cols-4 g-2 mt-2">
+                    {% for variant in product.variants %}
+                        <div class="col">
+                            <img src="{{ variant.originImage ?? productImage }}"
+                                 class="image-thumbnail border rounded w-100 h-100 object-fit-cover">
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h2>{{ product.title }}</h2>
+
+                <div class="price-block my-3">
+                    <span id="current-price" class="h4 fw-bold"></span>
+                    <span id="old-price" class="text-muted text-decoration-line-through ms-2"></span>
+                    <span id="discount" class="badge bg-danger ms-2 d-none">%</span>
+                </div>
+
+                <div class="variants mb-3">
+                    {% for variant in product|product_grouped_parameters %}
+                        <button class="btn size-option btn-outline-secondary mb-2 w-100 text-start">
+                            {% for param in variant.params %}
+                                <div class="small">{{ param.label }}: <b>{{ param.value }}</b></div>
+                            {% endfor %}
+                        </button>
+                    {% endfor %}
+                </div>
+
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <button id="qty-minus" class="btn btn-light">-</button>
+                    <span id="quantity" class="fw-bold">1</span>
+                    <button id="qty-plus" class="btn btn-light">+</button>
+                </div>
+
+                <button id="add-to-cart" class="btn btn-danger w-100">
+                    Добавить в корзину
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
