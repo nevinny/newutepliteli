@@ -2,9 +2,12 @@
 
 namespace App\Controller\Personal;
 
+use App\Entity\Subscriber;
 use App\Entity\User;
+use App\Enum\Statuses;
 use App\Form\ChangePasswordForm;
 use App\Form\ProfileType;
+use App\Form\SubscribeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -111,5 +114,32 @@ class AccountController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/subscribe', name: 'subscribe')]
+    public function subscribe(Request $request, EntityManagerInterface $em)
+    {
+        $template = 'personal/subscription.html.twig';
+        $context = ['page' => ['title' => 'Подписка', 'description' => '']];
+        $main = [];
+        /** @var User $user */
+        $user = $this->getUser();
+        $subscription = $em->getRepository(Subscriber::class)->findOneBy(['email' => $user->getEmail()]);
+        if ($subscription && $subscription->getStatus() == Statuses::Active) {
+            $user->setIsSubscribed(true);
+        }
 
+        $form = $this->createForm(SubscribeType::class, $subscription);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('success', ' обновлен.');
+        }
+        return $this->render($template, [
+            'user' => $user,
+            'subscription' => $subscription,
+            'main' => $main,
+            'page' => $context['page'],
+            'form' => $form->createView()
+        ]);
+    }
 }

@@ -1,0 +1,47 @@
+{# templates/subscribe/unsubscribe_not_found.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Подписка не найдена{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h2 class="card-title">Подписка не найдена</h2>
+                        <div class="my-4">
+                            <i class="fas fa-search text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                        <p class="card-text">
+                            Не удалось найти активную подписку.
+                        </p>
+                        <p class="text-muted">
+                            Возможно, вы уже отписались от рассылки ранее, или ссылка устарела.
+                        </p>
+                        <div class="mt-4">
+                            <a href="{{ path('index') }}" class="btn">
+                                Вернуться на главную
+                            </a>
+                        </div>
+                        <hr>
+                        <h3>Оформить подписку</h3>
+                        <div class="my-4">
+                            <form action="{{ path('subscription_subscribe') }}" method="post" class="row g-2">
+                                <input type="hidden" name="token" value="{{ csrf_token('subscribe') }}">
+                                <input type="hidden" name="redirect_url" value="{{ app.request.uri }}">
+                                <div class="col-md-12">
+                                    <input type="email" class="form-control" name="email" placeholder="Ваш e-mail"
+                                           required>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-danger w-100">Подписаться</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

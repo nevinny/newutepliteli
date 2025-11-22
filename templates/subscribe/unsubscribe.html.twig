@@ -1,0 +1,36 @@
+{# templates/subscribe/unsubscribe.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Отписка от рассылки{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h2 class="card-title">Отписка от рассылки</h2>
+                        <div class="my-4">
+                            <i class="fas fa-envelope-slash text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                        <p class="card-text">
+                            Email <strong>{{ email }}</strong> успешно отписан от рассылки.
+                        </p>
+                        <p class="text-muted">
+                            Мы больше не будем присылать вам уведомления о скидках и акциях.
+                        </p>
+                        <div class="mt-4">
+                            <a href="{{ path('index') }}" class="btn btn-primary">
+                                Вернуться на главную
+                            </a>
+                            <a href="{{ path('subscription_resubscribe', {'token': app.request.get('token')}) }}"
+                               class="btn btn-secondary">
+                                Передумать и подписаться снова
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

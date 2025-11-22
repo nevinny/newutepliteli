@@ -5,7 +5,7 @@ twig:
         menu_service: '@App\Service\MenuBuilderService'
     form_themes:
         - 'form/combo_box.html.twig'
-        - '@EasyAdmin/crud/form_theme.html.twig'
+#        - '@EasyAdmin/crud/form_theme.html.twig'
 
 when@test:
     twig:
