@@ -1,0 +1,227 @@
+{% extends 'personal/index.html.twig' %}
+
+{% block title %}Подписка - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid wraps hover_shine" id="content">
+
+        <!-- Title Content -->
+        <div class="row">
+            <div class="col-12 top_inner_block_wrapper">
+                <div class="page-top-wrapper grey v3">
+                    <section class="page-top">
+                        <div class="page-top-main">
+                            <h1 id="pagetitle">Личный кабинет</h1>
+                        </div>
+                        <div class="breadcrumbs" id="navigation" itemscope itemtype="http://schema.org/BreadcrumbList">
+                            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                <link href="/personal" itemprop="item"/>
+                                <span>
+                                    <a href="/personal" itemprop="name">Личный кабинет</a>
+                                    <meta itemprop="position" content="1">
+                                </span>
+                            </span> /
+                            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                <link href="/personal/subscription" itemprop="item"/>
+                                <span>
+                                    <a href="/personal/subscription" itemprop="name">Управление подпиской</a>
+                                    <meta itemprop="position" content="2">
+                                </span>
+                            </span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!-- End Title Content -->
+
+        <div class="row wrapper_inner">
+            <!-- Left Sidebar -->
+            <div class="col-md-3 left_block">
+                <ul class="left_menu">
+                    {{ include('personal/menu.html.twig') }}
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 right_block">
+                <div class="middle">
+                    <div class="container-fluid">
+                        <div class="personal_wrapper">
+                            <h2>Управление подпиской</h2>
+
+                            {# Flash сообщения #}
+                            {% for message in app.flashes('success') %}
+                                <div class="alert alert-success mt-3">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+
+                            {% for message in app.flashes('error') %}
+                                <div class="alert alert-danger mt-3">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+
+                            {# Статус подписки #}
+                            <div class="subscription-status mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Статус подписки</h5>
+                                        {% if user.isSubscribed %}
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-success me-3">Активна</span>
+                                                <p class="mb-0">Вы подписаны на нашу рассылку. Мы будем присылать вам
+                                                    новости и специальные предложения.</p>
+                                            </div>
+                                            {% if subscription.createdAt %}
+                                                <small class="text-muted">Подписка активна
+                                                    с {{ subscription.createdAt|date('d.m.Y') }}</small>
+                                            {% endif %}
+                                        {% else %}
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-secondary me-3">Не активна</span>
+                                                <p class="mb-0">Вы не подписаны на нашу рассылку. Подпишитесь, чтобы
+                                                    получать новости и специальные предложения.</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# Форма управления подпиской #}
+                            <div class="subscription-management">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Управление подпиской</h5>
+
+                                        {% if user.isSubscribed %}
+                                            {# Форма отписки #}
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <p class="mb-0">Вы можете отписаться от рассылки в любой момент</p>
+                                                </div>
+                                                <div class="col-md-4 text-end">
+                                                    <form
+                                                        action="{{ path('subscription_unsubscribe', {token : subscription.token}) }}"
+                                                        method="post" class="d-inline">
+                                                        <input type="hidden" name="_token"
+                                                               value="{{ csrf_token('unsubscribe') }}">
+                                                        <button type="submit" class="btn btn-outline-danger"
+                                                                onclick="return confirm('Вы уверены, что хотите отписаться от рассылки?')">
+                                                            Отписаться от рассылки
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            {# Форма подписки #}
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <p class="mb-0">Подпишитесь на нашу рассылку, чтобы получать новости
+                                                        и специальные предложения</p>
+                                                </div>
+                                                <div class="col-md-4 text-end">
+                                                    <form action="{{ path('subscription_subscribe') }}" method="post"
+                                                          class="d-inline">
+                                                        <input type="hidden" name="_token"
+                                                               value="{{ csrf_token('subscribe') }}">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            Подписаться на рассылку
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# Настройки уведомлений (опционально) #}
+                            <div class="notification-settings mt-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Настройки уведомлений</h5>
+                                        <form action="
+{#    {{ path('personal_subscription_update_settings') }} #}
+" method="post">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('subscription_settings') }}">
+
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox"
+                                                       name="news_notifications"
+                                                       id="news_notifications"
+                                                    {#                                                    {{ user.newsNotifications ? 'checked' : '' }} #}
+                                                    {{ not user.isSubscribed ? 'disabled' : '' }}>
+                                                <label class="form-check-label" for="news_notifications">
+                                                    Новости и обновления
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox"
+                                                       name="promo_notifications"
+                                                       id="promo_notifications"
+                                                    {#                                                    {{ user.promoNotifications ? 'checked' : '' }} #}
+                                                    {{ not user.isSubscribed ? 'disabled' : '' }}>
+                                                <label class="form-check-label" for="promo_notifications">
+                                                    Специальные предложения и акции
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox"
+                                                       name="event_notifications"
+                                                       id="event_notifications"
+                                                    {#                                                    {{ user.eventNotifications ? 'checked' : '' }} #}
+                                                    {{ not user.isSubscribed ? 'disabled' : '' }}>
+                                                <label class="form-check-label" for="event_notifications">
+                                                    Уведомления о мероприятиях
+                                                </label>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-outline-primary"
+                                                {{ not user.isSubscribed ? 'disabled' : '' }}>
+                                                Сохранить настройки
+                                            </button>
+
+                                            {% if not user.isSubscribed %}
+                                                <small class="text-muted d-block mt-1">
+                                                    Для изменения настроек необходимо быть подписанным на рассылку
+                                                </small>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {#                            #}{# История рассылок (опционально) #}
+                            {#                            {% if newsletters is defined and newsletters|length > 0 %} #}
+                            {#                                <div class="newsletter-history mt-4"> #}
+                            {#                                    <div class="card"> #}
+                            {#                                        <div class="card-body"> #}
+                            {#                                            <h5 class="card-title">Последние рассылки</h5> #}
+                            {#                                            <div class="list-group"> #}
+                            {#                                                {% for newsletter in newsletters %} #}
+                            {#                                                    <div class="list-group-item"> #}
+                            {#                                                        <div class="d-flex w-100 justify-content-between"> #}
+                            {#                                                            <h6 class="mb-1">{{ newsletter.subject }}</h6> #}
+                            {#                                                            <small>{{ newsletter.sentAt|date('d.m.Y H:i') }}</small> #}
+                            {#                                                        </div> #}
+                            {#                                                        <p class="mb-1">{{ newsletter.preview }}</p> #}
+                            {#                                                    </div> #}
+                            {#                                                {% endfor %} #}
+                            {#                                            </div> #}
+                            {#                                        </div> #}
+                            {#                                    </div> #}
+                            {#                                </div> #}
+                            {#                            {% endif %} #}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

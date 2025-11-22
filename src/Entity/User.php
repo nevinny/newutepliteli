@@ -59,6 +59,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SystemE
     #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: 'user', cascade: ['persist'], orphanRemoval: true)]
     private Collection $carts;
 
+    private bool $isSubscribed = false;
+
     public function __construct()
     {
         $this->carts = new ArrayCollection();
@@ -241,4 +243,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SystemE
 
         return $cart;
     }
+
+    public function isSubscribed(): bool
+    {
+        return $this->isSubscribed;
+    }
+
+    public function setIsSubscribed(bool $isSubscribed): User
+    {
+        $this->isSubscribed = $isSubscribed;
+        return $this;
+    }
+
+
 }

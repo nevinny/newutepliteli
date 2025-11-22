@@ -2,9 +2,33 @@
 <div class="bg-light p-0 pt-5 rounded mb-5 mt-0">
     <h4>Будьте всегда в курсе!</h4>
     <p>Узнавайте о скидках и акциях первым</p>
-    <form action="/personal/subscribe/" class="row g-2">
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <form action="{{ path('subscription_subscribe') }}" method="post" class="row g-2">
+        <input type="hidden" name="token" value="{{ csrf_token('subscribe') }}">
+        <input type="hidden" name="redirect_url" value="{{ app.request.uri }}">
         <div class="col-md-12">
-            <input type="email" class="form-control" name="sf_EMAIL" placeholder="Ваш e-mail" required>
+            <input type="email" class="form-control" name="email" placeholder="Ваш e-mail" required>
         </div>
         <div class="col-md-12">
             <button type="submit" class="btn btn-danger w-100">Подписаться</button>
