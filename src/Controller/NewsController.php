@@ -32,6 +32,7 @@ class NewsController extends AbstractController
                     'datetime' => 'DESC'
                 ],10, 0);
 //        dd($context);
+
         $context['main'] = $main;
         return $this->render($template, $context);
     }

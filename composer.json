@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
+        "ext-dom": "*",
         "ext-iconv": "*",
         "ext-simplexml": "*",
         "ext-xmlreader": "*",
@@ -49,11 +50,10 @@
         "symfony/yaml": "7.3.*",
         "symfonycasts/reset-password-bundle": "^1.23",
         "symfonycasts/verify-email-bundle": "^1.17",
-        "twig/extra-bundle": "^3.21",
-        "twig/string-extra": "^3.21",
+        "twig/extra-bundle": "^3.22",
+        "twig/string-extra": "^3.22",
         "twig/twig": "^2.12|^3.21.1",
-        "vich/uploader-bundle": "^2.7",
-        "ext-dom": "*"
+        "vich/uploader-bundle": "^2.7"
     },
     "config": {
         "allow-plugins": {
