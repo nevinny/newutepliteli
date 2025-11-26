@@ -65,7 +65,7 @@ class CategoryController extends AbstractController
 //        dd($productList->productsWithVariants);
 //        dd($productIds,$variantsByProduct,$context['list'],$variants);
 
-//        dd($list);
+//        dd($productList->productsWithVariants);
 //        dd($main,$context);
         return $this->render($template, [
             'main' => $main,

@@ -7,12 +7,14 @@ use App\Entity\ProductVariant;
 use App\Enum\Statuses;
 use App\Repository\ProductParamsRepository;
 use App\Repository\ProductVariantRepository;
+use App\Service\Product\ParameterKeyMapper;
 
 class ProductVariantAggregator
 {
     public function __construct(
         private ProductVariantRepository $variantRepository,
-        private ProductParamsRepository  $paramsRepository
+        private ProductParamsRepository $paramsRepository,
+        private ParameterKeyMapper      $parameterKeyMapper,
     )
     {
     }
@@ -74,8 +76,10 @@ class ProductVariantAggregator
             return [
                 'id' => $variant->getId(),
                 'name' => $this->buildVariantName($params),
-                'color' => $this->extractColor($params),
+                'color' => $this->extractByParamKey($params, 'ral', 'convertToColor'),
                 'price' => $variant->getPrice(),
+                'thickness' => $this->extractByParamKey($params, 'thickness'),
+                'diameter' => $this->extractByParamKey($params, 'diameter'),
 //                'url' => $variant->getUrl(),
             ];
         }, $variantsWithParams);
@@ -89,15 +93,17 @@ class ProductVariantAggregator
         ));
     }
 
-    private function extractColor(array $params): ?string
+    private function extractByParamKey(array $params, $key, $callback = null): ?string
     {
         $possibleVariants = [
-//            'color',
-            'ral',
+            $this->parameterKeyMapper->getExternalIdByKey($key)
         ];
         foreach ($params as $param) {
             if (in_array($param->getExternalId(), $possibleVariants)) {
-                return $this->convertToColor($param->getVal());
+                if (null !== $callback) {
+                    return $this->$callback($param->getVal());
+                }
+                return $param->getVal();
             }
         }
         return null;

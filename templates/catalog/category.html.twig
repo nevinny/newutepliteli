@@ -60,13 +60,7 @@
                                                     {#                                                    {% endif %} #}
                                                 {% endfor %}
 
-                                                {% if item.variants|length > 6 %}
-                                                    <button class="btn btn-outline-secondary btn-sm py-0 px-1"
-                                                            data-bs-toggle="tooltip"
-                                                            title="Еще {{ item.variants|length - 6 }} вариантов">
-                                                        +{{ item.variants|length - 6 }}
-                                                    </button>
-                                                {% endif %}
+
                                             </div>
                                         </div>
                                     {% endif %}
@@ -87,32 +81,59 @@
                                     {% endif %}
 
                                 </div>
-                                {% if item.hasVariants %}
-                                    <div class="variants mt-2 w-100">
-                                        <div class="d-flex flex-wrap justify-content-center gap-1">
-                                            {% for variant in item.variants %}
-                                                {% if variant.color %}
-                                                    <a
-                                                        href="{{ item.product.m_fullPath }}?variant={{ loop.index0 }}"
-                                                        {#                                                            href="{{ variant.url }}" #}
-                                                        class="variant-color d-inline-block rounded-circle border"
-                                                        style="width: 16px; height: 16px; background-color: {{ variant.color }}; border: 1px solid #666 !important;"
-                                                        title="{{ variant.name }}"></a>
-                                                    {#                                                    {% else %} #}
-                                                    {#                                                        <a #}
-                                                    {#                                                            href="{{ variant.url }}" #}
-                                                    {#                                                           class="variant-btn btn btn-outline-secondary btn-sm py-0 px-1" #}
-                                                    {#                                                           title="{{ variant.name }}"> #}
-                                                    {#                                                            {{ variant.name|length > 10 ? variant.name|slice(0, 10) ~ '...' : variant.name }} #}
-                                                    {#                                                        </a> #}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                {% endif %}
+
+                                {#                                {% if item.variants|length > 6 %} #}
+                                {#                                <div class="variants mt-2 w-100"> #}
+                                {#                                    <div class="d-flex flex-wrap justify-content-center gap-1"> #}
+                                {#                                    <button class="btn btn-outline-secondary btn-sm py-0 px-1" #}
+                                {#                                            data-bs-toggle="tooltip" #}
+                                {#                                            title="Еще {{ item.variants|length - 6 }} вариантов"> #}
+                                {#                                        +{{ item.variants|length - 6 }} #}
+                                {#                                    </button> #}
+                                {#                                    </div> #}
+                                {#                                    </div> #}
+                                {#                                {% endif %} #}
                                 <h6 class="mt-2 mb-1">{{ item.product.p_title }}</h6>
                             </a>
 
+                            {% if item.hasVariants %}
+                                <div class="variants mt-2 w-100">
+                                    <div class="d-flex flex-wrap justify-content-center gap-1">
+                                        {% for variant in item.variants %}
+                                            {% if variant.color %}
+                                                <a
+                                                    href="{{ item.product.m_fullPath }}?variant={{ loop.index0 }}"
+                                                    {#                                                            href="{{ variant.url }}" #}
+                                                    class="variant-color d-inline-block rounded-circle border"
+                                                    style="width: 16px; height: 16px; background-color: {{ variant.color }}; border: 1px solid #666 !important;"
+                                                    title="{{ variant.name }}"></a>
+                                                {#                                                    {% else %} #}
+                                                {#                                                        <a #}
+                                                {#                                                            href="{{ variant.url }}" #}
+                                                {#                                                           class="variant-btn btn btn-outline-secondary btn-sm py-0 px-1" #}
+                                                {#                                                           title="{{ variant.name }}"> #}
+                                                {#                                                            {{ variant.name|length > 10 ? variant.name|slice(0, 10) ~ '...' : variant.name }} #}
+                                                {#                                                        </a> #}
+                                            {% endif %}
+                                            {% if variant.diameter is not null %}
+                                                <a href="{{ item.product.m_fullPath }}?variant={{ loop.index0 }}"
+                                                   class="variant-btn btn btn-outline-secondary btn-sm py-0 px-1 no-underline"
+                                                   title="{{ variant.diameter }}">
+                                                    &#8960; {{ variant.diameter }} x {{ variant.thickness }}
+                                                </a>
+
+                                            {% elseif variant.thickness %}
+                                                <a href="{{ item.product.m_fullPath }}?variant={{ loop.index0 }}"
+                                                   class="variant-btn btn btn-outline-secondary btn-sm py-0 px-1 no-underline"
+                                                   title="{{ variant.thickness }}">
+                                                    {{ variant.thickness }}
+                                                </a>
+
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
                             <div class="stars mb-1">
                                 <span class="text-warning">★★★★★</span>
                             </div>
